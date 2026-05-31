@@ -1,3 +1,8 @@
+.announcements-board {
+  border-top: 4px solid var(--horizonte-blue);
+  background: linear-gradient(180deg, #fff 0%, var(--horizonte-gray-light) 100%);
+}
+
 .announcement-card {
   border-left: 4px solid var(--horizonte-red);
 }

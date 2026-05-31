@@ -46,6 +46,21 @@
   position: relative;
 }
 
+.public-footer__cta {
+  background: linear-gradient(135deg, var(--horizonte-blue), #0d2847);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.public-footer__cta-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.public-footer__cta-text {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.9rem;
+}
+
 .public-footer__accent {
   height: 4px;
   background: linear-gradient(90deg, var(--horizonte-red), var(--horizonte-yellow), var(--horizonte-blue));

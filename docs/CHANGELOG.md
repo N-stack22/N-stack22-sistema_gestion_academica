@@ -12,6 +12,33 @@ Cambios pendientes de registrar en la próxima fase autorizada.
 
 ---
 
+## [1.2.0] — 2026-05-31 — Mejora: Web pública premium tipo colegio privado + ERP
+
+### Completado
+
+- **Mejora v1.2.0** — Rediseño visual profundo de la web pública con estética de colegio privado premium y comunicación de plataforma ERP.
+
+### Agregado / Mejorado
+
+- **Estilos globales v1.2** — Clases `.public-hero-premium`, `.public-dashboard-mock`, `.public-metric-card`, `.public-card-lift`, `.public-cta-premium`, `.public-login-shell`, etc.
+- **Home** — Landing premium con hero ERP mockup, métricas, propuesta educativa, sección plataforma digital, niveles, noticias y CTA.
+- **Login público** — Panel de beneficios intranet, formulario premium y credenciales demo ordenadas.
+- **Contacto** — Hero interno, mapa simulado premium, formulario en card elegante; Signals y `data-cy` intactos.
+- **Páginas internas** — Nosotros, niveles, admisión (timeline), noticias (destacada + secundarias), comunicados (tablero), galería.
+- **Navbar / Footer** — Glass effect, CTA institucional en footer.
+
+### Sin cambios
+
+- Intranet `/admin/*`, AuthService, guards, servicios mock, dashboard y sidebar admin.
+- Backend, Supabase, Firebase, APIs externas.
+
+### Verificado
+
+- `npm run build` — OK.
+- `npm run e2e:local` — **16/16 pruebas passing**.
+
+---
+
 ## [1.1.0] — 2026-05-31 — Mejora: Página pública institucional premium
 
 ### Completado

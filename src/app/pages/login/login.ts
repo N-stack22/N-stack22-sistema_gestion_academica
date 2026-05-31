@@ -1,3 +1,4 @@
+import { NgClass } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -5,7 +6,7 @@ import { isValidEmail } from '../../utils/form-validation';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink],
+  imports: [RouterLink, NgClass],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -20,6 +21,13 @@ export class Login {
   protected readonly authError = signal('');
   protected readonly isSubmitting = signal(false);
   protected readonly demoCredentials = this.auth.getDemoCredentials();
+
+  protected readonly intranetBenefits = [
+    { icon: 'bi-speedometer2', text: 'Dashboard ejecutivo con métricas académicas simuladas.' },
+    { icon: 'bi-journal-check', text: 'Notas, horarios, tareas y recursos según tu rol.' },
+    { icon: 'bi-shield-lock', text: 'Acceso seguro simulado con credenciales institucionales.' },
+    { icon: 'bi-people', text: 'Portales diferenciados para estudiantes, docentes, padres y administración.' },
+  ];
 
   protected readonly emailError = computed(() => {
     if (!this.submitted() && !this.email()) {

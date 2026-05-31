@@ -1,20 +1,22 @@
-.admission-step__number {
-  flex-shrink: 0;
-  width: 2.5rem;
-  height: 2.5rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background-color: var(--horizonte-blue);
-  color: var(--horizonte-white);
-  font-weight: 700;
+.admission-notice {
+  border-left: 4px solid var(--horizonte-yellow);
+  background: rgba(244, 196, 48, 0.1);
 }
 
-.admission-notice {
-  border: 0;
-  border-left: 4px solid var(--horizonte-yellow);
-  background: rgba(244, 196, 48, 0.12);
-  border-radius: 0.5rem;
-  padding: 1.25rem;
+.admission-notice__icon {
+  font-size: 1.5rem;
+  color: var(--horizonte-blue);
+  flex-shrink: 0;
+}
+
+.admission-req-card {
+  border-top: 4px solid var(--horizonte-red);
+  position: sticky;
+  top: 6rem;
+}
+
+@media (max-width: 991.98px) {
+  .admission-req-card {
+    position: static;
+  }
 }

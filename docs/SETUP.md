@@ -4,7 +4,7 @@
 
 Guía para instalar dependencias y ejecutar el proyecto en desarrollo local.
 
-**Estado actual:** Mejora v1.1.0 completada — web pública premium; intranet sin cambios funcionales.
+**Estado actual:** Mejora v1.2.0 completada — web pública premium ERP; intranet sin cambios funcionales.
 
 ---
 
@@ -323,6 +323,21 @@ npm run e2e
 | `npm run e2e:local` | ✅ 16/16 |
 | Backend | ❌ No existe (sin cambios) |
 | **Versión actual** | **1.1.0** |
+
+---
+
+## 20. Mejora v1.2.0 — Web pública premium ERP
+
+| Elemento | Estado |
+|----------|--------|
+| Estilos globales v1.2 | ✅ `.public-hero-premium`, `.public-dashboard-mock`, etc. |
+| Home landing ERP | ✅ Hero con mockup dashboard |
+| Login / Contacto | ✅ Visual premium; Signals y `data-cy` intactos |
+| Páginas públicas internas | ✅ Nosotros, niveles, admisión, noticias, comunicados, galería |
+| Intranet `/admin/*` | ✅ Sin cambios |
+| `npm run build` | ✅ OK |
+| `npm run e2e:local` | ✅ 16/16 |
+| **Versión actual** | **1.2.0** |
 
 ---
 

@@ -1,12 +1,12 @@
 .levels-focus {
-  padding: 0.85rem 1rem;
-  border-radius: 0.5rem;
+  padding: 1rem 1.15rem;
+  border-radius: 0.75rem;
   background: var(--horizonte-gray-light);
   border-left: 3px solid var(--horizonte-blue);
 }
 
 .levels-card {
-  border-top-width: 4px;
-  border-top-style: solid;
-  border-top-color: var(--horizonte-yellow);
+  border-top: 4px solid var(--horizonte-yellow);
+  display: flex;
+  flex-direction: column;
 }

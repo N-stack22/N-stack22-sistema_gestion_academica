@@ -24,7 +24,7 @@ Frontend académico desarrollado con Angular 21 que simula la experiencia de un 
 
 ## Características principales
 
-- **Web pública premium (v1.1.0):** Home landing institucional, navbar y footer mejorados, páginas públicas con diseño consistente.
+- **Web pública premium v1.2.0:** Landing institucional tipo colegio privado + plataforma ERP visual; login y contacto mejorados.
 - **Login simulado:** 5 roles con credenciales de prueba y sesión en `localStorage`.
 - **Intranet ERP:** Dashboard ejecutivo, sidebar por rol, 20+ rutas `/admin/*`.
 - **Módulos académicos:** Estudiantes, docentes, cursos, notas, tareas, horarios, asistencia, recursos, pagos simulados, etc.
@@ -148,7 +148,7 @@ Ver [`docs/MVP_SCOPE.md`](docs/MVP_SCOPE.md).
 
 ## Estado del proyecto
 
-**Versión 1.1.0** — Mejora visual de la web pública institucional premium (post-MVP).
+**Versión 1.2.0** — Web pública premium tipo colegio privado + plataforma ERP (post-v1.1.0).
 
 | Verificación | Estado |
 |--------------|--------|

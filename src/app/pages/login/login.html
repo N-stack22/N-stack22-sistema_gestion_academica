@@ -1,107 +1,137 @@
-<section class="login-page public-section">
-  <div class="login-page__bg" aria-hidden="true"></div>
-  <div class="container position-relative">
-    <div class="text-center mb-4">
-      <span class="public-badge public-badge--info mb-2">Acceso institucional</span>
-      <h1 class="h3 text-horizonte-blue fw-bold mb-1">Intranet HORIZONTE DIGITAL</h1>
-      <p class="text-muted mb-0">Ingresa con tus credenciales simuladas para acceder al panel académico.</p>
+<section class="public-login-shell">
+  <div class="container">
+    <div class="text-center mb-4 mb-lg-5">
+      <span class="public-badge public-badge--info mb-2">HORIZONTE DIGITAL</span>
+      <h1 class="h3 text-horizonte-blue fw-bold mb-1">Acceso a la plataforma académica</h1>
+      <p class="text-muted mb-0">Intranet institucional simulada para la comunidad I.E.P. HORIZONTE</p>
     </div>
-    <div class="row justify-content-center g-4">
+
+    <div class="row g-4 align-items-stretch">
       <div class="col-lg-5">
-        <div class="card login-card public-card-premium border-0">
-          <div class="card-body p-4 p-md-5">
-            <h2 class="h5 text-horizonte-blue mb-2">Acceso a Intranet</h2>
-            <p class="text-muted mb-4">
-              Ingresa con tus credenciales institucionales para acceder al panel académico simulado.
-            </p>
-
-            @if (authError()) {
-              <div class="alert alert-danger py-2" role="alert" data-cy="login-error">{{ authError() }}</div>
+        <div class="public-login-benefits">
+          <span class="public-kicker mb-3">Intranet ERP</span>
+          <h2 class="h4 fw-bold mb-3">Tu portal académico en un solo lugar</h2>
+          <p class="small opacity-90 mb-4">
+            Gestiona la experiencia educativa con módulos simulados de notas, asistencia, tareas,
+            comunicados y administración escolar.
+          </p>
+          <ul class="list-unstyled mb-4">
+            @for (benefit of intranetBenefits; track benefit.text) {
+              <li class="d-flex gap-2 mb-3">
+                <i class="bi flex-shrink-0" [ngClass]="benefit.icon" aria-hidden="true"></i>
+                <span class="small">{{ benefit.text }}</span>
+              </li>
             }
-
-            <form novalidate (submit)="onSubmit($event)" data-cy="login-form">
-              <div class="mb-3">
-                <label class="form-label" for="login-email">Correo</label>
-                <input
-                  id="login-email"
-                  type="email"
-                  class="form-control"
-                  data-cy="login-email"
-                  [class.is-invalid]="submitted() && emailError()"
-                  [value]="email()"
-                  (input)="email.set($any($event.target).value); authError.set('')"
-                  autocomplete="username"
-                  placeholder="admin@horizonte.edu.pe"
-                />
-                @if (submitted() && emailError()) {
-                  <div class="invalid-feedback d-block">{{ emailError() }}</div>
-                }
-              </div>
-
-              <div class="mb-4">
-                <label class="form-label" for="login-password">Contraseña</label>
-                <input
-                  id="login-password"
-                  type="password"
-                  class="form-control"
-                  data-cy="login-password"
-                  [class.is-invalid]="submitted() && passwordError()"
-                  [value]="password()"
-                  (input)="password.set($any($event.target).value); authError.set('')"
-                  autocomplete="current-password"
-                  placeholder="••••••••"
-                />
-                @if (submitted() && passwordError()) {
-                  <div class="invalid-feedback d-block">{{ passwordError() }}</div>
-                }
-              </div>
-
-              <button
-                type="submit"
-                class="btn btn-horizonte-primary w-100"
-                data-cy="login-submit"
-                [disabled]="isSubmitting() || (submitted() && !isFormValid())"
-              >
-                Ingresar
-              </button>
-            </form>
-
-            <p class="mt-3 mb-0 text-center">
-              <a routerLink="/" class="login-page__back">Volver al inicio</a>
+          </ul>
+          <div class="public-glass-card p-3">
+            <p class="small mb-1 fw-semibold">
+              <i class="bi bi-shield-check me-1" aria-hidden="true"></i>
+              Seguridad simulada
+            </p>
+            <p class="small mb-0 opacity-75">
+              Acceso protegido por credenciales de prueba. No se conecta a servicios externos.
             </p>
           </div>
         </div>
       </div>
 
-      <div class="col-lg-5">
-        <div class="card login-demo public-card-premium border-0 h-100" data-cy="demo-credentials">
-          <div class="card-body p-4">
-            <h2 class="h6 text-horizonte-blue fw-bold mb-3">
-              <i class="bi bi-key-fill horizonte-icon-inline" aria-hidden="true"></i>
-              Credenciales de prueba por rol
-            </h2>
-            <p class="text-muted small mb-3">
-              Usa cualquiera de estos accesos simulados. Cada rol muestra un panel y menú diferente.
-            </p>
-            <div class="table-responsive">
-              <table class="table table-sm table-bordered mb-0 login-demo__table">
-                <thead class="table-light">
-                  <tr>
-                    <th scope="col">Rol</th>
-                    <th scope="col">Correo</th>
-                    <th scope="col">Contraseña</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (credential of demoCredentials; track credential.email) {
-                    <tr>
-                      <td>{{ credential.label }}</td>
-                      <td class="small">{{ credential.email }}</td>
-                      <td class="small">{{ credential.password }}</td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
+      <div class="col-lg-7">
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="card login-card public-card-lift border-0">
+              <div class="card-body p-4 p-md-5">
+                <h2 class="h5 text-horizonte-blue mb-2">Iniciar sesión</h2>
+                <p class="text-muted mb-4">Ingresa con tus credenciales institucionales simuladas.</p>
+
+                @if (authError()) {
+                  <div class="alert alert-danger py-2" role="alert" data-cy="login-error">{{ authError() }}</div>
+                }
+
+                <form novalidate (submit)="onSubmit($event)" data-cy="login-form">
+                  <div class="mb-3">
+                    <label class="form-label" for="login-email">Correo</label>
+                    <input
+                      id="login-email"
+                      type="email"
+                      class="form-control form-control-lg"
+                      data-cy="login-email"
+                      [class.is-invalid]="submitted() && emailError()"
+                      [value]="email()"
+                      (input)="email.set($any($event.target).value); authError.set('')"
+                      autocomplete="username"
+                      placeholder="admin@horizonte.edu.pe"
+                    />
+                    @if (submitted() && emailError()) {
+                      <div class="invalid-feedback d-block">{{ emailError() }}</div>
+                    }
+                  </div>
+
+                  <div class="mb-4">
+                    <label class="form-label" for="login-password">Contraseña</label>
+                    <input
+                      id="login-password"
+                      type="password"
+                      class="form-control form-control-lg"
+                      data-cy="login-password"
+                      [class.is-invalid]="submitted() && passwordError()"
+                      [value]="password()"
+                      (input)="password.set($any($event.target).value); authError.set('')"
+                      autocomplete="current-password"
+                      placeholder="••••••••"
+                    />
+                    @if (submitted() && passwordError()) {
+                      <div class="invalid-feedback d-block">{{ passwordError() }}</div>
+                    }
+                  </div>
+
+                  <button
+                    type="submit"
+                    class="btn btn-horizonte-primary btn-lg w-100"
+                    data-cy="login-submit"
+                    [disabled]="isSubmitting() || (submitted() && !isFormValid())"
+                  >
+                    Ingresar
+                  </button>
+                </form>
+
+                <p class="mt-3 mb-0 text-center">
+                  <a routerLink="/" class="login-page__back">Volver al inicio</a>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="card login-demo public-card-lift border-0" data-cy="demo-credentials">
+              <div class="card-body p-4">
+                <h2 class="h6 text-horizonte-blue fw-bold mb-3">
+                  <i class="bi bi-key-fill horizonte-icon-inline" aria-hidden="true"></i>
+                  Credenciales de prueba por rol
+                </h2>
+                <p class="text-muted small mb-3">
+                  Cada rol muestra un panel y menú diferente dentro de la intranet simulada.
+                </p>
+                <div class="table-responsive">
+                  <table class="table table-sm table-bordered mb-0 login-demo__table">
+                    <thead class="table-light">
+                      <tr>
+                        <th scope="col">Rol</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">Contraseña</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (credential of demoCredentials; track credential.email) {
+                        <tr>
+                          <td>{{ credential.label }}</td>
+                          <td class="small">{{ credential.email }}</td>
+                          <td class="small">{{ credential.password }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>

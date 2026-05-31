@@ -463,7 +463,30 @@ Elevar la calidad visual de la web pública (Home, navbar, footer y páginas inf
 
 **Sin cambios:** rutas `/admin/*`, AuthService, guards, sidebar admin, backend.
 
-**Versión actual:** **1.1.0**.
+**Versión actual:** **1.2.0**.
+
+---
+
+## Mejora v1.2.0: Web pública premium ERP (completada)
+
+### Objetivo
+
+Elevar la web pública a landing institucional premium con comunicación visual de plataforma académica tipo ERP.
+
+### Estado
+
+| Elemento | Estado |
+|----------|--------|
+| Mejora v1.2.0 | ✅ Completada — 2026-05-31 |
+
+### Entregables cumplidos
+
+- Clases SCSS v1.2 en `src/styles.scss`.
+- Home, login, contacto y páginas internas públicas rediseñadas.
+- Navbar/footer premium; intranet sin cambios.
+- `npm run build` y `npm run e2e:local` — **16/16 passing**.
+
+**Versión actual:** **1.2.0**.
 
 ---
 

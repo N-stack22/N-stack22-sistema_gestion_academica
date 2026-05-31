@@ -239,7 +239,19 @@ Clases globales en `src/styles.scss` para páginas públicas:
 
 ## 13. Estado actual
 
-Guía aplicada en MVP v1.0.0 y **mejora visual v1.1.0** (web pública premium). La intranet conserva el diseño ERP de fases 7–9.
+Guía aplicada en MVP v1.0.0, mejora v1.1.0 y **v1.2.0** (web pública premium ERP). La intranet conserva el diseño ERP de fases 7–9.
+
+### Clases v1.2 (referencia)
+
+| Clase | Uso |
+|-------|-----|
+| `.public-hero-premium` | Hero grande con gradiente y orbes decorativos |
+| `.public-dashboard-mock` | Mockup ERP flotante en hero |
+| `.public-metric-card` | Métricas institucionales en cards |
+| `.public-card-lift` | Card con sombra premium y hover |
+| `.public-cta-premium` | CTA con gradiente institucional |
+| `.public-login-shell` | Contenedor login público premium |
+| `.public-login-benefits` | Panel lateral de beneficios intranet |
 
 ---
 

@@ -42,4 +42,7 @@ export class News {
       summary: 'Durante febrero promovemos hábitos lectoros con talleres, feria de libros y lecturas en voz alta.',
     },
   ];
+
+  protected readonly featured = this.articles[0];
+  protected readonly secondary = this.articles.slice(1);
 }

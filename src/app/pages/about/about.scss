@@ -1,14 +1,5 @@
 .about-identity-panel {
   background: linear-gradient(135deg, var(--horizonte-blue), var(--horizonte-dark)) !important;
-  border: none !important;
-}
-
-.about-identity-panel__label {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--horizonte-yellow);
-  font-weight: 600;
 }
 
 .about-color-swatch {
@@ -30,6 +21,10 @@
   background: var(--horizonte-yellow);
 }
 
-.about-value {
-  border-left: 4px solid var(--horizonte-yellow);
+.about-mv-card {
+  border-top: 4px solid var(--horizonte-yellow);
+}
+
+.about-history {
+  border-left: 4px solid var(--horizonte-red);
 }
