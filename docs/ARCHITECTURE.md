@@ -440,6 +440,7 @@ La Fase 2 queda completa cuando:
 | Formularios con Angular Signals | ✅ Fase 9 — Login, contacto, estudiante, docente, curso, tarea, recurso |
 | Validaciones visibles | ✅ Fase 9 — `computed()` + `invalid-feedback` |
 | Visibilidad formularios por rol | ✅ Fase 9 — `RoleContextService.canRegister*()` |
+| Cypress E2E | ✅ Fase 10 — 5 specs, comandos login por rol |
 
 ---
 

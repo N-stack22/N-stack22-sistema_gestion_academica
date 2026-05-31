@@ -72,6 +72,8 @@ Módulos **Matrículas, Pensiones, Pagos, Ventas** — simulados; no hay pasarel
 
 **Fase 9:** Formularios con Angular Signals (`signal`, `computed`), validaciones visibles, envío simulado. Formularios administrativos ocultos por rol (STUDENT/PARENT no ven formularios de registro). Sin backend ni CRUD real.
 
+**Fase 10:** Cypress E2E — web pública, login mock, rutas protegidas, contacto, dashboard por rol, visibilidad de formularios. Sin backend; pruebas sobre frontend simulado.
+
 ---
 
 ### 2.4 Dashboard

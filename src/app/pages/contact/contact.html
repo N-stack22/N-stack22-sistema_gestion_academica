@@ -53,13 +53,13 @@
             </div>
 
             @if (successMessage()) {
-              <div class="form-success-card mb-4" role="status">
+              <div class="form-success-card mb-4" role="status" data-cy="contact-success">
                 <i class="bi bi-check-circle-fill horizonte-icon-inline" aria-hidden="true"></i>
                 {{ successMessage() }}
               </div>
             }
 
-            <form novalidate (submit)="onSubmit($event)">
+            <form novalidate (submit)="onSubmit($event)" data-cy="contact-form">
               <div class="row g-3">
                 <div class="col-md-6">
                   <label class="form-label" for="contact-name">Nombre completo</label>
@@ -67,6 +67,7 @@
                     class="form-control"
                     id="contact-name"
                     type="text"
+                    data-cy="contact-name"
                     [class.is-invalid]="submitted() && fullNameError()"
                     [value]="fullName()"
                     (input)="fullName.set($any($event.target).value)"
@@ -82,6 +83,7 @@
                     class="form-control"
                     id="contact-email"
                     type="email"
+                    data-cy="contact-email"
                     [class.is-invalid]="submitted() && emailError()"
                     [value]="email()"
                     (input)="email.set($any($event.target).value)"
@@ -97,6 +99,7 @@
                     class="form-control"
                     id="contact-phone"
                     type="tel"
+                    data-cy="contact-phone"
                     [class.is-invalid]="submitted() && phoneError()"
                     [value]="phone()"
                     (input)="phone.set($any($event.target).value)"
@@ -113,6 +116,7 @@
                     class="form-control"
                     id="contact-subject"
                     type="text"
+                    data-cy="contact-subject"
                     [class.is-invalid]="submitted() && subjectError()"
                     [value]="subject()"
                     (input)="subject.set($any($event.target).value)"
@@ -128,6 +132,7 @@
                     class="form-control"
                     id="contact-message"
                     rows="4"
+                    data-cy="contact-message"
                     [class.is-invalid]="submitted() && messageError()"
                     [value]="message()"
                     (input)="message.set($any($event.target).value)"
@@ -141,6 +146,7 @@
                   <button
                     type="submit"
                     class="btn btn-horizonte-primary"
+                    data-cy="contact-submit"
                     [disabled]="submitted() && !isFormValid()"
                   >
                     Enviar mensaje

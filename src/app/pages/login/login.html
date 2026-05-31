@@ -10,16 +10,17 @@
             </p>
 
             @if (authError()) {
-              <div class="alert alert-danger py-2" role="alert">{{ authError() }}</div>
+              <div class="alert alert-danger py-2" role="alert" data-cy="login-error">{{ authError() }}</div>
             }
 
-            <form novalidate (submit)="onSubmit($event)">
+            <form novalidate (submit)="onSubmit($event)" data-cy="login-form">
               <div class="mb-3">
                 <label class="form-label" for="login-email">Correo</label>
                 <input
                   id="login-email"
                   type="email"
                   class="form-control"
+                  data-cy="login-email"
                   [class.is-invalid]="submitted() && emailError()"
                   [value]="email()"
                   (input)="email.set($any($event.target).value); authError.set('')"
@@ -37,6 +38,7 @@
                   id="login-password"
                   type="password"
                   class="form-control"
+                  data-cy="login-password"
                   [class.is-invalid]="submitted() && passwordError()"
                   [value]="password()"
                   (input)="password.set($any($event.target).value); authError.set('')"
@@ -51,6 +53,7 @@
               <button
                 type="submit"
                 class="btn btn-horizonte-primary w-100"
+                data-cy="login-submit"
                 [disabled]="isSubmitting() || (submitted() && !isFormValid())"
               >
                 Ingresar
@@ -65,7 +68,7 @@
       </div>
 
       <div class="col-lg-5">
-        <div class="card login-demo border-0 shadow-sm h-100">
+        <div class="card login-demo border-0 shadow-sm h-100" data-cy="demo-credentials">
           <div class="card-body p-4">
             <h2 class="h6 text-horizonte-blue fw-bold mb-3">
               <i class="bi bi-key-fill horizonte-icon-inline" aria-hidden="true"></i>

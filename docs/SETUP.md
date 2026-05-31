@@ -219,13 +219,86 @@ Cada rol muestra un **panel de dashboard** y un **menú lateral** diferente. Tod
 
 ## 14. Próxima fase
 
-**Fase 10 — Pruebas Cypress.**
+**Fase 11 — Revisión final para rúbrica.**
 
 No avanzar sin autorización.
 
 ---
 
-## 15. Estado de la Fase 9
+## 15. Pruebas E2E con Cypress
+
+Cypress valida flujos **frontend** del MVP simulado. No prueba backend ni APIs reales.
+
+### Comando recomendado
+
+Libera el puerto 4200, levanta Angular y ejecuta todas las pruebas:
+
+```bash
+npm run e2e:local
+```
+
+Este es el flujo más confiable. Evita ejecutar Cypress contra una instancia antigua de `ng serve`.
+
+### Otros comandos
+
+Modo interactivo (requiere `npm start` en otra terminal):
+
+```bash
+npm start
+npm run cypress:open
+```
+
+Modo headless manual (requiere `npm start` activo):
+
+```bash
+npm run cypress:run
+```
+
+Alias:
+
+```bash
+npm run e2e
+```
+
+### Si el puerto 4200 está ocupado
+
+`npm run e2e:local` ejecuta automáticamente `kill-port 4200` antes de iniciar. Si usas `npm start` manualmente y el puerto está en uso, detén el proceso previo con **Ctrl+C** o cierra la terminal.
+
+### Specs incluidos
+
+| Archivo | Qué prueba |
+|---------|------------|
+| `cypress/e2e/smoke.cy.ts` | Diagnóstico: app Angular actual y formulario login |
+| `cypress/e2e/public.cy.ts` | Home, navbar, navegación a contacto y login |
+| `cypress/e2e/auth.cy.ts` | Ruta protegida, login incorrecto, login ADMIN y logout |
+| `cypress/e2e/contact-form.cy.ts` | Validaciones y envío simulado del formulario de contacto |
+| `cypress/e2e/role-dashboard.cy.ts` | Panel ejecutivo por rol y sidebar del apoderado |
+| `cypress/e2e/forms-role.cy.ts` | Visibilidad de formularios ADMIN / TEACHER / PARENT |
+
+### Comandos personalizados
+
+- `cy.loginAsAdmin()`
+- `cy.loginAsTeacher()`
+- `cy.loginAsParent()`
+
+---
+
+## 16. Estado de la Fase 10
+
+| Elemento | Estado |
+|----------|--------|
+| Cypress instalado | ✅ |
+| Configuración `cypress.config.ts` | ✅ |
+| Scripts npm | ✅ `e2e:local` (recomendado), `cypress:open`, `cypress:run`, `e2e` |
+| Dependencias E2E | ✅ `start-server-and-test`, `kill-port` |
+| Selectores `data-cy` | ✅ Elementos clave |
+| Specs E2E | ✅ 6 archivos, **16 pruebas** |
+| Verificación | ✅ `npm run e2e:local` — 16/16 passing |
+| Backend en pruebas | ❌ Solo frontend mock |
+
+---
+
+## 17. Estado de la Fase 9
 
 | Elemento | Estado |
 |----------|--------|
@@ -235,7 +308,7 @@ No avanzar sin autorización.
 | Visibilidad por rol | ✅ `RoleContextService.canRegister*()` |
 | Backend / HTTP | ❌ No implementado |
 | CRUD real | ❌ Registro local temporal en memoria |
-| Cypress | ❌ Fase 10 |
+| Cypress | ✅ Fase 10 — ver sección 15 |
 
 ---
 

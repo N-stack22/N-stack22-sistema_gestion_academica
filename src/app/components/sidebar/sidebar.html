@@ -1,4 +1,4 @@
-<aside class="sidebar d-flex flex-column h-100">
+<aside class="sidebar d-flex flex-column h-100" data-cy="admin-sidebar">
   <div class="sidebar__brand">
     <div class="sidebar__brand-icon" aria-hidden="true">
       <i class="bi bi-mortarboard-fill"></i>
@@ -43,7 +43,7 @@
   </nav>
 
   <div class="sidebar__footer p-3 mt-auto">
-    <button type="button" class="btn btn-outline-light btn-sm w-100" (click)="logout()">
+    <button type="button" class="btn btn-outline-light btn-sm w-100" (click)="logout()" data-cy="logout-button">
       <i class="bi bi-box-arrow-right me-2" aria-hidden="true"></i>
       Cerrar sesión
     </button>

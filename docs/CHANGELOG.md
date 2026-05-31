@@ -12,6 +12,71 @@ Cambios pendientes de registrar en la próxima fase autorizada.
 
 ---
 
+## [0.10.1] — 2026-05-31 — Corrección Fase 10: Cypress E2E confiable
+
+### Corregido
+
+- Fallo E2E por instancia antigua en puerto 4200 (sin `data-cy`).
+- `npm run e2e:local` ahora libera el puerto con `kill-port` antes de levantar Angular.
+
+### Agregado
+
+- Dependencias: `start-server-and-test`, `kill-port`.
+- Script `pree2e:local` + `e2e:local`.
+- Spec `cypress/e2e/smoke.cy.ts`.
+- `allowCypressEnv: false` en `cypress.config.ts`.
+
+### Verificado
+
+- `npm run build` — OK.
+- `npm run e2e:local` — **16/16 pruebas pasando**.
+
+---
+
+## [0.10.0] — 2026-05-31 — Fase 10: Pruebas E2E con Cypress
+
+### Completado
+
+- **Fase 10** — Cypress configurado con pruebas E2E básicas para flujos frontend principales.
+
+### Agregado
+
+- Dependencia de desarrollo `cypress`.
+- Configuración `cypress.config.ts` con `baseUrl: http://localhost:4200`.
+- Scripts: `cypress:open`, `cypress:run`, `e2e`.
+- Comandos personalizados: `loginAsAdmin`, `loginAsTeacher`, `loginAsParent`.
+- Atributos `data-cy` en navbar, login, contacto, dashboard, sidebar, formularios académicos.
+- Pruebas E2E:
+  - `cypress/e2e/public.cy.ts`
+  - `cypress/e2e/auth.cy.ts`
+  - `cypress/e2e/contact-form.cy.ts`
+  - `cypress/e2e/role-dashboard.cy.ts`
+  - `cypress/e2e/forms-role.cy.ts`
+
+### Verificado
+
+- `npm run build` — Compilación exitosa.
+- Cypress prueba flujos frontend simulados; **no hay backend ni API real**.
+
+### Nota de ejecución
+
+- **Comando recomendado:** `npm run e2e:local` — libera el puerto 4200, levanta Angular y ejecuta Cypress.
+- Si usas `npm run cypress:run` manualmente, asegúrate de que `npm start` esté activo con el código actualizado.
+- Si el puerto 4200 está ocupado por una instancia antigua, `pree2e:local` ejecuta `kill-port 4200` automáticamente.
+
+### Corrección Fase 10 (Cypress)
+
+- `start-server-and-test` + `kill-port` para E2E confiable contra la app actual.
+- Spec `smoke.cy.ts` de diagnóstico.
+- Pruebas más robustas con `data-cy` y textos flexibles (`HORIZONTE`).
+- **16/16 pruebas E2E aprobadas** con `npm run e2e:local`.
+
+### Próximo paso
+
+- **Fase 11: Revisión final para rúbrica** (requiere autorización).
+
+---
+
 ## [0.9.0] — 2026-05-31 — Fase 9: Formularios con Angular Signals y validaciones visibles
 
 ### Completado
@@ -643,5 +708,6 @@ Cambios pendientes de registrar en la próxima fase autorizada.
 | 0.7.x | Fase 7 — Dashboard e intranet |
 | 0.8.x | Fase 8 — Módulos académicos |
 | 0.9.x | Fase 9 — Formularios con Angular Signals |
+| 0.10.x | Fase 10 — Pruebas Cypress E2E |
 | 1.0.0-rc | Fase 10 — Cypress |
 | 1.0.0 | Fase 11 — Revisión final rúbrica |

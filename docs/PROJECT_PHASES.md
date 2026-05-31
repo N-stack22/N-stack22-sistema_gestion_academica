@@ -390,22 +390,28 @@ Aplicar Angular Signals en los formularios principales con validaciones visibles
 
 ---
 
-## Fase 10: Pruebas Cypress
+## Fase 10: Pruebas Cypress (completada)
 
 ### Objetivo
 
-Agregar pruebas end-to-end con Cypress para validar flujos críticos del frontend.
+Agregar pruebas end-to-end básicas con Cypress para validar flujos críticos del frontend.
 
-### Entregables
+### Estado
 
-- Cypress configurado en el proyecto.
-- Pruebas para:
-  - Carga de página pública.
-  - Login mock.
-  - Acceso protegido al dashboard.
-  - Visualización de tabla.
-  - Validación de formulario.
-- Entrada en `CHANGELOG.md`.
+| Elemento | Estado |
+|----------|--------|
+| Fase 10 | ✅ Completada — 2026-05-31 |
+
+### Entregables cumplidos
+
+- Cypress instalado y configurado (`cypress.config.ts`).
+- Scripts `cypress:open`, `cypress:run`, `e2e`, **`e2e:local`** (recomendado).
+- 6 specs E2E incluyendo `smoke.cy.ts` — **16 pruebas, todas passing**.
+- Comandos `loginAsAdmin`, `loginAsTeacher`, `loginAsParent`.
+- Selectores `data-cy` en elementos clave.
+- `start-server-and-test` + `kill-port` para E2E confiable (evita instancia antigua en puerto 4200).
+
+**No incluido en Fase 10:** backend, mocks HTTP, pruebas unitarias complejas, cobertura total.
 
 ---
 
@@ -442,7 +448,7 @@ Verificar que el proyecto cumple los criterios académicos y está listo para ex
 | 7 | Dashboard e intranet tipo ERP | Sí |
 | 8 | Módulos académicos | Sí |
 | 9 | Formularios con Angular Signals | ✅ Completada |
-| 10 | Pruebas Cypress | Sí |
+| 10 | Pruebas Cypress E2E | ✅ Completada |
 | 11 | Revisión final para rúbrica | Revisión |
 
 ---
