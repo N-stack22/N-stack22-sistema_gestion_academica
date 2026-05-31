@@ -219,13 +219,24 @@ Cada rol muestra un **panel de dashboard** y un **menú lateral** diferente. Tod
 
 ## 14. Próxima fase
 
-**Fase 11 — Revisión final para rúbrica.**
+**No hay fases pendientes.** El MVP académico (Fases 1–11) está completado.
 
-No avanzar sin autorización.
+Mejoras futuras opcionales: backend, `roleGuard`, CRUD persistente — fuera del alcance actual.
 
 ---
 
-## 15. Pruebas E2E con Cypress
+## 15. Documentos finales (Fase 11)
+
+| Documento | Descripción |
+|-----------|-------------|
+| [`FINAL_REVIEW.md`](FINAL_REVIEW.md) | Cumplimiento de rúbrica |
+| [`PRESENTATION_GUIDE.md`](PRESENTATION_GUIDE.md) | Guía de exposición |
+| [`DELIVERY_CHECKLIST.md`](DELIVERY_CHECKLIST.md) | Checklist de entrega |
+| [`../README.md`](../README.md) | Inicio rápido del proyecto |
+
+---
+
+## 16. Pruebas E2E con Cypress
 
 Cypress valida flujos **frontend** del MVP simulado. No prueba backend ni APIs reales.
 
@@ -283,7 +294,22 @@ npm run e2e
 
 ---
 
-## 16. Estado de la Fase 10
+## 17. Estado de la Fase 11
+
+| Elemento | Estado |
+|----------|--------|
+| Revisión técnica | ✅ |
+| README.md | ✅ |
+| FINAL_REVIEW.md | ✅ |
+| PRESENTATION_GUIDE.md | ✅ |
+| DELIVERY_CHECKLIST.md | ✅ |
+| `npm run build` | ✅ |
+| `npm run e2e:local` | ✅ 16/16 |
+| **Versión final** | **1.0.0** |
+
+---
+
+## 18. Estado de la Fase 10
 
 | Elemento | Estado |
 |----------|--------|

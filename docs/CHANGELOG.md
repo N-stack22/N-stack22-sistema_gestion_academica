@@ -12,6 +12,32 @@ Cambios pendientes de registrar en la próxima fase autorizada.
 
 ---
 
+## [1.0.0] — 2026-05-31 — Fase 11: Revisión final para rúbrica
+
+### Completado
+
+- **Fase 11** — Revisión final del MVP. Proyecto listo para exposición académica.
+
+### Agregado
+
+- `README.md` — Documentación principal del repositorio.
+- `docs/FINAL_REVIEW.md` — Cumplimiento de rúbrica y checklists.
+- `docs/PRESENTATION_GUIDE.md` — Guía de defensa (5–8 min).
+- `docs/DELIVERY_CHECKLIST.md` — Checklist de entrega.
+
+### Verificado
+
+- Revisión técnica: estructura, servicios mock, guards, Signals, sin backend/HTTP.
+- `npm run build` — OK (warnings Sass y budget no bloqueantes).
+- `npm run e2e:local` — **16/16 pruebas passing**.
+
+### Estado final
+
+- MVP frontend académico completado (Fases 1–11).
+- Sin backend, pagos reales, Supabase ni Firebase.
+
+---
+
 ## [0.10.1] — 2026-05-31 — Corrección Fase 10: Cypress E2E confiable
 
 ### Corregido

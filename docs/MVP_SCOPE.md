@@ -4,7 +4,7 @@
 
 Este documento define el **alcance mínimo viable (MVP)** del proyecto. El MVP debe verse **funcional y completo a nivel frontend**, aunque **no tenga backend**. Todos los datos provienen de servicios mock e interfaces TypeScript.
 
-**Estado:** Definición detallada completada en **Fase 2**.
+**Estado:** MVP completado — **Fase 11** (versión **1.0.0**). Ver [`FINAL_REVIEW.md`](FINAL_REVIEW.md).
 
 ---
 
@@ -72,7 +72,9 @@ Módulos **Matrículas, Pensiones, Pagos, Ventas** — simulados; no hay pasarel
 
 **Fase 9:** Formularios con Angular Signals (`signal`, `computed`), validaciones visibles, envío simulado. Formularios administrativos ocultos por rol (STUDENT/PARENT no ven formularios de registro). Sin backend ni CRUD real.
 
-**Fase 10:** Cypress E2E — web pública, login mock, rutas protegidas, contacto, dashboard por rol, visibilidad de formularios. Sin backend; pruebas sobre frontend simulado.
+**Fase 10:** Cypress E2E — 6 specs, 16 pruebas; comando recomendado `npm run e2e:local`.
+
+**Fase 11:** Revisión final — README, FINAL_REVIEW, PRESENTATION_GUIDE, DELIVERY_CHECKLIST. Build y Cypress verificados.
 
 ---
 

@@ -440,7 +440,8 @@ La Fase 2 queda completa cuando:
 | Formularios con Angular Signals | ✅ Fase 9 — Login, contacto, estudiante, docente, curso, tarea, recurso |
 | Validaciones visibles | ✅ Fase 9 — `computed()` + `invalid-feedback` |
 | Visibilidad formularios por rol | ✅ Fase 9 — `RoleContextService.canRegister*()` |
-| Cypress E2E | ✅ Fase 10 — 5 specs, comandos login por rol |
+| Cypress E2E | ✅ Fase 10 — 6 specs, 16 pruebas, `e2e:local` |
+| Revisión final rúbrica | ✅ Fase 11 — MVP 1.0.0 |
 
 ---
 
@@ -451,3 +452,6 @@ La Fase 2 queda completa cuando:
 - Mapa de rutas: `ROUTE_MAP.md`
 - Fases: `PROJECT_PHASES.md`
 - UI: `UI_GUIDELINES.md`
+- Revisión final: `FINAL_REVIEW.md`
+- Exposición: `PRESENTATION_GUIDE.md`
+- Entrega: `DELIVERY_CHECKLIST.md`

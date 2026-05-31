@@ -1,59 +1,167 @@
-# ColegioHorizonte
+# HORIZONTE DIGITAL
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.13.
+Sistema web institucional con intranet académica para la **I.E.P. Horizonte**.
 
-## Development server
+Frontend académico desarrollado con Angular 21 que simula la experiencia de un ERP escolar: web pública institucional, login multirol, dashboard ejecutivo, módulos académicos y formularios con validaciones visibles. **No incluye backend ni base de datos real.**
 
-To start a local development server, run:
+---
+
+## Tecnologías usadas
+
+| Tecnología | Uso |
+|------------|-----|
+| Angular 21 | Framework principal (standalone components) |
+| TypeScript | Tipado e interfaces |
+| Bootstrap 5 | Grid, componentes y responsive |
+| Bootstrap Icons | Iconografía |
+| Angular Signals | Estado y validaciones en formularios |
+| SCSS | Estilos e identidad visual |
+| Cypress | Pruebas E2E |
+| Servicios mock | Datos simulados locales |
+| Guards | Protección de rutas privadas |
+
+---
+
+## Características principales
+
+- **Web pública:** Home, nosotros, niveles, admisión, noticias, comunicados, galería, contacto.
+- **Login simulado:** 5 roles con credenciales de prueba y sesión en `localStorage`.
+- **Intranet ERP:** Dashboard ejecutivo, sidebar por rol, 20+ rutas `/admin/*`.
+- **Módulos académicos:** Estudiantes, docentes, cursos, notas, tareas, horarios, asistencia, recursos, pagos simulados, etc.
+- **Formularios con Signals:** Login, contacto y registros académicos simulados con validaciones visibles.
+- **Pruebas Cypress:** 16 pruebas E2E sobre flujos críticos del frontend.
+
+---
+
+## Roles simulados
+
+| Rol | Descripción |
+|-----|-------------|
+| ADMIN | Gestión institucional completa |
+| DIRECTOR | Panel similar a ADMIN |
+| TEACHER | Portal docente (cursos, tareas, recursos) |
+| STUDENT | Portal estudiante (notas, horario, tareas) |
+| PARENT | Portal apoderado (seguimiento de Lucía Torres) |
+
+---
+
+## Credenciales de prueba
+
+| Rol | Correo | Contraseña |
+|-----|--------|------------|
+| ADMIN | `admin@horizonte.edu.pe` | `Admin123` |
+| DIRECTOR | `director@horizonte.edu.pe` | `Director123` |
+| TEACHER | `docente@horizonte.edu.pe` | `Docente123` |
+| STUDENT | `estudiante@horizonte.edu.pe` | `Estudiante123` |
+| PARENT | `padre@horizonte.edu.pe` | `Padre123` |
+
+---
+
+## Instalación
 
 ```bash
-ng serve
+npm install
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## Ejecución
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Servidor de desarrollo:
 
 ```bash
-ng generate component component-name
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Abrir [http://localhost:4200](http://localhost:4200).
+
+Compilación de producción:
 
 ```bash
-ng generate --help
+npm run build
 ```
 
-## Building
+---
 
-To build the project run:
+## Pruebas Cypress
+
+**Comando recomendado** (levanta Angular y ejecuta pruebas):
 
 ```bash
-ng build
+npm run e2e:local
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Modo interactivo (con `npm start` en otra terminal):
 
 ```bash
-ng test
+npm run cypress:open
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Modo headless manual:
 
 ```bash
-ng e2e
+npm run cypress:run
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## Estructura del proyecto
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```txt
+colegio-horizonte/
+├── src/app/
+│   ├── components/     # Navbar, sidebar, StatCard, DataTable, etc.
+│   ├── guards/         # authGuard
+│   ├── interfaces/     # Tipos TypeScript
+│   ├── layouts/        # PublicLayout, AdminLayout
+│   ├── pages/          # Páginas públicas y privadas
+│   ├── services/       # Auth, dashboard, entidades mock
+│   └── utils/          # Helpers de validación
+├── cypress/e2e/        # Pruebas E2E
+├── docs/               # Documentación académica
+└── dist/               # Build de producción
+```
+
+Documentación detallada en la carpeta [`docs/`](docs/).
+
+---
+
+## Alcance del MVP
+
+Incluye frontend funcional con datos simulados, experiencia diferenciada por rol, formularios con Signals y pruebas E2E básicas.
+
+Ver [`docs/MVP_SCOPE.md`](docs/MVP_SCOPE.md).
+
+---
+
+## Limitaciones actuales
+
+- **No hay backend** ni API REST real.
+- **No hay base de datos** ni persistencia de CRUD.
+- **No hay pagos reales** ni pasarela de pago.
+- **No se usa Supabase, Firebase** ni servicios externos.
+- Los datos son **simulados** con servicios mock y arrays locales.
+- No hay `roleGuard` en rutas (sidebar y UI filtran por rol).
+- El sistema es un **proyecto frontend académico** para demostración y defensa de curso.
+
+---
+
+## Estado final del proyecto
+
+**Fase 11 completada** — MVP listo para exposición académica.
+
+| Verificación | Estado |
+|--------------|--------|
+| `npm run build` | OK |
+| `npm run e2e:local` | 16/16 pruebas |
+| Documentación | Completa en `docs/` |
+
+Revisión final: [`docs/FINAL_REVIEW.md`](docs/FINAL_REVIEW.md)  
+Guía de exposición: [`docs/PRESENTATION_GUIDE.md`](docs/PRESENTATION_GUIDE.md)  
+Checklist de entrega: [`docs/DELIVERY_CHECKLIST.md`](docs/DELIVERY_CHECKLIST.md)
+
+---
+
+## Licencia y contexto académico
+
+Proyecto desarrollado como trabajo académico para la I.E.P. Horizonte. Uso educativo.
