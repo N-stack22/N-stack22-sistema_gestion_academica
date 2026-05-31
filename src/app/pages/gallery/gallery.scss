@@ -1,0 +1,23 @@
+.gallery-item {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: var(--horizonte-white);
+  box-shadow: 0 0.25rem 1rem rgba(11, 31, 58, 0.08);
+}
+
+.gallery-item__visual {
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-item__initial {
+  font-size: 3rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.gallery-item__body {
+  background: var(--horizonte-white);
+}

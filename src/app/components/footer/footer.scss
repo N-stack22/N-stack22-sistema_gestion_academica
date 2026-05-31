@@ -1,0 +1,37 @@
+.footer__brand {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.footer__heading {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--horizonte-yellow);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.footer__text,
+.footer__copy {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.9rem;
+}
+
+.footer__links a,
+.footer__contact li {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.footer__links a:hover {
+  color: var(--horizonte-yellow);
+}
+
+.footer__divider {
+  border-color: rgba(255, 255, 255, 0.15);
+}

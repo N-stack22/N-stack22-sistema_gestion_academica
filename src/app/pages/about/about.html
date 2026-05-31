@@ -1,0 +1,82 @@
+<app-page-header
+  title="Nosotros"
+  subtitle="Conoce la identidad, propósito e historia de la I.E.P. Horizonte."
+/>
+
+<section class="section-padding pt-4">
+  <div class="container">
+    <div class="row g-4 mb-5">
+      <div class="col-lg-8">
+        <h2 class="h4 text-horizonte-blue fw-bold">Presentación institucional</h2>
+        <p class="text-muted">
+          La I.E.P. Horizonte es una institución educativa privada de Huancayo que acompaña a niños,
+          niñas y adolescentes en su desarrollo integral. Nuestro proyecto educativo combina rigor
+          académico, formación en valores y un clima de confianza entre estudiantes, docentes y familias.
+        </p>
+        <p class="text-muted mb-0">
+          A través de HORIZONTE DIGITAL fortalecemos la comunicación institucional y la gestión
+          académica con herramientas modernas al servicio de nuestra comunidad.
+        </p>
+      </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+      <div class="col-md-6">
+        <div class="card public-card public-card__accent h-100">
+          <div class="card-body p-4">
+            <h2 class="h5 text-horizonte-blue mb-3">
+              <i class="bi bi-bullseye horizonte-icon-inline" aria-hidden="true"></i>
+              Misión
+            </h2>
+            <p class="text-muted mb-0">
+              Formar estudiantes competentes, éticos y autónomos, capaces de afrontar los retos del
+              mundo actual con responsabilidad social y espíritu de servicio.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card public-card public-card__accent h-100">
+          <div class="card-body p-4">
+            <h2 class="h5 text-horizonte-blue mb-3">
+              <i class="bi bi-eye-fill horizonte-icon-inline" aria-hidden="true"></i>
+              Visión
+            </h2>
+            <p class="text-muted mb-0">
+              Ser reconocidos como una institución referente en excelencia académica, innovación
+              pedagógica y vínculo sólido con las familias de la región Junín.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-5">
+      <h2 class="h4 text-horizonte-blue fw-bold mb-4">Valores institucionales</h2>
+      <div class="row g-3">
+        @for (value of values; track value.name) {
+          <div class="col-md-6">
+            <div class="about-value p-4 h-100">
+              <h3 class="h6 fw-bold text-horizonte-blue mb-2">
+                <i class="bi bi-star-fill horizonte-icon-inline" aria-hidden="true"></i>
+                {{ value.name }}
+              </h3>
+              <p class="text-muted mb-0">{{ value.text }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="about-history p-4 p-md-5">
+      <h2 class="h4 fw-bold mb-3">Historia institucional</h2>
+      <p class="mb-0">
+        Fundada hace más de 25 años, la I.E.P. Horizonte ha crecido junto a generaciones de
+        estudiantes huancainos. Desde sus inicios promovió una propuesta centrada en el alumno,
+        la participación familiar y la mejora continua. Hoy consolidamos ese legado con espacios
+        renovados, docentes especializados y plataformas digitales que complementan la experiencia
+        educativa presencial.
+      </p>
+    </div>
+  </div>
+</section>

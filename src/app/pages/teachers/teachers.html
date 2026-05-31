@@ -1,0 +1,110 @@
+<div class="admin-page">
+  <header class="mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+      <div>
+        <span class="badge admin-page__badge-module mb-2">Módulo académico</span>
+        <h1 class="h4 text-horizonte-blue fw-bold mb-1">
+          <i class="bi bi-person-workspace horizonte-icon-inline" aria-hidden="true"></i>
+          Docentes
+        </h1>
+        <p class="text-muted mb-0">Directorio simulado del personal docente.</p>
+      </div>
+      <span class="badge bg-warning text-dark">Datos simulados para fines académicos</span>
+    </div>
+  </header>
+
+  @if (roleContext.canRegisterTeachers()) {
+    <div class="form-panel admin-card">
+      <div class="form-panel__header">
+        <h2 class="form-panel__title">Registrar docente</h2>
+        <p class="form-panel__subtitle">Formulario simulado con Angular Signals.</p>
+      </div>
+      <div class="form-panel__body">
+        @if (successMessage()) {
+          <div class="form-success-card mb-3" role="status">{{ successMessage() }}</div>
+        }
+        <form novalidate (submit)="onSubmit($event)">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label" for="teacher-code">Código</label>
+              <input
+                id="teacher-code"
+                class="form-control"
+                [class.is-invalid]="submitted() && codeError()"
+                [value]="code()"
+                (input)="code.set($any($event.target).value)"
+              />
+              @if (submitted() && codeError()) {
+                <div class="invalid-feedback d-block">{{ codeError() }}</div>
+              }
+            </div>
+            <div class="col-md-5">
+              <label class="form-label" for="teacher-name">Nombre completo</label>
+              <input
+                id="teacher-name"
+                class="form-control"
+                [class.is-invalid]="submitted() && fullNameError()"
+                [value]="fullName()"
+                (input)="fullName.set($any($event.target).value)"
+              />
+              @if (submitted() && fullNameError()) {
+                <div class="invalid-feedback d-block">{{ fullNameError() }}</div>
+              }
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="teacher-specialty">Especialidad</label>
+              <input
+                id="teacher-specialty"
+                class="form-control"
+                [class.is-invalid]="submitted() && specialtyError()"
+                [value]="specialty()"
+                (input)="specialty.set($any($event.target).value)"
+              />
+              @if (submitted() && specialtyError()) {
+                <div class="invalid-feedback d-block">{{ specialtyError() }}</div>
+              }
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="teacher-email">Correo</label>
+              <input
+                id="teacher-email"
+                type="email"
+                class="form-control"
+                [class.is-invalid]="submitted() && emailError()"
+                [value]="email()"
+                (input)="email.set($any($event.target).value)"
+              />
+              @if (submitted() && emailError()) {
+                <div class="invalid-feedback d-block">{{ emailError() }}</div>
+              }
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="teacher-status">Estado</label>
+              <select
+                id="teacher-status"
+                class="form-select"
+                [class.is-invalid]="submitted() && statusError()"
+                [value]="status()"
+                (change)="status.set($any($event.target).value)"
+              >
+                <option value="">Seleccionar</option>
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+              </select>
+              @if (submitted() && statusError()) {
+                <div class="invalid-feedback d-block">{{ statusError() }}</div>
+              }
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-horizonte-primary" [disabled]="submitted() && !isFormValid()">
+                Registrar docente
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  <app-data-table title="Personal docente" icon="bi-person-workspace" [columns]="columns" [rows]="rows()" />
+</div>

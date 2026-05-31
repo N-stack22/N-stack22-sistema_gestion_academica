@@ -1,0 +1,156 @@
+<app-page-header
+  title="Contacto"
+  subtitle="Estamos atentos para orientarte sobre admisión, niveles educativos y servicios institucionales."
+/>
+
+<section class="section-padding pt-4">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <div class="card public-card public-card__accent h-100">
+          <div class="card-body p-4">
+            <h2 class="h5 text-horizonte-blue mb-3">
+              <i class="bi bi-geo-alt-fill horizonte-icon-inline" aria-hidden="true"></i>
+              Información institucional
+            </h2>
+            <ul class="list-unstyled text-muted mb-4">
+              <li class="mb-2">
+                <i class="bi bi-geo-alt horizonte-icon-inline" aria-hidden="true"></i>
+                Av. Los Educadores 123, Huancayo
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-telephone horizonte-icon-inline" aria-hidden="true"></i>
+                (064) 555-123
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-envelope horizonte-icon-inline" aria-hidden="true"></i>
+                informes&#64;iephorizonte.edu.pe
+              </li>
+            </ul>
+            <h3 class="h6 text-horizonte-blue">
+              <i class="bi bi-clock-fill horizonte-icon-inline" aria-hidden="true"></i>
+              Horario de atención
+            </h3>
+            <p class="text-muted mb-0">
+              Lunes a viernes: 8:00 a.m. – 4:30 p.m.<br />
+              Sábados: 8:00 a.m. – 12:00 p.m. (solo admisiones)
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="card public-card h-100">
+          <div class="card-body p-4">
+            <div class="form-panel__header mb-3">
+              <h2 class="form-panel__title">
+                <i class="bi bi-chat-dots-fill horizonte-icon-inline" aria-hidden="true"></i>
+                Escríbenos
+              </h2>
+              <p class="form-panel__subtitle">
+                Completa el formulario. El envío es simulado y no se conecta a un servidor real.
+              </p>
+            </div>
+
+            @if (successMessage()) {
+              <div class="form-success-card mb-4" role="status">
+                <i class="bi bi-check-circle-fill horizonte-icon-inline" aria-hidden="true"></i>
+                {{ successMessage() }}
+              </div>
+            }
+
+            <form novalidate (submit)="onSubmit($event)">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label" for="contact-name">Nombre completo</label>
+                  <input
+                    class="form-control"
+                    id="contact-name"
+                    type="text"
+                    [class.is-invalid]="submitted() && fullNameError()"
+                    [value]="fullName()"
+                    (input)="fullName.set($any($event.target).value)"
+                    placeholder="Ej. María García"
+                  />
+                  @if (submitted() && fullNameError()) {
+                    <div class="invalid-feedback d-block">{{ fullNameError() }}</div>
+                  }
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label" for="contact-email">Correo electrónico</label>
+                  <input
+                    class="form-control"
+                    id="contact-email"
+                    type="email"
+                    [class.is-invalid]="submitted() && emailError()"
+                    [value]="email()"
+                    (input)="email.set($any($event.target).value)"
+                    placeholder="correo@ejemplo.com"
+                  />
+                  @if (submitted() && emailError()) {
+                    <div class="invalid-feedback d-block">{{ emailError() }}</div>
+                  }
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label" for="contact-phone">Teléfono</label>
+                  <input
+                    class="form-control"
+                    id="contact-phone"
+                    type="tel"
+                    [class.is-invalid]="submitted() && phoneError()"
+                    [value]="phone()"
+                    (input)="phone.set($any($event.target).value)"
+                    placeholder="987654321"
+                  />
+                  @if (submitted() && phoneError()) {
+                    <div class="invalid-feedback d-block">{{ phoneError() }}</div>
+                  }
+                  <p class="form-help-text">9 dígitos, sin espacios.</p>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label" for="contact-subject">Asunto</label>
+                  <input
+                    class="form-control"
+                    id="contact-subject"
+                    type="text"
+                    [class.is-invalid]="submitted() && subjectError()"
+                    [value]="subject()"
+                    (input)="subject.set($any($event.target).value)"
+                    placeholder="Consulta de admisión"
+                  />
+                  @if (submitted() && subjectError()) {
+                    <div class="invalid-feedback d-block">{{ subjectError() }}</div>
+                  }
+                </div>
+                <div class="col-12">
+                  <label class="form-label" for="contact-message">Mensaje</label>
+                  <textarea
+                    class="form-control"
+                    id="contact-message"
+                    rows="4"
+                    [class.is-invalid]="submitted() && messageError()"
+                    [value]="message()"
+                    (input)="message.set($any($event.target).value)"
+                    placeholder="Escribe tu consulta..."
+                  ></textarea>
+                  @if (submitted() && messageError()) {
+                    <div class="invalid-feedback d-block">{{ messageError() }}</div>
+                  }
+                </div>
+                <div class="col-12">
+                  <button
+                    type="submit"
+                    class="btn btn-horizonte-primary"
+                    [disabled]="submitted() && !isFormValid()"
+                  >
+                    Enviar mensaje
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

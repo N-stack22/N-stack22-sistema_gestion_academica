@@ -1,0 +1,23 @@
+.dashboard-page__welcome {
+  font-size: 0.95rem;
+  color: var(--horizonte-gray);
+}
+
+.dashboard-page__portal-badge {
+  background-color: var(--horizonte-blue);
+  color: var(--horizonte-white);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+.dashboard-page--teacher .dashboard-page__portal-badge {
+  border-left: 3px solid var(--horizonte-yellow);
+}
+
+.dashboard-page--student .dashboard-page__portal-badge {
+  border-left: 3px solid var(--horizonte-yellow);
+}
+
+.dashboard-page--parent .dashboard-page__portal-badge {
+  border-left: 3px solid var(--horizonte-red);
+}

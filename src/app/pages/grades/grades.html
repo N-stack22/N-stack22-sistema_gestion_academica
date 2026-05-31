@@ -1,0 +1,40 @@
+<div class="admin-page">
+  <header class="admin-page-header">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+      <div>
+        <span class="badge admin-page__badge-module admin-badge mb-2">Calificaciones</span>
+        <h1 class="admin-page-title">
+          <i class="bi bi-card-checklist horizonte-icon-inline" aria-hidden="true"></i>
+          @if (roleContext.isStudent()) {
+            Mis notas
+          } @else if (roleContext.isParent()) {
+            Notas del estudiante
+          } @else if (roleContext.isTeacher()) {
+            Notas de mis cursos
+          } @else {
+            Notas
+          }
+        </h1>
+        <p class="admin-page-subtitle">
+          @if (roleContext.isStudent()) {
+            Calificaciones simuladas del I bimestre 2026.
+          } @else if (roleContext.isParent()) {
+            Rendimiento académico de {{ roleContext.linkedStudent.fullName }}.
+          } @else if (roleContext.isTeacher()) {
+            Registro simulado de notas por curso asignado.
+          } @else {
+            Consulta administrativa simulada de calificaciones.
+          }
+        </p>
+      </div>
+      <span class="badge bg-warning text-dark admin-badge">Datos simulados para fines académicos</span>
+    </div>
+  </header>
+
+  <app-data-table
+    [title]="roleContext.isInstitutional() ? 'Registro de notas' : 'Libreta simulada'"
+    icon="bi-card-checklist"
+    [columns]="columns"
+    [rows]="rows()"
+  />
+</div>

@@ -1,0 +1,102 @@
+<section class="login-page section-padding">
+  <div class="container">
+    <div class="row justify-content-center g-4">
+      <div class="col-lg-5">
+        <div class="card login-card border-0 shadow-sm">
+          <div class="card-body p-4 p-md-5">
+            <h1 class="h3 text-horizonte-blue mb-2">Acceso a Intranet</h1>
+            <p class="text-muted mb-4">
+              Ingresa con tus credenciales institucionales para acceder al panel académico simulado.
+            </p>
+
+            @if (authError()) {
+              <div class="alert alert-danger py-2" role="alert">{{ authError() }}</div>
+            }
+
+            <form novalidate (submit)="onSubmit($event)">
+              <div class="mb-3">
+                <label class="form-label" for="login-email">Correo</label>
+                <input
+                  id="login-email"
+                  type="email"
+                  class="form-control"
+                  [class.is-invalid]="submitted() && emailError()"
+                  [value]="email()"
+                  (input)="email.set($any($event.target).value); authError.set('')"
+                  autocomplete="username"
+                  placeholder="admin@horizonte.edu.pe"
+                />
+                @if (submitted() && emailError()) {
+                  <div class="invalid-feedback d-block">{{ emailError() }}</div>
+                }
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label" for="login-password">Contraseña</label>
+                <input
+                  id="login-password"
+                  type="password"
+                  class="form-control"
+                  [class.is-invalid]="submitted() && passwordError()"
+                  [value]="password()"
+                  (input)="password.set($any($event.target).value); authError.set('')"
+                  autocomplete="current-password"
+                  placeholder="••••••••"
+                />
+                @if (submitted() && passwordError()) {
+                  <div class="invalid-feedback d-block">{{ passwordError() }}</div>
+                }
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-horizonte-primary w-100"
+                [disabled]="isSubmitting() || (submitted() && !isFormValid())"
+              >
+                Ingresar
+              </button>
+            </form>
+
+            <p class="mt-3 mb-0 text-center">
+              <a routerLink="/" class="login-page__back">Volver al inicio</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="card login-demo border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <h2 class="h6 text-horizonte-blue fw-bold mb-3">
+              <i class="bi bi-key-fill horizonte-icon-inline" aria-hidden="true"></i>
+              Credenciales de prueba por rol
+            </h2>
+            <p class="text-muted small mb-3">
+              Usa cualquiera de estos accesos simulados. Cada rol muestra un panel y menú diferente.
+            </p>
+            <div class="table-responsive">
+              <table class="table table-sm table-bordered mb-0 login-demo__table">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col">Rol</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Contraseña</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (credential of demoCredentials; track credential.email) {
+                    <tr>
+                      <td>{{ credential.label }}</td>
+                      <td class="small">{{ credential.email }}</td>
+                      <td class="small">{{ credential.password }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

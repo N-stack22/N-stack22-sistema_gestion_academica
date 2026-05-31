@@ -1,0 +1,46 @@
+.navbar-brand__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--horizonte-red);
+  color: var(--horizonte-white);
+  font-size: 1.15rem;
+}
+
+.navbar-brand__title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.navbar-brand__subtitle {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: var(--horizonte-yellow);
+}
+
+.nav-link {
+  font-weight: 500;
+  padding-inline: 0.65rem !important;
+
+  &.active {
+    color: var(--horizonte-yellow) !important;
+  }
+}
+
+.btn-horizonte-accent {
+  background-color: var(--horizonte-red);
+  border-color: var(--horizonte-red);
+  color: var(--horizonte-white);
+  font-weight: 600;
+
+  &:hover,
+  &:focus {
+    background-color: #a00f1a;
+    border-color: #a00f1a;
+    color: var(--horizonte-white);
+  }
+}

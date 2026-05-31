@@ -1,0 +1,48 @@
+<div class="admin-shell">
+  <aside class="admin-shell__sidebar">
+    <app-sidebar />
+  </aside>
+
+  <section class="admin-shell__main">
+    <header class="admin-shell__topbar">
+      <div>
+        <p class="admin-shell__eyebrow mb-0">
+          <i class="bi bi-grid-1x2-fill horizonte-icon-inline" aria-hidden="true"></i>
+          Intranet académica ERP
+        </p>
+        <h1 class="admin-shell__title mb-0">HORIZONTE DIGITAL</h1>
+      </div>
+
+      <div class="admin-shell__meta text-end">
+        @if (auth.currentUser(); as user) {
+          <p class="admin-shell__user mb-1">
+            <i class="bi bi-person-circle horizonte-icon-inline" aria-hidden="true"></i>
+            {{ user.fullName }}
+          </p>
+          <p class="admin-shell__role mb-2">{{ roleLabel(user.role) }}</p>
+        }
+        <span class="badge bg-success">
+          <i class="bi bi-shield-check horizonte-icon-inline" aria-hidden="true"></i>
+          Sesión simulada
+        </span>
+      </div>
+    </header>
+
+    <main class="admin-shell__content">
+      @if (roleContext.getActiveStudent(); as student) {
+        <div class="admin-context-banner mb-3" role="status">
+          <i class="bi bi-person-badge horizonte-icon-inline" aria-hidden="true"></i>
+          @if (roleContext.isParent()) {
+            Estudiante asociado: <strong>{{ student.fullName }}</strong> — {{ student.level }},
+            {{ student.grade }} sección {{ student.section }}
+          } @else {
+            Mi perfil académico: <strong>{{ student.fullName }}</strong> — {{ student.level }},
+            {{ student.grade }} sección {{ student.section }}
+          }
+        </div>
+      }
+
+      <router-outlet />
+    </main>
+  </section>
+</div>

@@ -1,0 +1,28 @@
+<app-page-header
+  title="Galería"
+  subtitle="Momentos destacados de la vida académica, cultural y deportiva en Horizonte."
+/>
+
+<section class="section-padding pt-4">
+  <div class="container">
+    <p class="text-muted mb-4">
+      <i class="bi bi-images horizonte-icon-inline" aria-hidden="true"></i>
+      Momentos destacados de la vida institucional.
+    </p>
+    <div class="row g-4">
+      @for (item of items; track item.title) {
+        <div class="col-sm-6 col-lg-3">
+          <div class="gallery-item">
+            <div class="gallery-item__visual" [style.background]="item.gradient">
+              <span class="gallery-item__initial">{{ item.title.charAt(0) }}</span>
+            </div>
+            <div class="gallery-item__body p-3">
+              <span class="badge badge-horizonte-outline small mb-2">{{ item.category }}</span>
+              <h2 class="h6 text-horizonte-blue mb-0">{{ item.title }}</h2>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

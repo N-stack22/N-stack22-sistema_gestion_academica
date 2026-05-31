@@ -1,0 +1,11 @@
+.about-value {
+  background: var(--horizonte-white);
+  border-radius: 0.75rem;
+  border-left: 4px solid var(--horizonte-red);
+}
+
+.about-history {
+  background: linear-gradient(135deg, var(--horizonte-blue) 0%, var(--horizonte-dark) 100%);
+  border-radius: 1rem;
+  color: var(--horizonte-white);
+}

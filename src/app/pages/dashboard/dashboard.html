@@ -1,0 +1,108 @@
+<div class="dashboard-page" [class]="'dashboard-page--' + panel().theme">
+  <header class="erp-hero mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+      <div>
+        @if (auth.currentUser(); as user) {
+          <p class="dashboard-page__welcome mb-1">
+            <i class="bi bi-person-circle horizonte-icon-inline" aria-hidden="true"></i>
+            Bienvenido, {{ user.fullName }}
+          </p>
+        }
+        <span class="badge dashboard-page__portal-badge mb-2">{{ panel().portalLabel }}</span>
+        <h1 class="h4 erp-hero__title fw-bold mb-2">
+          <i class="bi bi-speedometer2 horizonte-icon-inline" aria-hidden="true"></i>
+          {{ panel().title }}
+        </h1>
+        <p class="erp-hero__subtitle mb-0">{{ panel().subtitle }}</p>
+      </div>
+      <span class="badge bg-warning text-dark admin-badge">
+        <i class="bi bi-info-circle horizonte-icon-inline" aria-hidden="true"></i>
+        Datos simulados para fines académicos
+      </span>
+    </div>
+  </header>
+
+  <section class="erp-metric-grid mb-4">
+    <div class="row g-3">
+      @for (metric of panel().metrics; track metric.id) {
+        <div class="col-sm-6 col-lg-4 col-xl-2">
+          <app-stat-card
+            [title]="metric.title"
+            [value]="metric.value"
+            [description]="metric.description"
+            [icon]="metric.icon"
+            [variant]="metric.variant"
+          />
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="row g-4 mb-4">
+    <div class="col-lg-6">
+      <div class="admin-card h-100 p-3 p-md-4">
+        <h2 class="erp-section-title h6 mb-3">
+          <i class="bi bi-exclamation-triangle horizonte-icon-inline" aria-hidden="true"></i>
+          {{ panel().alertsTitle }}
+        </h2>
+        <ul class="erp-alert-list list-unstyled mb-0">
+          @for (alert of panel().alerts; track alert.id) {
+            <li class="erp-alert-card mb-3" [class]="alertClass(alert.severity)">
+              <div class="d-flex gap-3">
+                <span class="horizonte-icon-circle horizonte-icon-circle--accent flex-shrink-0">
+                  <i class="bi" [class]="alert.icon" aria-hidden="true"></i>
+                </span>
+                <div>
+                  <p class="erp-alert-card__title mb-1 fw-semibold">{{ alert.title }}</p>
+                  <p class="erp-alert-card__text mb-0 text-muted small">{{ alert.description }}</p>
+                </div>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="admin-card h-100 p-3 p-md-4">
+        <h2 class="erp-section-title h6 mb-3">
+          <i class="bi bi-calendar-event horizonte-icon-inline" aria-hidden="true"></i>
+          {{ panel().eventsTitle }}
+        </h2>
+        <ul class="erp-event-list list-unstyled mb-0">
+          @for (event of panel().events; track event.id) {
+            <li class="erp-event-list__item">
+              <div class="d-flex justify-content-between align-items-start gap-2">
+                <div>
+                  <p class="erp-event-list__title mb-1 fw-semibold">{{ event.title }}</p>
+                  <p class="erp-event-list__text mb-0 text-muted small">{{ event.description }}</p>
+                </div>
+                <span class="erp-event-list__date badge text-bg-light">{{ event.date }}</span>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-4">
+    <h2 class="erp-section-title h6 mb-3">
+      <i class="bi bi-grid horizonte-icon-inline" aria-hidden="true"></i>
+      {{ panel().quickAccessTitle }}
+    </h2>
+    <div class="row g-3">
+      @for (link of panel().quickAccess; track link.route) {
+        <div class="col-6 col-md-3">
+          <a [routerLink]="link.route" class="erp-quick-access text-decoration-none">
+            <span class="erp-quick-access__icon">
+              <i class="bi" [class]="link.icon" aria-hidden="true"></i>
+            </span>
+            <span class="erp-quick-access__label">{{ link.label }}</span>
+            <i class="bi bi-chevron-right erp-quick-access__arrow" aria-hidden="true"></i>
+          </a>
+        </div>
+      }
+    </div>
+  </section>
+</div>

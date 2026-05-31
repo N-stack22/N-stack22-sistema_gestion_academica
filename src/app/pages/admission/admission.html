@@ -1,0 +1,49 @@
+<app-page-header
+  title="Admisión 2026"
+  subtitle="Proceso claro y acompañado para familias que desean formar parte de Horizonte."
+/>
+
+<section class="section-padding pt-4">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-7">
+        <h2 class="h4 text-horizonte-blue fw-bold mb-4">
+          <i class="bi bi-list-check horizonte-icon-inline" aria-hidden="true"></i>
+          Pasos del proceso
+        </h2>
+        <div class="admission-steps">
+          @for (item of steps; track item.step) {
+            <div class="admission-step d-flex gap-3 mb-4">
+              <span class="admission-step__number">{{ item.step }}</span>
+              <div>
+                <h3 class="h6 fw-bold mb-1">{{ item.title }}</h3>
+                <p class="text-muted mb-0">{{ item.text }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="card public-card public-card__accent">
+          <div class="card-body p-4">
+            <h2 class="h5 text-horizonte-blue mb-3">
+              <i class="bi bi-file-earmark-check-fill horizonte-icon-inline" aria-hidden="true"></i>
+              Requisitos
+            </h2>
+            <ul class="text-muted mb-4">
+              @for (req of requirements; track req) {
+                <li class="mb-2">{{ req }}</li>
+              }
+            </ul>
+            <p class="small text-muted mb-3">
+              La matrícula en línea no está disponible en esta etapa del sistema. Nuestro equipo de
+              admisiones te orientará personalmente.
+            </p>
+            <a class="btn btn-horizonte-primary w-100" routerLink="/contacto">Contactar admisiones</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

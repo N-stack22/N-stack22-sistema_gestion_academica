@@ -1,0 +1,51 @@
+<aside class="sidebar d-flex flex-column h-100">
+  <div class="sidebar__brand">
+    <div class="sidebar__brand-icon" aria-hidden="true">
+      <i class="bi bi-mortarboard-fill"></i>
+    </div>
+    <div>
+      <span class="sidebar__brand-title">HORIZONTE</span>
+      <span class="sidebar__brand-subtitle">{{ portalLabel() }}</span>
+    </div>
+  </div>
+
+  @if (auth.currentUser(); as user) {
+    <div class="sidebar__user-card mx-3 my-3">
+      <p class="sidebar__user-name mb-1">
+        <i class="bi bi-person-circle sidebar__user-icon" aria-hidden="true"></i>
+        {{ user.fullName }}
+      </p>
+      <p class="sidebar__user-role mb-0">{{ roleLabel(user.role) }}</p>
+    </div>
+  }
+
+  <nav class="sidebar__nav flex-grow-1" aria-label="Menú intranet">
+    @for (group of groups(); track group.title) {
+      <div class="sidebar__group">
+        <p class="sidebar__group-title">{{ group.title }}</p>
+        <ul class="sidebar__list list-unstyled mb-0">
+          @for (link of group.links; track link.label) {
+            <li>
+              <a
+                class="sidebar__link"
+                [routerLink]="link.route"
+                routerLinkActive="sidebar__link--active"
+                [routerLinkActiveOptions]="{ exact: true }"
+              >
+                <i class="bi sidebar__link-icon" [class]="link.icon" aria-hidden="true"></i>
+                {{ link.label }}
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </nav>
+
+  <div class="sidebar__footer p-3 mt-auto">
+    <button type="button" class="btn btn-outline-light btn-sm w-100" (click)="logout()">
+      <i class="bi bi-box-arrow-right me-2" aria-hidden="true"></i>
+      Cerrar sesión
+    </button>
+  </div>
+</aside>

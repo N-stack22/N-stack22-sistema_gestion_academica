@@ -1,0 +1,9 @@
+<div class="empty-state text-center py-5 px-3">
+  <div class="empty-state__icon mb-3" aria-hidden="true">
+    <i class="bi" [ngClass]="icon()"></i>
+  </div>
+  <h3 class="h6 text-horizonte-blue fw-bold mb-2">{{ title() }}</h3>
+  @if (message()) {
+    <p class="text-muted mb-0">{{ message() }}</p>
+  }
+</div>

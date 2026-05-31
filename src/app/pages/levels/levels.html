@@ -1,0 +1,34 @@
+<app-page-header
+  title="Niveles educativos"
+  subtitle="Una propuesta formativa continua desde la primera infancia hasta la secundaria."
+/>
+
+<section class="section-padding pt-4">
+  <div class="container">
+    <div class="row g-4">
+      @for (level of levels; track level.name) {
+        <div class="col-lg-4">
+          <div class="card public-card public-card__accent h-100">
+            <div class="card-body p-4 d-flex flex-column">
+              <span class="horizonte-icon-circle horizonte-icon-circle--primary mb-3">
+                <i class="bi" [ngClass]="level.icon" aria-hidden="true"></i>
+              </span>
+              <span class="badge badge-horizonte align-self-start mb-3">{{ level.name }}</span>
+              <h2 class="h5 text-horizonte-blue">{{ level.ages }}</h2>
+              <p class="text-muted small mb-2"><strong>Grados:</strong> {{ level.grades }}</p>
+              <p class="text-muted">{{ level.description }}</p>
+              <ul class="text-muted small mb-4">
+                @for (benefit of level.benefits; track benefit) {
+                  <li>{{ benefit }}</li>
+                }
+              </ul>
+              <a class="btn btn-horizonte-primary mt-auto align-self-start" routerLink="/admision">
+                Solicitar admisión
+              </a>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

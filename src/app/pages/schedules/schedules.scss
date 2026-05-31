@@ -1,0 +1,28 @@
+.schedule-day__header {
+  background: linear-gradient(90deg, var(--horizonte-blue), #163a66);
+  color: var(--horizonte-white);
+  font-weight: 600;
+  border-bottom: 0;
+  padding: 0.85rem 1.25rem;
+}
+
+.schedule-table {
+  thead th {
+    background: rgba(11, 31, 58, 0.04);
+    color: var(--horizonte-blue);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom-width: 1px;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    vertical-align: middle;
+    font-size: 0.92rem;
+  }
+}
+
+.schedule-week .schedule-day:last-child {
+  margin-bottom: 0 !important;
+}

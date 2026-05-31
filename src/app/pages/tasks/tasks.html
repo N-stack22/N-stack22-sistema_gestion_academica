@@ -1,0 +1,121 @@
+<div class="admin-page">
+  <header class="admin-page-header">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+      <div>
+        <span class="badge admin-page__badge-module admin-badge mb-2">Tareas académicas</span>
+        <h1 class="admin-page-title">
+          <i class="bi bi-clipboard-check horizonte-icon-inline" aria-hidden="true"></i>
+          @if (roleContext.isStudent()) {
+            Mis tareas
+          } @else if (roleContext.isParent()) {
+            Tareas pendientes del estudiante
+          } @else if (roleContext.isTeacher()) {
+            Tareas asignadas
+          } @else {
+            Tareas
+          }
+        </h1>
+        <p class="admin-page-subtitle">
+          @if (roleContext.isParent()) {
+            Entregas y pendientes de {{ roleContext.linkedStudent.fullName }}.
+          } @else if (roleContext.isStudent()) {
+            Actividades asignadas por tus docentes.
+          } @else if (roleContext.isTeacher()) {
+            Tareas publicadas y entregas por revisar.
+          } @else {
+            Listado administrativo simulado de tareas académicas.
+          }
+        </p>
+      </div>
+      <span class="badge bg-warning text-dark admin-badge">Datos simulados para fines académicos</span>
+    </div>
+  </header>
+
+  @if (roleContext.canRegisterTasks()) {
+    <div class="form-panel admin-card">
+      <div class="form-panel__header">
+        <h2 class="form-panel__title">Registrar tarea</h2>
+        <p class="form-panel__subtitle">Formulario simulado con Angular Signals.</p>
+      </div>
+      <div class="form-panel__body">
+        @if (successMessage()) {
+          <div class="form-success-card mb-3" role="status">{{ successMessage() }}</div>
+        }
+        <form novalidate (submit)="onSubmit($event)">
+          <div class="row g-3">
+            <div class="col-md-5">
+              <label class="form-label" for="task-title">Título</label>
+              <input
+                id="task-title"
+                class="form-control"
+                [class.is-invalid]="submitted() && titleError()"
+                [value]="title()"
+                (input)="title.set($any($event.target).value)"
+              />
+              @if (submitted() && titleError()) {
+                <div class="invalid-feedback d-block">{{ titleError() }}</div>
+              }
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="task-course">Curso</label>
+              <input
+                id="task-course"
+                class="form-control"
+                [class.is-invalid]="submitted() && courseError()"
+                [value]="course()"
+                (input)="course.set($any($event.target).value)"
+              />
+              @if (submitted() && courseError()) {
+                <div class="invalid-feedback d-block">{{ courseError() }}</div>
+              }
+            </div>
+            <div class="col-md-2">
+              <label class="form-label" for="task-date">Fecha de entrega</label>
+              <input
+                id="task-date"
+                type="date"
+                class="form-control"
+                [class.is-invalid]="submitted() && dueDateError()"
+                [value]="dueDate()"
+                (input)="dueDate.set($any($event.target).value)"
+              />
+              @if (submitted() && dueDateError()) {
+                <div class="invalid-feedback d-block">{{ dueDateError() }}</div>
+              }
+            </div>
+            <div class="col-md-2">
+              <label class="form-label" for="task-status">Estado</label>
+              <select
+                id="task-status"
+                class="form-select"
+                [class.is-invalid]="submitted() && statusError()"
+                [value]="status()"
+                (change)="status.set($any($event.target).value)"
+              >
+                <option value="">Seleccionar</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="En revisión">En revisión</option>
+                <option value="Completada">Completada</option>
+              </select>
+              @if (submitted() && statusError()) {
+                <div class="invalid-feedback d-block">{{ statusError() }}</div>
+              }
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-horizonte-primary" [disabled]="submitted() && !isFormValid()">
+                Registrar tarea
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  <app-data-table
+    [title]="roleContext.isInstitutional() ? 'Tareas académicas' : 'Listado de tareas'"
+    icon="bi-clipboard-check"
+    [columns]="columns"
+    [rows]="rows()"
+  />
+</div>
