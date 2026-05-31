@@ -214,9 +214,32 @@ El proyecto usa **Bootstrap Icons** como librería de iconografía oficial.
 
 ---
 
-## 12. Estado actual
+## 12. Clases utilitarias web pública premium (v1.1.0)
 
-Esta guía es **documentación de referencia** (Fase 1). Los estilos se implementarán a partir de la **Fase 3** (Bootstrap) y se aplicarán progresivamente en las Fases 4–9.
+Clases globales en `src/styles.scss` para páginas públicas:
+
+| Clase | Uso |
+|-------|-----|
+| `.public-hero` | Hero principal con gradiente azul marino |
+| `.public-section` | Sección con padding vertical estándar |
+| `.public-section--muted` | Fondo gris claro alternado |
+| `.public-card-premium` | Card con sombra y hover sutil |
+| `.public-gradient-panel` | Panel semitransparente sobre hero |
+| `.public-stat` | Métrica en franja de confianza |
+| `.public-cta` | Bloque CTA (rojo o `.public-cta--blue`) |
+| `.public-badge` | Badge institucional (`--important`, `--info`, `--academic`) |
+| `.public-trust-strip` | Franja blanca con estadísticas |
+| `.public-gallery-tile` | Tile de galería con gradiente placeholder |
+
+**Navbar público (v1.1.0):** fondo blanco, sombra ligera, `.public-navbar`.
+
+**Intranet:** mantiene sidebar y estilos admin existentes; no usar clases `.public-*` en `/admin/*`.
+
+---
+
+## 13. Estado actual
+
+Guía aplicada en MVP v1.0.0 y **mejora visual v1.1.0** (web pública premium). La intranet conserva el diseño ERP de fases 7–9.
 
 ---
 

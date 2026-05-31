@@ -10,3 +10,11 @@
   color: var(--horizonte-white);
   font-weight: 700;
 }
+
+.admission-notice {
+  border: 0;
+  border-left: 4px solid var(--horizonte-yellow);
+  background: rgba(244, 196, 48, 0.12);
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+}

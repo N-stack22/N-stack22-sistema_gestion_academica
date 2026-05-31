@@ -440,6 +440,33 @@ Verificar que el proyecto cumple los criterios académicos y está listo para ex
 
 ---
 
+## Mejora v1.1.0: Página pública institucional premium (completada)
+
+### Objetivo
+
+Elevar la calidad visual de la web pública (Home, navbar, footer y páginas informativas) sin modificar intranet, autenticación ni servicios mock.
+
+### Estado
+
+| Elemento | Estado |
+|----------|--------|
+| Mejora v1.1.0 | ✅ Completada — 2026-05-31 |
+
+### Entregables cumplidos
+
+- Navbar público premium (blanco, logo, botón Intranet).
+- Home con hero, franja de confianza, propuesta educativa, niveles, intranet por roles, noticias y CTA.
+- Páginas `/nosotros`, `/niveles`, `/admision`, `/noticias`, `/comunicados`, `/galeria`, `/contacto`, `/login` rediseñadas.
+- Clases SCSS públicas en `src/styles.scss`.
+- Documentación actualizada (`README.md`, `CHANGELOG.md`, `UI_GUIDELINES.md`, `SETUP.md`).
+- `npm run build` y `npm run e2e:local` — **16/16 passing**.
+
+**Sin cambios:** rutas `/admin/*`, AuthService, guards, sidebar admin, backend.
+
+**Versión actual:** **1.1.0**.
+
+---
+
 ## Resumen de fases
 
 | Fase | Nombre | ¿Código Angular? |

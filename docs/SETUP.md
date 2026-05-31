@@ -4,7 +4,7 @@
 
 Guía para instalar dependencias y ejecutar el proyecto en desarrollo local.
 
-**Estado actual:** Fase 3 completada — Angular 21 y Bootstrap 5 configurados.
+**Estado actual:** Mejora v1.1.0 completada — web pública premium; intranet sin cambios funcionales.
 
 ---
 
@@ -305,7 +305,24 @@ npm run e2e
 | DELIVERY_CHECKLIST.md | ✅ |
 | `npm run build` | ✅ |
 | `npm run e2e:local` | ✅ 16/16 |
-| **Versión final** | **1.0.0** |
+| **Versión MVP** | **1.0.0** |
+
+---
+
+## 19. Mejora v1.1.0 — Web pública premium
+
+| Elemento | Estado |
+|----------|--------|
+| Navbar / Footer públicos | ✅ Diseño premium |
+| Home landing institucional | ✅ 7 secciones |
+| Páginas públicas internas | ✅ Nosotros, niveles, admisión, noticias, comunicados, galería, contacto, login |
+| Intranet `/admin/*` | ✅ Sin cambios |
+| AuthService / guards | ✅ Sin cambios |
+| `data-cy` Cypress | ✅ Preservados |
+| `npm run build` | ✅ OK |
+| `npm run e2e:local` | ✅ 16/16 |
+| Backend | ❌ No existe (sin cambios) |
+| **Versión actual** | **1.1.0** |
 
 ---
 

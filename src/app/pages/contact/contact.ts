@@ -1,10 +1,11 @@
 import { Component, computed, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { PageHeader } from '../../components/page-header/page-header';
 import { isPhoneNineDigits, isRequired, isValidEmail, minLength } from '../../utils/form-validation';
 
 @Component({
   selector: 'app-contact',
-  imports: [PageHeader],
+  imports: [PageHeader, RouterLink],
   templateUrl: './contact.html',
   styleUrl: './contact.scss',
 })

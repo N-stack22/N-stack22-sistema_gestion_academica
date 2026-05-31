@@ -1,0 +1,27 @@
+.contact-map-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 7rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, rgba(11, 31, 58, 0.08), rgba(7, 21, 39, 0.12));
+  color: var(--horizonte-blue);
+  font-size: 0.85rem;
+  text-align: center;
+
+  i {
+    font-size: 1.75rem;
+    opacity: 0.7;
+  }
+}
+
+.contact-form-card {
+  border-top: 4px solid var(--horizonte-red);
+}
+
+.contact-form-card .form-control:focus {
+  border-color: var(--horizonte-blue);
+  box-shadow: 0 0 0 0.2rem rgba(11, 31, 58, 0.12);
+}

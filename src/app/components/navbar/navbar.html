@@ -1,17 +1,17 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-horizonte-blue sticky-top" data-cy="public-navbar">
+<nav class="navbar navbar-expand-lg navbar-light bg-white public-navbar sticky-top shadow-sm" data-cy="public-navbar">
   <div class="container">
-    <a class="navbar-brand d-flex align-items-center gap-2 py-2" routerLink="/">
+    <a class="navbar-brand navbar-brand--premium d-flex align-items-center py-2" routerLink="/">
       <span class="navbar-brand__badge" aria-hidden="true">
         <i class="bi bi-mortarboard-fill"></i>
       </span>
-      <span class="d-flex flex-column lh-sm">
-        <span class="navbar-brand__title">HORIZONTE DIGITAL</span>
-        <span class="navbar-brand__subtitle">I.E.P. Horizonte</span>
+      <span class="navbar-brand__text d-flex flex-column">
+        <span class="navbar-brand__title">I.E.P. HORIZONTE</span>
+        <span class="navbar-brand__subtitle">La educación hecha con pasión</span>
       </span>
     </a>
 
     <button
-      class="navbar-toggler"
+      class="navbar-toggler border-0"
       type="button"
       data-bs-toggle="collapse"
       data-bs-target="#navbarHorizonte"
@@ -23,7 +23,7 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarHorizonte">
-      <ul class="navbar-nav ms-auto align-items-lg-center">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
         <li class="nav-item">
           <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" data-cy="nav-home">
             Inicio

@@ -22,4 +22,19 @@ export class Admission {
     'Libreta de notas del grado anterior',
     'Constancia de no adeudo (si proviene de otra institución)',
   ];
+
+  protected readonly faqs = [
+    {
+      question: '¿La admisión en línea confirma la matrícula?',
+      answer: 'No. Este sistema es informativo. La matrícula se gestiona presencialmente con el equipo de admisiones.',
+    },
+    {
+      question: '¿Hay vacantes en todos los grados?',
+      answer: 'La disponibilidad varía por nivel. Contáctanos para confirmar vacantes en el grado de interés.',
+    },
+    {
+      question: '¿Cuándo inicia el proceso 2026?',
+      answer: 'Atendemos solicitudes de lunes a sábado en horario institucional. Consulta fechas en contacto.',
+    },
+  ];
 }

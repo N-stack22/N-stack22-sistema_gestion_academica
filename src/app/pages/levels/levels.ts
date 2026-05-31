@@ -10,6 +10,7 @@ interface LevelCard {
   grades: string;
   description: string;
   benefits: string[];
+  focus: string;
 }
 
 @Component({
@@ -27,6 +28,7 @@ export class Levels {
       grades: '3, 4 y 5 años',
       description: 'Ambientes lúdicos y seguros que favorecen la curiosidad, la expresión y la autonomía.',
       benefits: ['Desarrollo psicomotor', 'Inicio de lectoescritura', 'Socialización guiada'],
+      focus: 'Aprendizaje basado en juego, estimulación temprana y afecto seguro.',
     },
     {
       name: 'Primaria',
@@ -35,6 +37,7 @@ export class Levels {
       grades: '1.° a 6.° grado',
       description: 'Fortalecimiento de competencias básicas con proyectos interdisciplinarios.',
       benefits: ['Comunicación y matemática', 'Ciencia y tecnología', 'Formación en valores'],
+      focus: 'Competencias fundamentales con metodologías activas y tutoría personalizada.',
     },
     {
       name: 'Secundaria',
@@ -43,6 +46,7 @@ export class Levels {
       grades: '1.° a 5.° año',
       description: 'Preparación académica exigente con orientación vocacional y liderazgo estudiantil.',
       benefits: ['Pensamiento crítico', 'Preparación universitaria', 'Proyectos de emprendimiento'],
+      focus: 'Rigor académico, orientación vocacional y desarrollo de liderazgo.',
     },
   ];
 }

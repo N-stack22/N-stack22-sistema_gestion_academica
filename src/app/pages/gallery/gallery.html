@@ -3,26 +3,41 @@
   subtitle="Momentos destacados de la vida académica, cultural y deportiva en Horizonte."
 />
 
-<section class="section-padding pt-4">
+<section class="public-section pt-4">
   <div class="container">
-    <p class="text-muted mb-4">
-      <i class="bi bi-images horizonte-icon-inline" aria-hidden="true"></i>
-      Momentos destacados de la vida institucional.
-    </p>
-    <div class="row g-4">
+    <div class="public-section__header mb-4">
+      <p class="public-section__lead">
+        <i class="bi bi-images horizonte-icon-inline" aria-hidden="true"></i>
+        Registro visual de actividades institucionales con placeholders premium (sin imágenes externas).
+      </p>
+    </div>
+    <div class="row g-4 mb-5">
       @for (item of items; track item.title) {
         <div class="col-sm-6 col-lg-3">
-          <div class="gallery-item">
-            <div class="gallery-item__visual" [style.background]="item.gradient">
-              <span class="gallery-item__initial">{{ item.title.charAt(0) }}</span>
+          <div class="public-gallery-tile gallery-tile">
+            <div class="public-gallery-tile__visual gallery-tile__visual" [style.background]="item.gradient">
+              <i class="bi" [ngClass]="item.icon" aria-hidden="true"></i>
             </div>
-            <div class="gallery-item__body p-3">
-              <span class="badge badge-horizonte-outline small mb-2">{{ item.category }}</span>
-              <h2 class="h6 text-horizonte-blue mb-0">{{ item.title }}</h2>
+            <div class="gallery-tile__body p-3 bg-white">
+              <span class="public-badge public-badge--info small mb-2">{{ item.category }}</span>
+              <h2 class="h6 text-horizonte-blue mb-1">{{ item.title }}</h2>
+              <p class="text-muted small mb-0">{{ item.caption }}</p>
             </div>
           </div>
         </div>
       }
+    </div>
+
+    <div class="public-cta public-cta--blue text-center text-md-start">
+      <div class="row align-items-center g-3">
+        <div class="col-md-8">
+          <h2 class="h5 fw-bold mb-1">Vive la experiencia Horizonte</h2>
+          <p class="mb-0 opacity-90">Conoce nuestra propuesta educativa y proceso de admisión.</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <a class="btn btn-light fw-semibold" routerLink="/nosotros">Sobre nosotros</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>

@@ -3,20 +3,25 @@
   subtitle="Actualidad, logros y actividades de la comunidad educativa Horizonte."
 />
 
-<section class="section-padding pt-4">
+<section class="public-section pt-4">
   <div class="container">
-    <p class="text-muted mb-4">
-      <i class="bi bi-newspaper horizonte-icon-inline" aria-hidden="true"></i>
-      Actualidad y logros de nuestra comunidad educativa.
-    </p>
-    <div class="row g-4">
+    <div class="public-section__header mb-4">
+      <p class="public-section__lead">
+        <i class="bi bi-newspaper horizonte-icon-inline" aria-hidden="true"></i>
+        Blog institucional con novedades, reconocimientos y actividades de nuestra comunidad.
+      </p>
+    </div>
+    <div class="row g-4 mb-5">
       @for (article of articles; track article.title) {
         <div class="col-md-6">
-          <article class="card public-card h-100">
+          <article class="card public-card-premium h-100 news-card">
             <div class="card-body p-4 d-flex flex-column">
               <div class="d-flex flex-wrap gap-2 mb-3">
-                <span class="badge badge-horizonte">{{ article.category }}</span>
-                <span class="badge badge-horizonte-outline">{{ article.date }}</span>
+                <span class="public-badge public-badge--info">{{ article.category }}</span>
+                <span class="badge badge-horizonte-outline">
+                  <i class="bi bi-calendar3 me-1" aria-hidden="true"></i>
+                  {{ article.date }}
+                </span>
               </div>
               <h2 class="h5 text-horizonte-blue">{{ article.title }}</h2>
               <p class="text-muted flex-grow-1">{{ article.summary }}</p>
@@ -27,6 +32,18 @@
           </article>
         </div>
       }
+    </div>
+
+    <div class="public-cta public-cta--blue text-center text-md-start">
+      <div class="row align-items-center g-3">
+        <div class="col-md-8">
+          <h2 class="h5 fw-bold mb-1">Mantente informado</h2>
+          <p class="mb-0 opacity-90">Consulta también nuestros comunicados oficiales para la comunidad educativa.</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <a class="btn btn-light fw-semibold" routerLink="/comunicados">Ver comunicados</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>

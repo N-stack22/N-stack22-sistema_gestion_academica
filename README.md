@@ -24,7 +24,7 @@ Frontend académico desarrollado con Angular 21 que simula la experiencia de un 
 
 ## Características principales
 
-- **Web pública:** Home, nosotros, niveles, admisión, noticias, comunicados, galería, contacto.
+- **Web pública premium (v1.1.0):** Home landing institucional, navbar y footer mejorados, páginas públicas con diseño consistente.
 - **Login simulado:** 5 roles con credenciales de prueba y sesión en `localStorage`.
 - **Intranet ERP:** Dashboard ejecutivo, sidebar por rol, 20+ rutas `/admin/*`.
 - **Módulos académicos:** Estudiantes, docentes, cursos, notas, tareas, horarios, asistencia, recursos, pagos simulados, etc.
@@ -146,17 +146,18 @@ Ver [`docs/MVP_SCOPE.md`](docs/MVP_SCOPE.md).
 
 ---
 
-## Estado final del proyecto
+## Estado del proyecto
 
-**Fase 11 completada** — MVP listo para exposición académica.
+**Versión 1.1.0** — Mejora visual de la web pública institucional premium (post-MVP).
 
 | Verificación | Estado |
 |--------------|--------|
 | `npm run build` | OK |
 | `npm run e2e:local` | 16/16 pruebas |
-| Documentación | Completa en `docs/` |
+| Intranet `/admin/*` | Sin cambios funcionales |
+| Documentación | Actualizada en `docs/` |
 
-Revisión final: [`docs/FINAL_REVIEW.md`](docs/FINAL_REVIEW.md)  
+MVP base (v1.0.0): [`docs/FINAL_REVIEW.md`](docs/FINAL_REVIEW.md)  
 Guía de exposición: [`docs/PRESENTATION_GUIDE.md`](docs/PRESENTATION_GUIDE.md)  
 Checklist de entrega: [`docs/DELIVERY_CHECKLIST.md`](docs/DELIVERY_CHECKLIST.md)
 

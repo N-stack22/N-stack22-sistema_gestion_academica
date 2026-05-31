@@ -12,6 +12,33 @@ Cambios pendientes de registrar en la próxima fase autorizada.
 
 ---
 
+## [1.1.0] — 2026-05-31 — Mejora: Página pública institucional premium
+
+### Completado
+
+- **Mejora v1.1.0** — Rediseño visual de la web pública sin alterar intranet, auth ni servicios mock.
+
+### Agregado / Mejorado
+
+- **Navbar público** — Fondo blanco con sombra, logo con icono, botón Intranet destacado, estado activo con `routerLinkActive`.
+- **Footer** — Franja de color institucional, columnas de enlaces y contacto.
+- **Home** — Hero premium, franja de confianza, propuesta educativa (4 pilares), niveles, sección intranet por roles, noticias destacadas y CTA final.
+- **Páginas internas** — Nosotros, niveles, admisión (+ FAQ), noticias, comunicados (badges Importante/Informativo/Académico), galería, contacto y login con diseño consistente.
+- **Estilos globales** — Clases `.public-hero`, `.public-section`, `.public-card-premium`, `.public-gradient-panel`, `.public-stat`, `.public-cta`, `.public-badge`, etc. en `src/styles.scss`.
+
+### Sin cambios
+
+- AuthService, guards, rutas `/admin/*`, dashboard, sidebar administrativo y formularios de intranet.
+- Backend (no existe), Supabase, Firebase ni APIs externas.
+- Atributos `data-cy` de Cypress en navbar, contacto y login.
+
+### Verificado
+
+- `npm run build` — OK (warnings Sass y budget no bloqueantes).
+- `npm run e2e:local` — **16/16 pruebas passing**.
+
+---
+
 ## [1.0.0] — 2026-05-31 — Fase 11: Revisión final para rúbrica
 
 ### Completado

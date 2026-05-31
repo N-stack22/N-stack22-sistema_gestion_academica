@@ -1,7 +1,13 @@
 .footer__brand {
   font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.footer__tagline {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.82rem;
+  letter-spacing: 0.01em;
 }
 
 .footer__heading {
@@ -34,4 +40,13 @@
 
 .footer__divider {
   border-color: rgba(255, 255, 255, 0.15);
+}
+
+.public-footer {
+  position: relative;
+}
+
+.public-footer__accent {
+  height: 4px;
+  background: linear-gradient(90deg, var(--horizonte-red), var(--horizonte-yellow), var(--horizonte-blue));
 }

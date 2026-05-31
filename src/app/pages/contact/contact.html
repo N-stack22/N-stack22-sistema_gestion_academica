@@ -3,11 +3,11 @@
   subtitle="Estamos atentos para orientarte sobre admisión, niveles educativos y servicios institucionales."
 />
 
-<section class="section-padding pt-4">
+<section class="public-section pt-4">
   <div class="container">
-    <div class="row g-4">
+    <div class="row g-4 mb-4">
       <div class="col-lg-5">
-        <div class="card public-card public-card__accent h-100">
+        <div class="card public-card-premium public-card-premium__accent h-100">
           <div class="card-body p-4">
             <h2 class="h5 text-horizonte-blue mb-3">
               <i class="bi bi-geo-alt-fill horizonte-icon-inline" aria-hidden="true"></i>
@@ -31,17 +31,21 @@
               <i class="bi bi-clock-fill horizonte-icon-inline" aria-hidden="true"></i>
               Horario de atención
             </h3>
-            <p class="text-muted mb-0">
+            <p class="text-muted mb-4">
               Lunes a viernes: 8:00 a.m. – 4:30 p.m.<br />
               Sábados: 8:00 a.m. – 12:00 p.m. (solo admisiones)
             </p>
+            <div class="contact-map-placeholder" aria-hidden="true">
+              <i class="bi bi-map-fill"></i>
+              <span>Ubicación simulada — Huancayo, Junín</span>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="col-lg-7">
-        <div class="card public-card h-100">
-          <div class="card-body p-4">
+        <div class="card public-card-premium h-100 contact-form-card">
+          <div class="card-body p-4 p-md-5">
             <div class="form-panel__header mb-3">
               <h2 class="form-panel__title">
                 <i class="bi bi-chat-dots-fill horizonte-icon-inline" aria-hidden="true"></i>
@@ -145,7 +149,7 @@
                 <div class="col-12">
                   <button
                     type="submit"
-                    class="btn btn-horizonte-primary"
+                    class="btn btn-horizonte-primary px-4"
                     data-cy="contact-submit"
                     [disabled]="submitted() && !isFormValid()"
                   >
@@ -155,6 +159,18 @@
               </div>
             </form>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="public-cta public-cta--blue text-center text-md-start">
+      <div class="row align-items-center g-3">
+        <div class="col-md-8">
+          <h2 class="h5 fw-bold mb-1">¿Prefieres visitarnos?</h2>
+          <p class="mb-0 opacity-90">Agenda una cita presencial con el equipo de admisiones en horario institucional.</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <a class="btn btn-light fw-semibold" routerLink="/admision">Ver admisión</a>
         </div>
       </div>
     </div>

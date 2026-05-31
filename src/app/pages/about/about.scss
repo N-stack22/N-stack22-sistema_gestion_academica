@@ -1,11 +1,35 @@
-.about-value {
-  background: var(--horizonte-white);
-  border-radius: 0.75rem;
-  border-left: 4px solid var(--horizonte-red);
+.about-identity-panel {
+  background: linear-gradient(135deg, var(--horizonte-blue), var(--horizonte-dark)) !important;
+  border: none !important;
 }
 
-.about-history {
-  background: linear-gradient(135deg, var(--horizonte-blue) 0%, var(--horizonte-dark) 100%);
-  border-radius: 1rem;
-  color: var(--horizonte-white);
+.about-identity-panel__label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--horizonte-yellow);
+  font-weight: 600;
+}
+
+.about-color-swatch {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.35rem;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+}
+
+.about-color-swatch--blue {
+  background: var(--horizonte-blue);
+}
+
+.about-color-swatch--red {
+  background: var(--horizonte-red);
+}
+
+.about-color-swatch--yellow {
+  background: var(--horizonte-yellow);
+}
+
+.about-value {
+  border-left: 4px solid var(--horizonte-yellow);
 }

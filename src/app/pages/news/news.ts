@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { PageHeader } from '../../components/page-header/page-header';
 
 interface NewsArticle {
@@ -10,7 +11,7 @@ interface NewsArticle {
 
 @Component({
   selector: 'app-news',
-  imports: [PageHeader],
+  imports: [PageHeader, RouterLink],
   templateUrl: './news.html',
   styleUrl: './news.scss',
 })

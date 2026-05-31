@@ -1,11 +1,23 @@
 .page-header {
-  padding: 3rem 1.5rem 2rem;
+  padding: 3rem 0 2.5rem;
   background: linear-gradient(135deg, var(--horizonte-blue) 0%, var(--horizonte-dark) 100%);
   color: var(--horizonte-white);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--horizonte-red), var(--horizonte-yellow));
+  }
 }
 
 .page-header__eyebrow {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--horizonte-yellow);
@@ -14,12 +26,12 @@
 
 .page-header__title {
   font-size: clamp(1.75rem, 4vw, 2.5rem);
-  font-weight: 700;
+  font-weight: 800;
   margin-bottom: 0.75rem;
 }
 
 .page-header__subtitle {
   font-size: 1.05rem;
-  color: rgba(255, 255, 255, 0.85);
-  max-width: 42rem;
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 40rem;
 }
