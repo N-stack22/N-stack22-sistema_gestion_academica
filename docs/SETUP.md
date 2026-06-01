@@ -4,7 +4,7 @@
 
 Guía para instalar dependencias y ejecutar el proyecto en desarrollo local.
 
-**Estado actual:** Mejora v1.5.0 completada — tablas ERP premium y microinteracciones públicas; intranet sin cambios funcionales.
+**Estado actual:** Mejora v1.6.0 completada — web pública con hero premium y visuales institucionales; intranet sin cambios.
 
 ---
 
@@ -390,6 +390,23 @@ npm run e2e
 | `npm run build` | ✅ OK |
 | `npm run e2e:local` | ✅ OK |
 | **Versión actual** | **1.5.0** |
+
+---
+
+## 24. Mejora v1.6.0 — Web pública con impacto visual
+
+| Elemento | Estado |
+|----------|--------|
+| Hero Home premium | ✅ Composición visual, cards flotantes, badge admisión |
+| `.school-photo-card` | ✅ Visuales institucionales CSS sin imágenes externas |
+| Secciones alternadas | ✅ Tinted, institucional, ondas, CTA v1.6 |
+| Páginas internas | ✅ Nosotros, niveles, admisión, plataforma, contacto, login |
+| Intranet `/admin/*` | ✅ Sin cambios |
+| Chatbot | ✅ Lógica intacta |
+| Modo oscuro | ❌ No implementado |
+| `npm run build` | ✅ OK |
+| `npm run e2e:local` | ✅ OK |
+| **Versión actual** | **1.6.0** |
 
 ---
 

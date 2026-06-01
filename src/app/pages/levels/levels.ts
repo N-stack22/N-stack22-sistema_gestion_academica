@@ -11,6 +11,8 @@ interface LevelCard {
   description: string;
   benefits: string[];
   focus: string;
+  accent: string;
+  photoVariant: string;
 }
 
 @Component({
@@ -29,6 +31,8 @@ export class Levels {
       description: 'Ambientes lúdicos y seguros que favorecen la curiosidad, la expresión y la autonomía.',
       benefits: ['Desarrollo psicomotor', 'Inicio de lectoescritura', 'Socialización guiada'],
       focus: 'Aprendizaje basado en juego, estimulación temprana y afecto seguro.',
+      accent: 'inicial',
+      photoVariant: 'learning',
     },
     {
       name: 'Primaria',
@@ -38,6 +42,8 @@ export class Levels {
       description: 'Fortalecimiento de competencias básicas con proyectos interdisciplinarios.',
       benefits: ['Comunicación y matemática', 'Ciencia y tecnología', 'Formación en valores'],
       focus: 'Competencias fundamentales con metodologías activas y tutoría personalizada.',
+      accent: 'primaria',
+      photoVariant: 'culture',
     },
     {
       name: 'Secundaria',
@@ -47,6 +53,8 @@ export class Levels {
       description: 'Preparación académica exigente con orientación vocacional y liderazgo estudiantil.',
       benefits: ['Pensamiento crítico', 'Preparación universitaria', 'Proyectos de emprendimiento'],
       focus: 'Rigor académico, orientación vocacional y desarrollo de liderazgo.',
+      accent: 'secundaria',
+      photoVariant: 'tech',
     },
   ];
 }

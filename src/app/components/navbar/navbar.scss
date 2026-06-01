@@ -1,8 +1,10 @@
 .public-navbar {
   border-bottom: 1px solid rgba(11, 31, 58, 0.08);
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.95) !important;
-  box-shadow: 0 0.35rem 1.25rem rgba(11, 31, 58, 0.06) !important;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.97) !important;
+  box-shadow:
+    0 0.35rem 1.25rem rgba(11, 31, 58, 0.07),
+    0 1px 0 rgba(244, 196, 48, 0.15) !important;
 }
 
 .navbar-brand--premium {

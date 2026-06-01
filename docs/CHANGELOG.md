@@ -12,6 +12,41 @@ Cambios pendientes de registrar en la próxima fase autorizada.
 
 ---
 
+## [1.6.0] — 2026-05-31 — Mejora: Web pública con impacto visual e imágenes institucionales
+
+### Completado
+
+- **Mejora v1.6.0** — Rediseño visual fuerte de la web pública con hero premium, visuales institucionales CSS y secciones con más color.
+
+### Agregado
+
+- **Hero Home v1.6** — Composición visual con mockup ERP, cards flotantes (estudiante, asistencia), badge “Admisión abierta” y bloque fotográfico simulado “Comunidad Horizonte”.
+- **`.school-photo-card`** — Bloques visuales tipo fotografía institucional con gradientes CSS (sin imágenes externas obligatorias).
+- **Secciones alternadas** — Fondos tintados, franja institucional rojo/azul, divisores onda CSS y CTA final `.public-cta-premium--v16`.
+- **Métricas v1.6** — Cards `.public-metric-card--v16` más grandes con borde superior de color.
+- **Visuales en páginas internas** — `/nosotros`, `/niveles`, `/admision`, `/plataforma`, `/contacto`, `/login`.
+
+### Mejorado
+
+- Propuesta educativa con card destacada “Gestión académica digital”.
+- Sección “Comunidad conectada” con mockup ERP, badge HORIZONTE DIGITAL y cards por rol.
+- Niveles y noticias con diseño editorial premium.
+- Page headers internos con patrón institucional.
+- Navbar con sombra y acento dorado refinado.
+
+### Sin cambios
+
+- Intranet `/admin/*`, AuthService, guards, servicios mock, formularios Signals.
+- Chatbot (lógica intacta; hover conservado).
+- Modo oscuro, backend, API externa.
+
+### Verificación
+
+- `npm run build` — OK.
+- `npm run e2e:local` — OK.
+
+---
+
 ## [1.5.0] — 2026-05-31 — Mejora: Pulido visual premium, tablas ERP y experiencia pública viva
 
 ### Completado

@@ -269,6 +269,15 @@ Componente `DataTable` con card contenedora, header (título, subtítulo opciona
 
 Clases: `.public-card-lift`, `.premium-button`, `.public-glow`. Hover sutil en cards, CTAs, navbar, chatbot y mockups. Sin animaciones pesadas ni modo oscuro.
 
+### Impacto visual web pública (v1.6.0)
+
+- **`.school-photo-card`** — Bloques visuales tipo fotografía institucional con gradientes CSS (variantes: `learning`, `teachers`, `culture`, `community`, `tech`).
+- **Secciones** — `.public-section-tinted`, `.public-section-institutional`, `.public-wave-divider`.
+- **Métricas** — `.public-metric-card--v16` con borde superior de color.
+- **CTA** — `.public-cta-premium--v16` con gradiente rojo + azul y orbes decorativos.
+- **Niveles** — `.public-level-card-premium` con mini visual superior.
+- Sin imágenes externas obligatorias; intranet sin cambios.
+
 ---
 
 ## Referencia

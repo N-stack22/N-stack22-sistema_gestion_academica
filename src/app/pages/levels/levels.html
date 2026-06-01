@@ -4,7 +4,7 @@
     subtitle="Una propuesta formativa continua desde la primera infancia hasta la secundaria."
   />
 
-  <section class="public-section-premium pt-4">
+  <section class="public-section-premium pt-4 public-section-tinted">
     <div class="container">
       <div class="public-section-head public-section-head--center mb-5">
         <p class="public-section-head__lead">
@@ -16,38 +16,49 @@
       <div class="row g-4 mb-5">
         @for (level of levels; track level.name) {
           <div class="col-lg-4">
-            <div class="public-card-lift p-4 p-md-5 h-100 levels-card">
-              <span class="horizonte-icon-circle horizonte-icon-circle--primary mb-3">
-                <i class="bi" [ngClass]="level.icon" aria-hidden="true"></i>
-              </span>
-              <span class="public-badge public-badge--academic mb-3">{{ level.name }}</span>
-              <h2 class="h4 text-horizonte-blue fw-bold">{{ level.ages }}</h2>
-              <p class="text-muted small mb-2"><strong>Grados:</strong> {{ level.grades }}</p>
-              <p class="text-muted">{{ level.description }}</p>
-              <div class="levels-focus mb-3">
-                <p class="small fw-semibold text-horizonte-blue mb-1">Enfoque pedagógico</p>
-                <p class="small text-muted mb-0">{{ level.focus }}</p>
+            <article class="public-level-card-premium h-100" [ngClass]="'public-level-card-premium--' + level.accent">
+              <div
+                class="school-photo-card school-photo-card--mini"
+                [ngClass]="'school-photo-card--' + level.photoVariant"
+              >
+                <div class="school-photo-card__icon">
+                  <i class="bi" [ngClass]="level.icon" aria-hidden="true"></i>
+                </div>
+                <div class="school-photo-card__overlay">
+                  <span>{{ level.name }}</span>
+                  <small>{{ level.ages }}</small>
+                </div>
               </div>
-              <p class="small fw-semibold text-horizonte-blue mb-2">Beneficios</p>
-              <ul class="text-muted small mb-4">
-                @for (benefit of level.benefits; track benefit) {
-                  <li>{{ benefit }}</li>
-                }
-              </ul>
-              <a class="btn btn-horizonte-primary mt-auto premium-button" routerLink="/admision">Solicitar admisión</a>
-            </div>
+              <div class="public-level-card-premium__body d-flex flex-column">
+                <span class="public-badge public-badge--academic mb-2">{{ level.name }}</span>
+                <h2 class="h4 text-horizonte-blue fw-bold">{{ level.ages }}</h2>
+                <p class="text-muted small mb-2"><strong>Grados:</strong> {{ level.grades }}</p>
+                <p class="text-muted">{{ level.description }}</p>
+                <div class="levels-focus mb-3">
+                  <p class="small fw-semibold text-horizonte-blue mb-1">Enfoque pedagógico</p>
+                  <p class="small text-muted mb-0">{{ level.focus }}</p>
+                </div>
+                <p class="small fw-semibold text-horizonte-blue mb-2">Beneficios</p>
+                <ul class="text-muted small mb-4">
+                  @for (benefit of level.benefits; track benefit) {
+                    <li>{{ benefit }}</li>
+                  }
+                </ul>
+                <a class="btn btn-horizonte-primary mt-auto premium-button" routerLink="/admision">Solicitar admisión</a>
+              </div>
+            </article>
           </div>
         }
       </div>
 
-      <div class="public-cta-premium text-center text-md-start">
+      <div class="public-cta-premium public-cta-premium--v16 text-center text-md-start">
         <div class="row align-items-center g-3">
           <div class="col-md-8">
             <h2 class="h5 fw-bold mb-1">¿Listo para iniciar el proceso de admisión?</h2>
             <p class="mb-0 opacity-90">Conoce requisitos, pasos y fechas de atención para familias interesadas.</p>
           </div>
           <div class="col-md-4 text-md-end">
-            <a class="btn btn-light fw-semibold px-4" routerLink="/admision">Ver admisión</a>
+            <a class="btn btn-light fw-semibold px-4 premium-button" routerLink="/admision">Ver admisión</a>
           </div>
         </div>
       </div>
