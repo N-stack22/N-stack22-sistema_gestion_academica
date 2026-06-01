@@ -29,6 +29,8 @@ Frontend académico desarrollado con Angular 21 que simula la experiencia de un 
 - **Plataforma Digital v1.4.0:** Página pública `/plataforma` con presentación visual de la intranet ERP.
 - **Pulido visual v1.5.0:** Tablas ERP premium (`DataTable`), microinteracciones públicas y refinamiento responsive.
 - **Impacto visual v1.6.0:** Hero premium, visuales institucionales CSS (`.school-photo-card`) y secciones con más color en la web pública.
+- **Corrección v1.6.1:** Hero público sin datos personales; mockup institucional referencial.
+- **Corrección v1.6.2:** Login público menos redundante; chatbot con icono de asistente (`bi-robot`).
 - **Login simulado:** 5 roles con credenciales de prueba y sesión en `localStorage`.
 - **Intranet ERP:** Dashboard ejecutivo, sidebar por rol, 20+ rutas `/admin/*`.
 - **Módulos académicos:** Estudiantes, docentes, cursos, notas, tareas, horarios, asistencia, recursos, pagos simulados, etc.
@@ -152,7 +154,7 @@ Ver [`docs/MVP_SCOPE.md`](docs/MVP_SCOPE.md).
 
 ## Estado del proyecto
 
-**Versión 1.6.0** — Web pública con impacto visual, hero premium y visuales institucionales (post-v1.5.0).
+**Versión 1.6.2** — Login público refinado y chatbot con icono de asistente (post-v1.6.1).
 
 | Verificación | Estado |
 |--------------|--------|

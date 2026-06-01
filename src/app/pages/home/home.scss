@@ -104,6 +104,33 @@
   background: rgba(244, 196, 48, 0.1);
 }
 
+.home-dashboard-mock--institutional {
+  .public-dashboard-mock__stat-value {
+    font-size: 1.15rem;
+    letter-spacing: 0.02em;
+  }
+
+  .public-dashboard-mock__stat-label {
+    font-size: 0.68rem;
+    line-height: 1.35;
+  }
+}
+
+.home-dashboard-mock__badge {
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+}
+
+.home-dashboard-mock__disclaimer {
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.65);
+  text-align: center;
+  font-style: italic;
+}
+
 .home-hero-float {
   position: absolute;
   z-index: 5;
@@ -135,16 +162,34 @@
   }
 }
 
-.home-hero-float--student {
-  bottom: 1.5rem;
+.home-hero-float--admission {
+  bottom: 1.25rem;
   left: -0.25rem;
   animation-delay: 0.5s;
+
+  i {
+    color: var(--horizonte-red);
+  }
 }
 
-.home-hero-float--attendance {
-  top: 42%;
+.home-hero-float--family {
+  top: 38%;
   right: -0.5rem;
   animation-delay: 1s;
+
+  i {
+    color: var(--horizonte-blue);
+  }
+}
+
+.home-hero-float--digital {
+  top: 8%;
+  left: 0;
+  animation-delay: 1.5s;
+
+  i {
+    color: #c99400;
+  }
 }
 
 .home-metrics-section {
@@ -306,15 +351,22 @@
     max-width: 100%;
   }
 
-  .home-hero-float--student {
+  .home-hero-float--admission {
     bottom: auto;
-    top: 38%;
+    top: auto;
     left: 0;
+    position: relative;
+    margin-top: 0.75rem;
+    animation: none;
   }
 
-  .home-hero-float--attendance {
+  .home-hero-float--family {
     right: 0;
     top: 8%;
+  }
+
+  .home-hero-float--digital {
+    display: none;
   }
 }
 

@@ -278,6 +278,23 @@ Clases: `.public-card-lift`, `.premium-button`, `.public-glow`. Hover sutil en c
 - **Niveles** — `.public-level-card-premium` con mini visual superior.
 - Sin imágenes externas obligatorias; intranet sin cambios.
 
+### Hero público referencial (v1.6.1)
+
+- Mockup del hero **sin datos personales** ni nombres de estudiantes.
+- Copy institucional: “Ecosistema académico”, “Plataforma activa”, cards flotantes de admisión/portal/gestión.
+- Disclaimer: vista referencial del ecosistema digital.
+
+### Login público (v1.6.2)
+
+- Un solo encabezado: “Acceso a la plataforma académica”.
+- Layout: beneficios institucionales (izquierda) + formulario y credenciales demo (derecha).
+- En móvil, el formulario aparece primero (`order-1`).
+
+### Chatbot asistente (v1.6.2)
+
+- Botón flotante: icono `bi-robot`, texto “Asistente”, punto de estado verde.
+- En móvil: solo icono circular.
+
 ---
 
 ## Referencia

@@ -1,26 +1,19 @@
-<section class="public-login-shell">
-  <div class="public-login-hero-band">
-    <div class="container text-center">
-      <span class="public-badge-premium mb-3">I.E.P. HORIZONTE</span>
-      <h1 class="h2 fw-bold mb-2">Acceso a HORIZONTE DIGITAL</h1>
-      <p class="mb-0 opacity-90">Intranet académica simulada para toda la comunidad educativa</p>
-    </div>
-  </div>
-  <div class="container">
-    <div class="text-center mb-4 mb-lg-5 pt-4">
+<section class="public-login-shell login-page">
+  <div class="container login-page__container">
+    <header class="login-page__header text-center text-lg-start">
       <span class="public-badge public-badge--info mb-2">HORIZONTE DIGITAL</span>
       <h1 class="h3 text-horizonte-blue fw-bold mb-1">Acceso a la plataforma académica</h1>
-      <p class="text-muted mb-0">Intranet institucional simulada para la comunidad I.E.P. HORIZONTE</p>
-    </div>
+      <p class="text-muted mb-0">Ingresa a Horizonte Digital según tu rol institucional.</p>
+    </header>
 
     <div class="row g-4 align-items-stretch">
-      <div class="col-lg-5">
-        <div class="public-login-benefits">
-          <span class="public-kicker mb-3">Intranet ERP</span>
-          <h2 class="h4 fw-bold mb-3">Tu portal académico en un solo lugar</h2>
+      <div class="col-lg-5 order-lg-1 order-2">
+        <div class="public-login-benefits login-page__benefits">
+          <span class="public-kicker mb-2">HORIZONTE DIGITAL</span>
+          <h2 class="h4 fw-bold mb-3">Portal académico institucional</h2>
           <p class="small opacity-90 mb-4">
-            Gestiona la experiencia educativa con módulos simulados de notas, asistencia, tareas,
-            comunicados y administración escolar.
+            Consulta información académica, comunicados, asistencia, recursos y seguimiento escolar desde
+            un entorno seguro y organizado.
           </p>
           <ul class="list-unstyled mb-4">
             @for (benefit of intranetBenefits; track benefit.text) {
@@ -30,114 +23,108 @@
               </li>
             }
           </ul>
-          <div class="public-glass-card p-3">
+          <div class="public-glass-card p-3 login-page__security">
             <p class="small mb-1 fw-semibold">
               <i class="bi bi-shield-check me-1" aria-hidden="true"></i>
               Seguridad simulada
             </p>
             <p class="small mb-0 opacity-75">
-              Acceso protegido por credenciales de prueba. No se conecta a servicios externos.
+              Este acceso usa credenciales de prueba y no se conecta a servicios externos.
             </p>
           </div>
         </div>
       </div>
 
-      <div class="col-lg-7">
-        <div class="row g-4">
-          <div class="col-12">
-            <div class="card login-card public-card-lift border-0">
-              <div class="card-body p-4 p-md-5">
-                <h2 class="h5 text-horizonte-blue mb-2">Iniciar sesión</h2>
-                <p class="text-muted mb-4">Ingresa con tus credenciales institucionales simuladas.</p>
+      <div class="col-lg-7 order-lg-2 order-1">
+        <div class="login-page__form-stack">
+          <div class="card login-card login-page__card public-card-lift border-0">
+            <div class="card-body p-4 p-md-5">
+              <h2 class="h5 text-horizonte-blue mb-2">Iniciar sesión</h2>
+              <p class="text-muted mb-4">Usa una credencial de prueba según tu rol.</p>
 
-                @if (authError()) {
-                  <div class="alert alert-danger py-2" role="alert" data-cy="login-error">{{ authError() }}</div>
-                }
+              @if (authError()) {
+                <div class="alert alert-danger py-2" role="alert" data-cy="login-error">{{ authError() }}</div>
+              }
 
-                <form novalidate (submit)="onSubmit($event)" data-cy="login-form">
-                  <div class="mb-3">
-                    <label class="form-label" for="login-email">Correo</label>
-                    <input
-                      id="login-email"
-                      type="email"
-                      class="form-control form-control-lg"
-                      data-cy="login-email"
-                      [class.is-invalid]="submitted() && emailError()"
-                      [value]="email()"
-                      (input)="email.set($any($event.target).value); authError.set('')"
-                      autocomplete="username"
-                      placeholder="admin@horizonte.edu.pe"
-                    />
-                    @if (submitted() && emailError()) {
-                      <div class="invalid-feedback d-block">{{ emailError() }}</div>
-                    }
-                  </div>
+              <form novalidate (submit)="onSubmit($event)" data-cy="login-form">
+                <div class="mb-3">
+                  <label class="form-label" for="login-email">Correo</label>
+                  <input
+                    id="login-email"
+                    type="email"
+                    class="form-control form-control-lg"
+                    data-cy="login-email"
+                    [class.is-invalid]="submitted() && emailError()"
+                    [value]="email()"
+                    (input)="email.set($any($event.target).value); authError.set('')"
+                    autocomplete="username"
+                    placeholder="admin@horizonte.edu.pe"
+                  />
+                  @if (submitted() && emailError()) {
+                    <div class="invalid-feedback d-block">{{ emailError() }}</div>
+                  }
+                </div>
 
-                  <div class="mb-4">
-                    <label class="form-label" for="login-password">Contraseña</label>
-                    <input
-                      id="login-password"
-                      type="password"
-                      class="form-control form-control-lg"
-                      data-cy="login-password"
-                      [class.is-invalid]="submitted() && passwordError()"
-                      [value]="password()"
-                      (input)="password.set($any($event.target).value); authError.set('')"
-                      autocomplete="current-password"
-                      placeholder="••••••••"
-                    />
-                    @if (submitted() && passwordError()) {
-                      <div class="invalid-feedback d-block">{{ passwordError() }}</div>
-                    }
-                  </div>
+                <div class="mb-4">
+                  <label class="form-label" for="login-password">Contraseña</label>
+                  <input
+                    id="login-password"
+                    type="password"
+                    class="form-control form-control-lg"
+                    data-cy="login-password"
+                    [class.is-invalid]="submitted() && passwordError()"
+                    [value]="password()"
+                    (input)="password.set($any($event.target).value); authError.set('')"
+                    autocomplete="current-password"
+                    placeholder="••••••••"
+                  />
+                  @if (submitted() && passwordError()) {
+                    <div class="invalid-feedback d-block">{{ passwordError() }}</div>
+                  }
+                </div>
 
-                  <button
-                    type="submit"
-                    class="btn btn-horizonte-primary btn-lg w-100"
-                    data-cy="login-submit"
-                    [disabled]="isSubmitting() || (submitted() && !isFormValid())"
-                  >
-                    Ingresar
-                  </button>
-                </form>
+                <button
+                  type="submit"
+                  class="btn btn-horizonte-primary btn-lg w-100 premium-button"
+                  data-cy="login-submit"
+                  [disabled]="isSubmitting() || (submitted() && !isFormValid())"
+                >
+                  Ingresar
+                </button>
+              </form>
 
-                <p class="mt-3 mb-0 text-center">
-                  <a routerLink="/" class="login-page__back">Volver al inicio</a>
-                </p>
-              </div>
+              <p class="mt-3 mb-0 text-center">
+                <a routerLink="/" class="login-page__back">Volver al inicio</a>
+              </p>
             </div>
           </div>
 
-          <div class="col-12">
-            <div class="card login-demo public-card-lift border-0" data-cy="demo-credentials">
-              <div class="card-body p-4">
-                <h2 class="h6 text-horizonte-blue fw-bold mb-3">
-                  <i class="bi bi-key-fill horizonte-icon-inline" aria-hidden="true"></i>
-                  Credenciales de prueba por rol
-                </h2>
-                <p class="text-muted small mb-3">
-                  Cada rol muestra un panel y menú diferente dentro de la intranet simulada.
-                </p>
-                <div class="table-responsive">
-                  <table class="table table-sm table-bordered mb-0 login-demo__table">
-                    <thead class="table-light">
+          <div class="card login-demo login-page__demo public-card-lift border-0" data-cy="demo-credentials">
+            <div class="card-body p-4">
+              <h2 class="h6 text-horizonte-blue fw-bold mb-2">
+                <i class="bi bi-key-fill horizonte-icon-inline" aria-hidden="true"></i>
+                Credenciales de prueba por rol
+              </h2>
+              <p class="text-muted small mb-3">Cada rol abre un panel y menú diferente.</p>
+              <div class="table-responsive">
+                <table class="table table-sm table-bordered mb-0 login-demo__table">
+                  <thead class="table-light">
+                    <tr>
+                      <th scope="col">Rol</th>
+                      <th scope="col">Correo</th>
+                      <th scope="col">Contraseña</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (credential of demoCredentials; track credential.email) {
                       <tr>
-                        <th scope="col">Rol</th>
-                        <th scope="col">Correo</th>
-                        <th scope="col">Contraseña</th>
+                        <td>{{ credential.label }}</td>
+                        <td class="small">{{ credential.email }}</td>
+                        <td class="small">{{ credential.password }}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      @for (credential of demoCredentials; track credential.email) {
-                        <tr>
-                          <td>{{ credential.label }}</td>
-                          <td class="small">{{ credential.email }}</td>
-                          <td class="small">{{ credential.password }}</td>
-                        </tr>
-                      }
-                    </tbody>
-                  </table>
-                </div>
+                    }
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>

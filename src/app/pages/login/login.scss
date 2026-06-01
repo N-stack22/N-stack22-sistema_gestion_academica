@@ -1,18 +1,63 @@
-.login-card {
+.login-page__container {
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+
+.login-page__header {
+  max-width: 36rem;
+  margin-bottom: 2rem;
+}
+
+.login-page__benefits {
+  height: 100%;
+}
+
+.login-page__security {
+  margin-top: auto;
+}
+
+.login-page__form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  height: 100%;
+}
+
+.login-page__card {
   border-top: 4px solid var(--horizonte-red);
+  border-radius: 1.125rem;
+  box-shadow: 0 1rem 2.5rem rgba(11, 31, 58, 0.1);
 }
 
 .login-demo {
   border-top: 4px solid var(--horizonte-yellow);
+  border-radius: 1rem;
+}
+
+.login-page__demo {
+  background: var(--horizonte-white);
 }
 
 .login-page__back {
   color: var(--horizonte-gray-dark);
   font-size: 0.9rem;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--horizonte-blue);
+    text-decoration: underline;
+  }
 }
 
 .login-demo__table {
   font-size: 0.85rem;
+
+  th {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--horizonte-gray);
+  }
 }
 
 .public-login-benefits .bi {
@@ -21,7 +66,27 @@
   margin-top: 0.1rem;
 }
 
-.login-card .form-control:focus {
+.login-page__card .form-control:focus {
   border-color: var(--horizonte-blue);
   box-shadow: 0 0 0 0.2rem rgba(11, 31, 58, 0.12);
+}
+
+@media (max-width: 991.98px) {
+  .login-page__container {
+    padding-top: 1.25rem;
+  }
+
+  .login-page__header {
+    margin-bottom: 1.25rem;
+  }
+
+  .login-page__benefits {
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .login-page__header .h3 {
+    font-size: 1.35rem;
+  }
 }

@@ -9,6 +9,34 @@ import { RouterLink } from '@angular/router';
   styleUrl: './home.scss',
 })
 export class Home {
+  protected readonly heroMockFeatures = [
+    { value: '3', label: 'niveles educativos', highlight: false },
+    { value: '5', label: 'perfiles conectados', highlight: false },
+    { value: '24/7', label: 'acceso informativo', highlight: false },
+    { value: '360°', label: 'gestión escolar', highlight: true },
+  ];
+
+  protected readonly heroFloatCards = [
+    {
+      icon: 'bi-megaphone-fill',
+      title: 'Admisión 2026',
+      subtitle: 'Proceso informativo abierto',
+      modifier: 'admission',
+    },
+    {
+      icon: 'bi-people-fill',
+      title: 'Portal familiar',
+      subtitle: 'Seguimiento académico',
+      modifier: 'family',
+    },
+    {
+      icon: 'bi-grid-1x2-fill',
+      title: 'Gestión digital',
+      subtitle: 'Comunicación y reportes',
+      modifier: 'digital',
+    },
+  ];
+
   protected readonly metrics = [
     { icon: 'bi-award-fill', value: '25+', label: 'años de experiencia', accent: 'yellow' },
     { icon: 'bi-people-fill', value: '850', label: 'estudiantes', accent: 'blue' },

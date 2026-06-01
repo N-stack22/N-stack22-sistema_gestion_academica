@@ -23,10 +23,9 @@ export class Login {
   protected readonly demoCredentials = this.auth.getDemoCredentials();
 
   protected readonly intranetBenefits = [
-    { icon: 'bi-speedometer2', text: 'Dashboard ejecutivo con métricas académicas simuladas.' },
-    { icon: 'bi-journal-check', text: 'Notas, horarios, tareas y recursos según tu rol.' },
-    { icon: 'bi-shield-lock', text: 'Acceso seguro simulado con credenciales institucionales.' },
-    { icon: 'bi-people', text: 'Portales diferenciados para estudiantes, docentes, padres y administración.' },
+    { icon: 'bi-person-badge', text: 'Acceso diferenciado por rol.' },
+    { icon: 'bi-people', text: 'Seguimiento académico para familias.' },
+    { icon: 'bi-grid-1x2', text: 'Gestión escolar simulada para fines académicos.' },
   ];
 
   protected readonly emailError = computed(() => {

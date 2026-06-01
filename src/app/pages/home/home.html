@@ -15,7 +15,7 @@
           </h1>
           <p class="public-lead">
             En I.E.P. Horizonte impulsamos una educación integral con acompañamiento familiar, innovación
-            pedagógica y una plataforma académica digital para toda la comunidad educativa.
+            pedagógica y una plataforma digital que conecta a toda la comunidad educativa.
           </p>
           <div class="d-flex flex-wrap gap-2">
             <a class="btn btn-horizonte-primary btn-lg px-4 premium-button public-glow" routerLink="/nosotros">
@@ -45,60 +45,44 @@
               </div>
             </div>
 
-            <div class="public-dashboard-mock home-dashboard-mock">
+            <div class="public-dashboard-mock home-dashboard-mock home-dashboard-mock--institutional">
               <div class="public-dashboard-mock__header">
                 <div>
                   <p class="public-dashboard-mock__brand mb-1">HORIZONTE DIGITAL</p>
-                  <p class="public-dashboard-mock__title mb-0">Panel académico</p>
+                  <p class="public-dashboard-mock__title mb-0">Ecosistema académico</p>
                 </div>
-                <span class="public-badge-premium">
+                <span class="public-badge-premium home-dashboard-mock__badge">
                   <i class="bi bi-circle-fill text-success" aria-hidden="true"></i>
-                  En línea
+                  Plataforma activa
                 </span>
               </div>
               <div class="row g-3">
-                <div class="col-6">
-                  <div class="public-dashboard-mock__stat">
-                    <p class="public-dashboard-mock__stat-value mb-0">94%</p>
-                    <p class="public-dashboard-mock__stat-label mb-0">Asistencia</p>
+                @for (feature of heroMockFeatures; track feature.label) {
+                  <div class="col-6">
+                    <div
+                      class="public-dashboard-mock__stat"
+                      [class.home-dashboard-mock__highlight]="feature.highlight"
+                    >
+                      <p class="public-dashboard-mock__stat-value mb-0">{{ feature.value }}</p>
+                      <p class="public-dashboard-mock__stat-label mb-0">{{ feature.label }}</p>
+                    </div>
                   </div>
-                </div>
-                <div class="col-6">
-                  <div class="public-dashboard-mock__stat">
-                    <p class="public-dashboard-mock__stat-value mb-0">850</p>
-                    <p class="public-dashboard-mock__stat-label mb-0">Estudiantes</p>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="public-dashboard-mock__stat">
-                    <p class="public-dashboard-mock__stat-value mb-0">65</p>
-                    <p class="public-dashboard-mock__stat-label mb-0">Docentes</p>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="public-dashboard-mock__stat home-dashboard-mock__highlight">
-                    <p class="public-dashboard-mock__stat-value mb-0">12</p>
-                    <p class="public-dashboard-mock__stat-label mb-0">Comunicados activos</p>
-                  </div>
-                </div>
+                }
               </div>
+              <p class="home-dashboard-mock__disclaimer mb-0">
+                Vista referencial del ecosistema digital institucional
+              </p>
             </div>
 
-            <div class="home-hero-float home-hero-float--student">
-              <i class="bi bi-person-badge-fill" aria-hidden="true"></i>
-              <div>
-                <strong>Lucía Torres</strong>
-                <span>3.° Sec. · En clase</span>
+            @for (card of heroFloatCards; track card.title) {
+              <div class="home-hero-float" [ngClass]="'home-hero-float--' + card.modifier">
+                <i class="bi" [ngClass]="card.icon" aria-hidden="true"></i>
+                <div>
+                  <strong>{{ card.title }}</strong>
+                  <span>{{ card.subtitle }}</span>
+                </div>
               </div>
-            </div>
-
-            <div class="home-hero-float home-hero-float--attendance">
-              <i class="bi bi-calendar-check-fill text-success" aria-hidden="true"></i>
-              <div>
-                <strong>94% asistencia</strong>
-                <span>Esta semana</span>
-              </div>
-            </div>
+            }
           </div>
         </div>
       </div>
@@ -218,13 +202,13 @@
                 <div class="home-platform-bridge__content">
                   <div class="row g-2 mb-2">
                     <div class="col-4">
-                      <div class="home-platform-bridge__stat">Notas<small>Libreta</small></div>
+                      <div class="home-platform-bridge__stat">Comunicación<small>Institucional</small></div>
                     </div>
                     <div class="col-4">
-                      <div class="home-platform-bridge__stat">Asist.<small>94%</small></div>
+                      <div class="home-platform-bridge__stat">Seguimiento<small>Familiar</small></div>
                     </div>
                     <div class="col-4">
-                      <div class="home-platform-bridge__stat">Tareas<small>3 pend.</small></div>
+                      <div class="home-platform-bridge__stat">Gestión<small>Escolar</small></div>
                     </div>
                   </div>
                   <div class="home-platform-bridge__table" aria-hidden="true"></div>

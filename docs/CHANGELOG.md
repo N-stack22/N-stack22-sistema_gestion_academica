@@ -12,6 +12,55 @@ Cambios pendientes de registrar en la próxima fase autorizada.
 
 ---
 
+## [1.6.2] — 2026-05-31 — Corrección: Login público y chatbot asistente
+
+### Completado
+
+- **Corrección v1.6.2** — Login menos redundante y botón de chatbot con icono de asistente.
+
+### Cambiado
+
+- **Login (`/login`)** — Eliminado hero superior duplicado; un solo encabezado claro; card institucional izquierda refinada; formulario primero en móvil.
+- **Chatbot** — Botón flotante con `bi-robot`, etiqueta “Asistente”, punto de estado verde y estilo premium azul marino.
+
+### Sin cambios
+
+- AuthService, guards, credenciales, formularios Signals, lógica de autenticación.
+- Intranet `/admin/*`.
+- Atributos `data-cy` de Cypress.
+
+### Verificación
+
+- `npm run build` — OK.
+- `npm run e2e:local` — OK.
+
+---
+
+## [1.6.1] — 2026-05-31 — Corrección: Hero público sin datos personales
+
+### Completado
+
+- **Corrección v1.6.1** — Hero de Home con mockup institucional referencial, sin nombres ni datos internos sensibles.
+
+### Cambiado
+
+- Mockup lateral: de “Panel académico” con métricas operativas a **“Ecosistema académico”** con indicadores institucionales (niveles, perfiles, acceso informativo, gestión escolar).
+- Cards flotantes: eliminados nombre de estudiante y asistencia individual; reemplazados por Admisión 2026, Portal familiar y Gestión digital.
+- Microcopy de privacidad: *“Vista referencial del ecosistema digital institucional”*.
+- Sección comunidad conectada: mockup bridge sin porcentajes ni tareas personales.
+
+### Sin cambios
+
+- Intranet `/admin/*`, AuthService, guards, servicios mock.
+- Cypress `data-cy` conservados.
+
+### Verificación
+
+- `npm run build` — OK.
+- `npm run e2e:local` — OK.
+
+---
+
 ## [1.6.0] — 2026-05-31 — Mejora: Web pública con impacto visual e imágenes institucionales
 
 ### Completado
