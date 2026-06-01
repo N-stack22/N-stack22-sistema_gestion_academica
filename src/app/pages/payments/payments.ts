@@ -1,4 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
+import { DataTable } from '../../components/data-table/data-table';
 import { DataTableColumn, DataTableRow } from '../../components/data-table/data-table.model';
 import { StatCard } from '../../components/stat-card/stat-card';
 import { RoleContextService } from '../../services/role-context.service';
@@ -13,7 +14,7 @@ interface PaymentTimelineItem {
 
 @Component({
   selector: 'app-payments',
-  imports: [StatCard],
+  imports: [StatCard, DataTable],
   templateUrl: './payments.html',
   styleUrl: './payments.scss',
 })

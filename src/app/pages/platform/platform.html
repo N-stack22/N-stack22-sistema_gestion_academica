@@ -1,0 +1,226 @@
+<div class="public-premium-page platform-page" data-cy="platform-page">
+  <section class="public-hero-premium platform-hero">
+    <span class="public-gradient-orb public-gradient-orb--yellow" aria-hidden="true"></span>
+    <span class="public-gradient-orb public-gradient-orb--red" aria-hidden="true"></span>
+
+    <div class="container public-hero-grid">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-6 public-hero-content">
+          <span class="public-badge-premium mb-3">HORIZONTE DIGITAL</span>
+          <h1 class="public-title-xl">Plataforma Digital Horizonte</h1>
+          <p class="platform-hero__headline">
+            La plataforma que conecta toda la comunidad educativa
+          </p>
+          <p class="public-lead">
+            Centraliza la información académica, la comunicación institucional y el seguimiento escolar
+            en una experiencia digital moderna.
+          </p>
+          <p class="platform-hero__intro text-white-50 small mb-4">
+            Una intranet académica diseñada para conectar a estudiantes, familias, docentes y
+            administración en un solo ecosistema digital.
+          </p>
+          <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-horizonte-primary btn-lg px-4 premium-button public-glow" routerLink="/login" data-cy="platform-login-cta">
+              Ingresar a la intranet
+            </a>
+            <a class="btn btn-outline-light btn-lg px-4 premium-button" routerLink="/contacto">Solicitar información</a>
+          </div>
+        </div>
+
+        <div class="col-lg-6 public-hero-visual">
+          <div class="platform-mockup">
+            <div class="platform-mockup__topbar">
+              <span></span><span></span><span></span>
+              <p class="platform-mockup__topbar-title mb-0">HORIZONTE DIGITAL — Panel</p>
+            </div>
+            <div class="platform-mockup__body">
+              <div class="platform-mockup__sidebar" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div class="platform-mockup__content">
+                <div class="row g-2 mb-2">
+                  <div class="col-4">
+                    <div class="platform-mockup__metric">94%<small>Asistencia</small></div>
+                  </div>
+                  <div class="col-4">
+                    <div class="platform-mockup__metric">850<small>Estudiantes</small></div>
+                  </div>
+                  <div class="col-4">
+                    <div class="platform-mockup__metric">12<small>Comunicados</small></div>
+                  </div>
+                </div>
+                <div class="platform-mockup__table" aria-hidden="true"></div>
+              </div>
+            </div>
+            @for (mod of floatingModules; track mod.label) {
+              <div class="platform-float" [ngClass]="mod.className">
+                <i class="bi" [ngClass]="mod.icon" aria-hidden="true"></i>
+                <span>{{ mod.label }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="public-section-premium public-section-muted">
+    <div class="container">
+      <div class="public-section-head public-section-head--center mb-5">
+        <h2 class="public-section-head__title">Módulos por perfil</h2>
+        <p class="public-section-head__lead">
+          Cada rol accede a funcionalidades académicas adaptadas a su participación en la comunidad Horizonte.
+        </p>
+      </div>
+      <div class="row g-4">
+        @for (role of roles; track role.title) {
+          <div class="col-md-6 col-lg-3">
+            <div class="public-card-lift platform-role-card h-100 p-4">
+              <span class="horizonte-icon-circle horizonte-icon-circle--primary mb-3">
+                <i class="bi" [ngClass]="role.icon" aria-hidden="true"></i>
+              </span>
+              <h3 class="h6 text-horizonte-blue fw-bold mb-3">{{ role.title }}</h3>
+              <ul class="text-muted small mb-0 ps-3">
+                @for (item of role.items; track item) {
+                  <li class="mb-1">{{ item }}</li>
+                }
+              </ul>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="public-section-premium">
+    <div class="container">
+      <div class="public-section-head public-section-head--center mb-5">
+        <h2 class="public-section-head__title">Flujo digital escolar</h2>
+        <p class="public-section-head__lead">Cómo la plataforma conecta a toda la institución</p>
+      </div>
+      <div class="platform-flow row g-4">
+        @for (item of flowSteps; track item.step) {
+          <div class="col-md-6 col-lg-3">
+            <div class="platform-flow__step public-card-lift p-4 h-100">
+              <span class="platform-flow__number">{{ item.step }}</span>
+              <h3 class="h6 text-horizonte-blue fw-bold mb-2">{{ item.title }}</h3>
+              <p class="text-muted small mb-0">{{ item.text }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="public-section-premium public-section-muted">
+    <div class="container">
+      <div class="row g-5 align-items-center">
+        <div class="col-lg-5">
+          <h2 class="public-section-head__title">Diseñada para organizar la gestión académica</h2>
+          <p class="public-section-head__lead mb-0">
+            Vista tipo ERP con métricas, alertas y tablas simuladas que reflejan la experiencia real de
+            la intranet Horizonte Digital.
+          </p>
+        </div>
+        <div class="col-lg-7">
+          <div class="platform-erp-mock public-card-lift">
+            <div class="platform-erp-mock__header">
+              <span class="platform-erp-mock__dot"></span>
+              <span class="platform-erp-mock__dot"></span>
+              <span class="platform-erp-mock__dot"></span>
+              <span class="platform-erp-mock__brand">Intranet — Vista administrativa</span>
+            </div>
+            <div class="platform-erp-mock__layout">
+              <aside class="platform-erp-mock__sidebar" aria-hidden="true">
+                @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+                  <span></span>
+                }
+              </aside>
+              <div class="platform-erp-mock__main">
+                <div class="row g-2 mb-3">
+                  <div class="col-4">
+                    <div class="platform-erp-mock__stat">65<small>Docentes</small></div>
+                  </div>
+                  <div class="col-4">
+                    <div class="platform-erp-mock__stat">98%<small>Matrículas</small></div>
+                  </div>
+                  <div class="col-4">
+                    <div class="platform-erp-mock__stat alert-stat">3<small>Alertas</small></div>
+                  </div>
+                </div>
+                <div class="platform-erp-mock__alert mb-3">
+                  <i class="bi bi-bell-fill me-2" aria-hidden="true"></i>
+                  Comunicado institucional pendiente de revisión
+                </div>
+                <div class="platform-erp-mock__table" aria-hidden="true">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="public-section-premium">
+    <div class="container">
+      <div class="public-section-head public-section-head--center mb-5">
+        <h2 class="public-section-head__title">Beneficios institucionales</h2>
+      </div>
+      <div class="row g-4">
+        @for (benefit of benefits; track benefit.title) {
+          <div class="col-md-6 col-lg-4">
+            <div class="public-feature-card">
+              <span class="horizonte-icon-circle horizonte-icon-circle--primary mb-3">
+                <i class="bi" [ngClass]="benefit.icon" aria-hidden="true"></i>
+              </span>
+              <h3 class="h6 text-horizonte-blue fw-bold mb-2">{{ benefit.title }}</h3>
+              <p class="text-muted small mb-0">{{ benefit.text }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="public-section-premium public-section-muted">
+    <div class="container">
+      <div class="platform-security public-card-lift p-4 p-md-5">
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-5">
+            <span class="public-badge public-badge--info mb-3">Alcance del proyecto</span>
+            <h2 class="h4 text-horizonte-blue fw-bold mb-0">Seguridad y alcance académico</h2>
+          </div>
+          <div class="col-lg-7">
+            <ul class="platform-security__list mb-0">
+              @for (point of securityPoints; track point) {
+                <li>
+                  <i class="bi bi-check-circle-fill text-horizonte-blue me-2" aria-hidden="true"></i>
+                  {{ point }}
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="public-section-premium pb-5">
+    <div class="container">
+      <div class="public-cta-premium public-cta-premium--blue text-center text-lg-start">
+        <div class="row align-items-center g-3">
+          <div class="col-lg-8">
+            <h2 class="h3 fw-bold mb-2">Conoce la experiencia digital de I.E.P. Horizonte</h2>
+            <p class="mb-0 opacity-90">Accede a la intranet simulada o contáctanos para más información institucional.</p>
+          </div>
+          <div class="col-lg-4 d-flex flex-wrap gap-2 justify-content-lg-end">
+            <a class="btn btn-light fw-semibold px-4" routerLink="/login" data-cy="platform-login-cta">Ingresar a intranet</a>
+            <a class="btn btn-outline-light px-4" routerLink="/contacto">Contáctanos</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

@@ -21,6 +21,7 @@ import { ParentTracking } from './pages/parent-tracking/parent-tracking';
 import { Parents } from './pages/parents/parents';
 import { Payments } from './pages/payments/payments';
 import { Pensions } from './pages/pensions/pensions';
+import { Platform } from './pages/platform/platform';
 import { Profile } from './pages/profile/profile';
 import { Reports } from './pages/reports/reports';
 import { Resources } from './pages/resources/resources';
@@ -41,6 +42,7 @@ export const routes: Routes = [
       { path: 'nosotros', component: About },
       { path: 'niveles', component: Levels },
       { path: 'admision', component: Admission },
+      { path: 'plataforma', component: Platform },
       { path: 'noticias', component: News },
       { path: 'comunicados', component: Announcements },
       { path: 'galeria', component: Gallery },

@@ -10,19 +10,49 @@
   thead th {
     background: rgba(11, 31, 58, 0.04);
     color: var(--horizonte-blue);
-    font-size: 0.78rem;
+    font-size: 0.72rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    border-bottom-width: 1px;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(11, 31, 58, 0.08);
     white-space: nowrap;
+    padding: 0.85rem 1rem;
   }
 
   tbody td {
     vertical-align: middle;
-    font-size: 0.92rem;
+    font-size: 0.9rem;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid rgba(11, 31, 58, 0.05);
+  }
+
+  tbody tr {
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background: rgba(11, 31, 58, 0.025);
+    }
+  }
+}
+
+.schedule-week .schedule-day {
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+
+  &:hover {
+    box-shadow: 0 1rem 2.25rem rgba(11, 31, 58, 0.1);
   }
 }
 
 .schedule-week .schedule-day:last-child {
   margin-bottom: 0 !important;
+}
+
+.schedule-day__time {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(11, 31, 58, 0.08);
+  color: var(--horizonte-blue);
 }

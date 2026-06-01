@@ -1,0 +1,68 @@
+<div class="public-chatbot" aria-live="polite">
+  @if (!isOpen()) {
+    <button
+      type="button"
+      class="public-chatbot__toggle"
+      data-cy="public-chatbot-toggle"
+      aria-label="Abrir asistente institucional"
+      (click)="toggleChat()"
+    >
+      <i class="bi bi-chat-dots-fill" aria-hidden="true"></i>
+      <span class="public-chatbot__toggle-label">¿Necesitas ayuda?</span>
+    </button>
+  }
+
+  @if (isOpen()) {
+    <section class="public-chatbot__window" data-cy="public-chatbot-window" aria-label="Asistente institucional">
+      <header class="public-chatbot__header">
+        <div>
+          <p class="public-chatbot__title mb-0">Asistente Horizonte</p>
+          <p class="public-chatbot__subtitle mb-0">Orientación institucional</p>
+        </div>
+        <button type="button" class="public-chatbot__close" aria-label="Cerrar chat" (click)="closeChat()">
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <div class="public-chatbot__messages" data-cy="public-chatbot-messages">
+        @for (message of messages(); track message.id) {
+          <div
+            class="public-chatbot__message"
+            [class.public-chatbot__message--user]="message.from === 'user'"
+            [class.public-chatbot__message--bot]="message.from === 'bot'"
+          >
+            <p class="public-chatbot__bubble mb-1">{{ message.text }}</p>
+            <span class="public-chatbot__time">{{ message.time }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="public-chatbot__quick">
+        @for (item of quickQuestions; track item.label) {
+          <button
+            type="button"
+            class="public-chatbot__quick-btn"
+            [attr.data-cy]="item.dataCy"
+            (click)="askQuickQuestion(item.label)"
+          >
+            {{ item.label }}
+          </button>
+        }
+      </div>
+
+      <form class="public-chatbot__form" (submit)="onSubmit($event)">
+        <input
+          type="text"
+          class="form-control public-chatbot__input"
+          data-cy="public-chatbot-input"
+          placeholder="Escribe tu consulta..."
+          [value]="userInput()"
+          (input)="onInputChange($any($event.target).value)"
+        />
+        <button type="submit" class="btn public-chatbot__send" data-cy="public-chatbot-send" aria-label="Enviar mensaje">
+          <i class="bi bi-send-fill" aria-hidden="true"></i>
+        </button>
+      </form>
+    </section>
+  }
+</div>

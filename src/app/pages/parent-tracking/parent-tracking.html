@@ -1,4 +1,4 @@
-<div class="admin-page">
+<div class="admin-page erp-module-shell">
   <header class="admin-page-header">
     <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
       <div>
@@ -23,6 +23,7 @@
 
   <app-data-table
     [title]="roleContext.isParent() ? 'Mi seguimiento académico' : 'Seguimiento académico'"
+    subtitle="Indicadores simulados de rendimiento, conducta y comunicación familiar."
     icon="bi-people"
     [columns]="columns()"
     [rows]="rows()"

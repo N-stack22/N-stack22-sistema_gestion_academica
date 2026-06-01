@@ -110,7 +110,7 @@ Contiene los **layouts maestros** que envuelven grupos de páginas.
 
 Contiene **páginas o vistas** asociadas a rutas concretas. Un componente por ruta principal.
 
-- **Páginas públicas:** `home`, `about`, `levels`, `admission`, `news`, `announcements`, `gallery`, `contact`, `login`.
+- **Páginas públicas:** `home`, `about`, `levels`, `admission`, `platform`, `news`, `announcements`, `gallery`, `contact`, `login`.
 - **Páginas privadas:** `dashboard`, `profile`, `grades`, `schedules`, `tasks`, `resources`, `attendance`, `parent-tracking`, `students`, `teachers`, `parents`, `users`, `courses`, `settings`.
 
 **Propósito:** La lógica de presentación de cada módulo vive aquí; consume servicios mock, no accede directamente a `data/`.
@@ -339,6 +339,17 @@ export class StudentService {
 
 ---
 
+### PublicChatbot (v1.3.0)
+
+| Aspecto | Detalle |
+|---------|---------|
+| **Dónde se usa** | `PublicLayout` únicamente |
+| **Responsabilidad** | Widget flotante de orientación institucional; respuestas predefinidas por palabras clave |
+| **Estado** | Angular Signals (`isOpen`, `messages`, `userInput`) |
+| **Qué NO debe hacer** | No backend, API externa, ML ni IA real; no en `/admin/*`; no es tutor inteligente |
+
+---
+
 ### StatCard
 
 | Aspecto | Detalle |
@@ -349,13 +360,14 @@ export class StudentService {
 
 ---
 
-### DataTable
+### DataTable (v1.5.0 premium)
 
 | Aspecto | Detalle |
 |---------|---------|
-| **Dónde se usa** | Estudiantes, Docentes, Cursos, Notas, Horarios, Asistencia, Usuarios, etc. |
-| **Responsabilidad** | Renderizar columnas configurables, filas Bootstrap, acciones por fila (ver/editar), paginación simple opcional |
-| **Qué NO debe hacer** | No sorting/filtering avanzado tipo DataGrid; no virtual scroll; no integración con backend |
+| **Dónde se usa** | Estudiantes, Docentes, Cursos, Notas, Horarios, Asistencia, Usuarios, Pagos, Pensiones, Ventas, etc. |
+| **Responsabilidad** | Card contenedora premium, header con título/subtítulo/icono, contador, buscador visual simple, tabla responsive con badges de estado automáticos y columna de acciones simuladas (Ver / Detalle) |
+| **Inputs clave** | `title`, `subtitle?`, `icon`, `columns`, `rows`, `showActions?`, `showSearch?` |
+| **Qué NO debe hacer** | No sorting/filtering avanzado tipo DataGrid; no paginación real; no integración con backend; no CRUD real en acciones |
 
 ---
 

@@ -12,6 +12,92 @@ Cambios pendientes de registrar en la próxima fase autorizada.
 
 ---
 
+## [1.5.0] — 2026-05-31 — Mejora: Pulido visual premium, tablas ERP y experiencia pública viva
+
+### Completado
+
+- **Mejora v1.5.0** — Tablas ERP premium, microinteracciones públicas y refinamiento responsive.
+
+### Agregado
+
+- **DataTable premium** — Card contenedora, header con icono, subtítulo opcional, contador de registros, buscador visual simple, badges de estado automáticos y columna de acciones simuladas (Ver / Detalle).
+- **Clases ERP globales** — `.erp-table-card`, `.erp-table-header`, `.erp-table-title`, `.erp-table-subtitle`, `.erp-table-toolbar`, `.erp-table-search`, `.erp-table`, `.erp-status-badge`, `.erp-action-btn`, `.erp-module-shell`, `.erp-kpi-row`.
+- **Microinteracciones CSS** — `.public-card-lift`, `.premium-button`, `.public-glow`, hover en navbar, chatbot, métricas y cards de plataforma/noticias.
+- **Home v1.5** — Mockup ERP con sombra premium, malla decorativa en hero, CTAs con microinteracciones.
+- **Plataforma v1.5** — Mockup con hover elevado; cards de rol con lift.
+
+### Mejorado
+
+- Todos los módulos administrativos con tablas (`/admin/estudiantes`, docentes, padres, usuarios, cursos, notas, horarios, tareas, recursos, asistencia, seguimiento-padres, matrículas, pensiones, pagos, ventas, comunicados-internos) usan el nuevo estilo DataTable premium con subtítulos y shell `.erp-module-shell`.
+- **Horarios** — Vista semanal tipo calendario para STUDENT/PARENT; tablas premium para TEACHER e institucional.
+- **Pagos, pensiones y ventas** — KPIs, tablas premium, avisos de simulación reforzados; timeline para PARENT en pagos.
+- **Páginas públicas** — Home, plataforma, niveles, noticias y CTAs con hover y profundidad visual.
+
+### Sin cambios
+
+- AuthService, guards, roles, formularios Signals.
+- Backend, Supabase, Firebase, API externa, pagos reales, modo oscuro.
+- Atributos `data-cy` de Cypress conservados.
+
+### Verificación
+
+- `npm run build` — OK.
+- `npm run e2e:local` — OK.
+
+---
+
+## [1.4.0] — 2026-05-31 — Mejora: Página pública Plataforma Digital
+
+### Completado
+
+- **Mejora v1.4.0** — Nueva landing pública `/plataforma` para presentar la intranet académica tipo ERP.
+
+### Agregado
+
+- `Platform` — Página pública con hero tecnológico, módulos por perfil, flujo digital, mockup ERP, beneficios y CTA.
+- Ruta `/plataforma` en `PublicLayout`.
+- Enlaces en navbar (`nav-platform`) y footer.
+- Cypress: prueba de navegación a Plataforma en `public.cy.ts`.
+
+### Sin cambios
+
+- Intranet `/admin/*`, AuthService, guards, dashboard, sidebar admin.
+- Backend, API externa, modo oscuro.
+
+### Verificado
+
+- `npm run build` — OK.
+- `npm run e2e:local` — **18/18 pruebas passing**.
+
+---
+
+## [1.3.0] — 2026-05-31 — Mejora: Chatbot institucional público informativo
+
+### Completado
+
+- **Mejora v1.3.0** — Asistente virtual informativo en la web pública con respuestas predefinidas en frontend.
+
+### Agregado
+
+- `PublicChatbot` — Widget flotante en `PublicLayout` (no visible en `/admin/*`).
+- `interfaces/chat-message.ts` — Interface `ChatMessage`.
+- Estado con Angular Signals: `isOpen`, `messages`, `userInput`.
+- Preguntas rápidas: Admisión, Niveles, Horarios, Contacto, Intranet, Pensiones, Comunicados.
+- Respuestas por palabras clave (admisión, niveles, horarios, contacto, intranet, pensiones, comunicados, default).
+- `cypress/e2e/public-chatbot.cy.ts` — prueba E2E del chatbot.
+
+### Sin cambios
+
+- Intranet, AuthService, guards, servicios mock, dashboard y sidebar admin.
+- Backend, API externa, OpenAI, Machine Learning, tutor inteligente.
+
+### Verificado
+
+- `npm run build` — OK.
+- `npm run e2e:local` — **17/17 pruebas passing**.
+
+---
+
 ## [1.2.0] — 2026-05-31 — Mejora: Web pública premium tipo colegio privado + ERP
 
 ### Completado

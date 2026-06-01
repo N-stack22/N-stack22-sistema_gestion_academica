@@ -1,4 +1,4 @@
-<div class="admin-page">
+<div class="admin-page erp-module-shell">
   <header class="admin-page-header">
     <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
       <div>
@@ -32,14 +32,14 @@
   @if (roleContext.isStudent() || roleContext.isParent()) {
     <div class="schedule-week">
       @for (day of weeklySchedule(); track day.day) {
-        <div class="card admin-table-card schedule-day mb-3">
+        <div class="card erp-table-card admin-table-card schedule-day mb-3">
           <div class="card-header schedule-day__header">
             <i class="bi bi-calendar3 horizonte-icon-inline" aria-hidden="true"></i>
             {{ day.day }}
           </div>
           <div class="card-body p-0">
             <div class="table-responsive">
-              <table class="table table-hover schedule-table mb-0">
+              <table class="table erp-table schedule-table mb-0">
                 <thead>
                   <tr>
                     <th>Hora</th>
@@ -51,7 +51,7 @@
                 <tbody>
                   @for (block of day.blocks; track block.time + block.course) {
                     <tr>
-                      <td><span class="status-badge status-badge--info">{{ block.time }}</span></td>
+                      <td><span class="schedule-day__time">{{ block.time }}</span></td>
                       <td><strong>{{ block.course }}</strong></td>
                       <td>{{ block.teacher }}</td>
                       <td>{{ block.room }}</td>
@@ -68,6 +68,7 @@
     <div class="admin-table-card">
       <app-data-table
         title="Horario docente"
+        subtitle="Clases asignadas con curso, aula y horario simulado."
         icon="bi-calendar-week"
         [columns]="teacherColumns"
         [rows]="teacherRows"
@@ -77,6 +78,7 @@
     <div class="admin-table-card">
       <app-data-table
         title="Horario institucional"
+        subtitle="Horario general por nivel, docente, aula y franja horaria."
         icon="bi-calendar-week"
         [columns]="institutionalColumns"
         [rows]="institutionalRows"

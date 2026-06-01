@@ -490,6 +490,45 @@ Elevar la web pública a landing institucional premium con comunicación visual 
 
 ---
 
+## Mejora v1.3.0: Chatbot institucional público (completada)
+
+### Objetivo
+
+Asistente virtual informativo en web pública con respuestas predefinidas en frontend.
+
+### Estado
+
+| Elemento | Estado |
+|----------|--------|
+| Mejora v1.3.0 | ✅ Completada — 2026-05-31 |
+
+### Entregables cumplidos
+
+- Componente `PublicChatbot` en `PublicLayout`.
+- Interface `ChatMessage`, Angular Signals, preguntas rápidas y matching por keywords.
+- Cypress `public-chatbot.cy.ts` — **17/17 passing** en suite completa.
+- Sin backend, API externa, OpenAI ni Machine Learning.
+
+**Versión actual:** **1.3.0**.
+
+---
+
+## Mejora v1.4.0: Página pública Plataforma Digital (completada)
+
+### Objetivo
+
+Presentar visualmente la intranet académica como plataforma ERP escolar moderna en la ruta `/plataforma`.
+
+### Entregables cumplidos
+
+- Componente `Platform` con 7 secciones premium.
+- Enlaces en navbar y footer.
+- Cypress actualizado — **18/18 passing** en suite completa.
+
+**Versión actual:** **1.4.0**.
+
+---
+
 ## Resumen de fases
 
 | Fase | Nombre | ¿Código Angular? |

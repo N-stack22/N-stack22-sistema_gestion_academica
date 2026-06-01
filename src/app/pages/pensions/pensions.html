@@ -1,4 +1,4 @@
-<div class="admin-page">
+<div class="admin-page erp-module-shell">
   <header class="admin-page-header">
     <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
       <div>
@@ -34,7 +34,7 @@
     </div>
   }
 
-  <section class="mb-4">
+  <section class="mb-4 erp-kpi-row">
     <div class="row g-3">
       @for (metric of metrics(); track metric.id) {
         <div class="col-sm-6 col-lg-3">
@@ -52,6 +52,7 @@
 
   <app-data-table
     [title]="roleContext.isInstitutional() ? 'Pensiones del mes' : 'Historial de pensiones'"
+    [subtitle]="roleContext.isInstitutional() ? 'Control simulado de pensiones con montos, vencimiento y estado.' : 'Estado de vencimiento y pagos simulados de tu familia.'"
     icon="bi-cash-stack"
     [columns]="columns()"
     [rows]="rows()"

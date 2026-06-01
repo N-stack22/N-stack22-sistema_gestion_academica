@@ -870,6 +870,12 @@ body {
   background: linear-gradient(135deg, var(--horizonte-blue), var(--horizonte-dark));
   color: var(--horizonte-white);
   min-height: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 1.25rem 2.75rem rgba(11, 31, 58, 0.2);
+  }
 }
 
 .public-news-featured__body {
@@ -894,4 +900,303 @@ body {
 
 .public-contact-shell {
   background: linear-gradient(180deg, #f8fafc 0%, var(--horizonte-gray-light) 100%);
+}
+
+/* —— ERP premium v1.5 —— */
+
+.erp-module-shell {
+  animation: erp-fade-in 0.35s ease;
+}
+
+.erp-kpi-row {
+  margin-bottom: 1.5rem;
+}
+
+.erp-table-card {
+  border: 1px solid rgba(11, 31, 58, 0.06);
+  border-radius: 1rem;
+  background: var(--horizonte-white);
+  box-shadow: 0 0.75rem 2rem rgba(11, 31, 58, 0.08);
+  overflow: hidden;
+  transition: box-shadow 0.25s ease;
+
+  &:hover {
+    box-shadow: 0 1rem 2.25rem rgba(11, 31, 58, 0.11);
+  }
+}
+
+.erp-table-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(11, 31, 58, 0.06);
+  background: linear-gradient(180deg, #fff 0%, #f8fafc 100%);
+}
+
+.erp-table-header__main {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.erp-table-header__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.65rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(11, 31, 58, 0.08);
+  color: var(--horizonte-blue);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.erp-table-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--horizonte-blue);
+}
+
+.erp-table-subtitle {
+  font-size: 0.82rem;
+  color: var(--horizonte-gray);
+  margin-top: 0.2rem;
+}
+
+.erp-table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+.erp-table-count {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--horizonte-gray);
+  white-space: nowrap;
+}
+
+.erp-table-search-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.erp-table-search__icon {
+  position: absolute;
+  left: 0.65rem;
+  color: var(--horizonte-gray);
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+.erp-table-search {
+  min-width: 11rem;
+  padding-left: 2rem;
+  border-radius: 999px;
+  border-color: rgba(11, 31, 58, 0.12);
+  font-size: 0.85rem;
+
+  &:focus {
+    border-color: var(--horizonte-blue);
+    box-shadow: 0 0 0 0.15rem rgba(11, 31, 58, 0.1);
+  }
+}
+
+.erp-table {
+  thead th {
+    background: rgba(11, 31, 58, 0.04);
+    color: var(--horizonte-blue);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(11, 31, 58, 0.08);
+    white-space: nowrap;
+    padding: 0.85rem 1rem;
+  }
+
+  tbody td {
+    font-size: 0.9rem;
+    color: var(--horizonte-gray-dark);
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid rgba(11, 31, 58, 0.05);
+    vertical-align: middle;
+  }
+
+  tbody tr {
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background: rgba(11, 31, 58, 0.025);
+    }
+
+    &:last-child td {
+      border-bottom: 0;
+    }
+  }
+}
+
+.erp-status-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+.erp-status-badge--success {
+  background: rgba(25, 135, 84, 0.12);
+  color: #198754;
+}
+
+.erp-status-badge--warning {
+  background: rgba(244, 196, 48, 0.28);
+  color: #856404;
+}
+
+.erp-status-badge--danger {
+  background: rgba(193, 18, 31, 0.12);
+  color: var(--horizonte-red);
+}
+
+.erp-status-badge--info {
+  background: rgba(11, 31, 58, 0.1);
+  color: var(--horizonte-blue);
+}
+
+.erp-status-badge--muted {
+  background: rgba(156, 163, 175, 0.2);
+  color: var(--horizonte-gray-dark);
+}
+
+.erp-action-btn {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.55rem;
+  border-radius: 0.4rem;
+  border: 1px solid rgba(11, 31, 58, 0.12);
+  color: var(--horizonte-blue);
+  background: var(--horizonte-white);
+  margin-left: 0.25rem;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+
+  &:not(:disabled):hover {
+    transform: translateY(-1px);
+    background: rgba(11, 31, 58, 0.04);
+  }
+}
+
+.erp-action-btn--ghost {
+  background: transparent;
+}
+
+.admin-table-card {
+  border: 1px solid rgba(11, 31, 58, 0.06);
+  border-radius: 1rem;
+  box-shadow: 0 0.75rem 2rem rgba(11, 31, 58, 0.08);
+  overflow: hidden;
+  background: var(--horizonte-white);
+}
+
+/* —— Microinteracciones públicas v1.5 —— */
+
+.public-card-lift {
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 1.15rem 2.5rem rgba(11, 31, 58, 0.12);
+  }
+}
+
+.public-feature-card {
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 2.25rem rgba(11, 31, 58, 0.1);
+  }
+}
+
+.premium-button,
+.btn-horizonte-primary,
+.btn-horizonte-accent {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+}
+
+.public-glow:hover {
+  box-shadow: 0 0 0 0.15rem rgba(244, 196, 48, 0.25), 0 1rem 2rem rgba(11, 31, 58, 0.12);
+}
+
+.public-navbar .nav-link {
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.public-metric-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 1rem 2rem rgba(11, 31, 58, 0.1);
+  }
+}
+
+.public-hero-premium {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(244, 196, 48, 0.08) 0%, transparent 45%),
+      radial-gradient(circle at 80% 10%, rgba(193, 18, 31, 0.06) 0%, transparent 40%);
+    pointer-events: none;
+  }
+}
+
+.public-chatbot__toggle {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px) scale(1.02);
+  }
+}
+
+@keyframes erp-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .public-card-lift:hover,
+  .public-feature-card:hover,
+  .public-metric-card:hover,
+  .premium-button:hover,
+  .public-chatbot__toggle:hover {
+    transform: none;
+  }
+
+  .erp-module-shell {
+    animation: none;
+  }
 }

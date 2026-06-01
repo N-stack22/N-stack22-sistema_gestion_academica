@@ -25,11 +25,14 @@ Frontend académico desarrollado con Angular 21 que simula la experiencia de un 
 ## Características principales
 
 - **Web pública premium v1.2.0:** Landing institucional tipo colegio privado + plataforma ERP visual; login y contacto mejorados.
+- **Chatbot público v1.3.0:** Asistente institucional informativo con respuestas predefinidas (sin backend ni IA).
+- **Plataforma Digital v1.4.0:** Página pública `/plataforma` con presentación visual de la intranet ERP.
+- **Pulido visual v1.5.0:** Tablas ERP premium (`DataTable`), microinteracciones públicas y refinamiento responsive.
 - **Login simulado:** 5 roles con credenciales de prueba y sesión en `localStorage`.
 - **Intranet ERP:** Dashboard ejecutivo, sidebar por rol, 20+ rutas `/admin/*`.
 - **Módulos académicos:** Estudiantes, docentes, cursos, notas, tareas, horarios, asistencia, recursos, pagos simulados, etc.
 - **Formularios con Signals:** Login, contacto y registros académicos simulados con validaciones visibles.
-- **Pruebas Cypress:** 16 pruebas E2E sobre flujos críticos del frontend.
+- **Pruebas Cypress:** 18 pruebas E2E sobre flujos críticos del frontend (incluye chatbot y plataforma).
 
 ---
 
@@ -148,12 +151,12 @@ Ver [`docs/MVP_SCOPE.md`](docs/MVP_SCOPE.md).
 
 ## Estado del proyecto
 
-**Versión 1.2.0** — Web pública premium tipo colegio privado + plataforma ERP (post-v1.1.0).
+**Versión 1.5.0** — Pulido visual premium: tablas ERP, microinteracciones públicas y responsive refinado (post-v1.4.0).
 
 | Verificación | Estado |
 |--------------|--------|
 | `npm run build` | OK |
-| `npm run e2e:local` | 16/16 pruebas |
+| `npm run e2e:local` | 18/18 pruebas |
 | Intranet `/admin/*` | Sin cambios funcionales |
 | Documentación | Actualizada en `docs/` |
 

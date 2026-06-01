@@ -14,4 +14,16 @@ describe('Web pública', () => {
     cy.url().should('include', '/login');
     cy.get('[data-cy="login-form"]').should('be.visible');
   });
+
+  it('navega a la página Plataforma Digital', () => {
+    cy.visit('/');
+    cy.get('[data-cy="nav-platform"]').should('be.visible').click();
+    cy.url().should('include', '/plataforma');
+    cy.get('[data-cy="platform-page"]').should('be.visible');
+    cy.get('[data-cy="platform-page"]').should('contain.text', 'Plataforma Digital Horizonte');
+    cy.get('[data-cy="platform-page"]').should('contain.text', 'La plataforma que conecta');
+    cy.get('[data-cy="platform-login-cta"]').first().click();
+    cy.url().should('include', '/login');
+    cy.get('[data-cy="login-form"]').should('be.visible');
+  });
 });

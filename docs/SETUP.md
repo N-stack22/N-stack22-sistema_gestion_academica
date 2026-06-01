@@ -4,7 +4,7 @@
 
 Guía para instalar dependencias y ejecutar el proyecto en desarrollo local.
 
-**Estado actual:** Mejora v1.2.0 completada — web pública premium ERP; intranet sin cambios funcionales.
+**Estado actual:** Mejora v1.5.0 completada — tablas ERP premium y microinteracciones públicas; intranet sin cambios funcionales.
 
 ---
 
@@ -338,6 +338,58 @@ npm run e2e
 | `npm run build` | ✅ OK |
 | `npm run e2e:local` | ✅ 16/16 |
 | **Versión actual** | **1.2.0** |
+
+---
+
+## 21. Mejora v1.3.0 — Chatbot público informativo
+
+| Elemento | Estado |
+|----------|--------|
+| Componente `PublicChatbot` | ✅ Widget flotante en `PublicLayout` |
+| Angular Signals | ✅ `isOpen`, `messages`, `userInput` |
+| Respuestas predefinidas | ✅ Palabras clave (admisión, niveles, horarios, etc.) |
+| Preguntas rápidas | ✅ 7 botones |
+| Intranet `/admin/*` | ✅ Chatbot no visible |
+| Backend / IA / ML | ❌ No implementado |
+| Cypress `public-chatbot.cy.ts` | ✅ 1 prueba |
+| `npm run build` | ✅ OK |
+| `npm run e2e:local` | ✅ 17/17 |
+| **Versión actual** | **1.3.0** |
+
+---
+
+## 22. Mejora v1.4.0 — Página Plataforma Digital
+
+| Elemento | Estado |
+|----------|--------|
+| Ruta `/plataforma` | ✅ `Platform` en `PublicLayout` |
+| Navbar / Footer | ✅ Enlace Plataforma |
+| Landing ERP visual | ✅ Hero, roles, flujo, mockup, beneficios, CTA |
+| Intranet `/admin/*` | ✅ Sin cambios |
+| Modo oscuro | ❌ No implementado |
+| Cypress `public.cy.ts` | ✅ Navegación a plataforma |
+| `npm run build` | ✅ OK |
+| `npm run e2e:local` | ✅ 18/18 |
+| **Versión actual** | **1.4.0** |
+
+---
+
+## 23. Mejora v1.5.0 — Tablas ERP premium y web pública viva
+
+| Elemento | Estado |
+|----------|--------|
+| `DataTable` premium | ✅ Card, header, buscador, badges, acciones simuladas |
+| Clases ERP globales | ✅ `.erp-table-*`, `.erp-module-shell`, `.erp-kpi-row` |
+| Módulos admin con tablas | ✅ 16 módulos revisados |
+| Horarios visual | ✅ Calendario semanal STUDENT/PARENT; tablas TEACHER/institucional |
+| Pagos / pensiones / ventas | ✅ KPIs, tablas premium, avisos simulación |
+| Microinteracciones públicas | ✅ Home, plataforma, CTAs, cards |
+| Modo oscuro | ❌ No implementado |
+| AuthService / guards | ✅ Sin cambios |
+| Cypress `data-cy` | ✅ Conservados |
+| `npm run build` | ✅ OK |
+| `npm run e2e:local` | ✅ OK |
+| **Versión actual** | **1.5.0** |
 
 ---
 

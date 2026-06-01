@@ -14,6 +14,7 @@ Este documento define la **propuesta de rutas** del MVP. Las rutas son simples, 
 | `/nosotros` | `PublicLayout` | `About` | — | ✅ Activa |
 | `/niveles` | `PublicLayout` | `Levels` | — | ✅ Activa |
 | `/admision` | `PublicLayout` | `Admission` | — | ✅ Activa |
+| `/plataforma` | `PublicLayout` | `Platform` | — | ✅ Activa (v1.4.0) |
 | `/noticias` | `PublicLayout` | `News` | — | ✅ Activa |
 | `/comunicados` | `PublicLayout` | `Announcements` | — | ✅ Activa |
 | `/galeria` | `PublicLayout` | `Gallery` | — | ✅ Activa |

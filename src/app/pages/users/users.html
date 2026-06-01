@@ -1,4 +1,4 @@
-<div class="admin-page">
+<div class="admin-page erp-module-shell">
   <header class="mb-4">
     <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
       <div>
@@ -13,5 +13,11 @@
     </div>
   </header>
 
-  <app-data-table title="Usuarios del sistema" icon="bi-person-gear" [columns]="columns" [rows]="rows" />
+  <app-data-table
+    title="Usuarios del sistema"
+    subtitle="Usuarios simulados con rol, estado y último acceso."
+    icon="bi-person-gear"
+    [columns]="columns"
+    [rows]="rows"
+  />
 </div>

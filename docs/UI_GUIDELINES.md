@@ -253,6 +253,22 @@ Guía aplicada en MVP v1.0.0, mejora v1.1.0 y **v1.2.0** (web pública premium E
 | `.public-login-shell` | Contenedor login público premium |
 | `.public-login-benefits` | Panel lateral de beneficios intranet |
 
+### Chatbot público (v1.3.0)
+
+Widget `PublicChatbot` en esquina inferior derecha. Respuestas simuladas por palabras clave. Selectores Cypress: `public-chatbot-toggle`, `public-chatbot-window`, `public-chatbot-messages`, `public-chatbot-input`, `public-chatbot-send`, `public-chatbot-quick-admission`.
+
+### Página Plataforma Digital (v1.4.0)
+
+Ruta `/plataforma` — landing pública que presenta la intranet ERP con mockups visuales. Selectores: `nav-platform`, `platform-page`, `platform-login-cta`. Sin modo oscuro.
+
+### Tablas ERP premium (v1.5.0)
+
+Componente `DataTable` con card contenedora, header (título, subtítulo opcional, icono), contador, buscador visual simple, badges de estado automáticos y acciones simuladas (Ver / Detalle). Clases globales: `.erp-table-card`, `.erp-table-header`, `.erp-module-shell`, `.erp-kpi-row`, `.erp-status-badge`, `.erp-action-btn`.
+
+### Microinteracciones públicas (v1.5.0)
+
+Clases: `.public-card-lift`, `.premium-button`, `.public-glow`. Hover sutil en cards, CTAs, navbar, chatbot y mockups. Sin animaciones pesadas ni modo oscuro.
+
 ---
 
 ## Referencia
