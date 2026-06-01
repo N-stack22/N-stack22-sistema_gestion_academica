@@ -295,6 +295,12 @@ Clases: `.public-card-lift`, `.premium-button`, `.public-glow`. Hover sutil en c
 - Botón flotante: icono `bi-robot`, texto “Asistente”, punto de estado verde.
 - En móvil: solo icono circular.
 
+### Horario semanal ERP (v1.6.3)
+
+- Módulo `/admin/horarios` con grid semanal (Hora + L–V), bloques coloreados por curso, fila de receso y card “Próxima clase”.
+- Clases SCSS: `.schedule-calendar`, `.schedule-block--*`, `.schedule-next-card`.
+- Vista por rol: institucional, docente, estudiante, apoderado.
+
 ---
 
 ## Referencia

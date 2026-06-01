@@ -31,6 +31,7 @@ Frontend académico desarrollado con Angular 21 que simula la experiencia de un 
 - **Impacto visual v1.6.0:** Hero premium, visuales institucionales CSS (`.school-photo-card`) y secciones con más color en la web pública.
 - **Corrección v1.6.1:** Hero público sin datos personales; mockup institucional referencial.
 - **Corrección v1.6.2:** Login público menos redundante; chatbot con icono de asistente (`bi-robot`).
+- **Horario semanal v1.6.3:** Calendario académico premium en `/admin/horarios` con vista por rol.
 - **Login simulado:** 5 roles con credenciales de prueba y sesión en `localStorage`.
 - **Intranet ERP:** Dashboard ejecutivo, sidebar por rol, 20+ rutas `/admin/*`.
 - **Módulos académicos:** Estudiantes, docentes, cursos, notas, tareas, horarios, asistencia, recursos, pagos simulados, etc.
@@ -154,7 +155,7 @@ Ver [`docs/MVP_SCOPE.md`](docs/MVP_SCOPE.md).
 
 ## Estado del proyecto
 
-**Versión 1.6.2** — Login público refinado y chatbot con icono de asistente (post-v1.6.1).
+**Versión 1.6.3** — Horario semanal premium tipo calendario académico en intranet (post-v1.6.2).
 
 | Verificación | Estado |
 |--------------|--------|

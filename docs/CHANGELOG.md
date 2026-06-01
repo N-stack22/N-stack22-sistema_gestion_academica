@@ -12,6 +12,32 @@ Cambios pendientes de registrar en la próxima fase autorizada.
 
 ---
 
+## [1.6.3] — 2026-05-31 — Mejora: Horario semanal premium tipo calendario académico
+
+### Completado
+
+- **Mejora v1.6.3** — Módulo `/admin/horarios` con vista semanal tipo calendario ERP.
+
+### Agregado
+
+- Grid semanal con columnas Hora + Lunes a Viernes, fechas (18–22 MAY), filas horarias y receso.
+- Bloques de clase coloreados por tipo (matemática, tecnología, ética, proyecto, evaluación).
+- Card **Próxima clase / actividad** según rol (institucional, docente, estudiante/apoderado).
+- Breadcrumb `Dashboard > Horario Semanal`.
+- Vista adaptada por rol con títulos y datos simulados locales.
+
+### Sin cambios
+
+- AuthService, guards, login, web pública, backend.
+- `ScheduleService` y `RoleContextService` (datos existentes reutilizados para estudiante/apoderado).
+
+### Verificación
+
+- `npm run build` — OK.
+- `npm run e2e:local` — OK.
+
+---
+
 ## [1.6.2] — 2026-05-31 — Corrección: Login público y chatbot asistente
 
 ### Completado
