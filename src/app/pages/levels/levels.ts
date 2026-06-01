@@ -56,5 +56,17 @@ export class Levels {
       accent: 'secundaria',
       photoVariant: 'tech',
     },
+    {
+      name: 'CEBA',
+      icon: 'bi-journal-bookmark-fill',
+      ages: 'Jóvenes y adultos',
+      grades: '1.° a 5.° año',
+      description:
+        'Programa dirigido a jóvenes y adultos que desean continuar o culminar sus estudios en una modalidad flexible y orientada al desarrollo personal y laboral.',
+      benefits: ['Horarios flexibles', 'Acompañamiento docente', 'Formación para jóvenes y adultos', 'Continuidad educativa'],
+      focus: 'Flexibilidad horaria, acompañamiento personalizado y formación para la vida y el trabajo.',
+      accent: 'ceba',
+      photoVariant: 'teachers',
+    },
   ];
 }

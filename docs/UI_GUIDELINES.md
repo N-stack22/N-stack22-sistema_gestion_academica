@@ -301,6 +301,13 @@ Clases: `.public-card-lift`, `.premium-button`, `.public-glow`. Hover sutil en c
 - Clases SCSS: `.schedule-calendar`, `.schedule-block--*`, `.schedule-next-card`.
 - Vista por rol: institucional, docente, estudiante, apoderado.
 
+### Web pública v1.6.4
+
+- **Ubicación:** San Martín de Pangoa (textos públicos y chatbot).
+- **CEBA:** cuarto nivel en Home y `/niveles`.
+- **Plataforma (`/plataforma`):** guías de uso, manuales, FAQ y acceso por perfil (enfoque visitante).
+- **Footer:** clase `.footer-badge` con alto contraste.
+
 ---
 
 ## Referencia

@@ -9,7 +9,7 @@
       <div class="row align-items-center g-5">
         <div class="col-lg-6 public-hero-content">
           <span class="public-badge-premium mb-3">Admisión 2026 · Cupos limitados</span>
-          <span class="public-kicker d-block">I.E.P. HORIZONTE · Huancayo</span>
+          <span class="public-kicker d-block">I.E.P. HORIZONTE · San Martín de Pangoa</span>
           <h1 class="public-title-xl home-hero__title">
             Formamos líderes con visión, valores y tecnología
           </h1>
@@ -242,7 +242,7 @@
       <div class="row align-items-center g-4 text-center text-lg-start">
         <div class="col-lg-8">
           <p class="home-institutional-strip__kicker mb-2">Educación privada premium</p>
-          <h2 class="h3 fw-bold mb-2">Más de 25 años formando líderes en Huancayo</h2>
+          <h2 class="h3 fw-bold mb-2">Más de 25 años formando líderes en San Martín de Pangoa</h2>
           <p class="mb-0 opacity-90">
             Rigor académico, valores sólidos y tecnología al servicio de familias que buscan lo mejor
             para sus hijos.
@@ -266,7 +266,7 @@
       </div>
       <div class="row g-4">
         @for (level of levels; track level.name) {
-          <div class="col-md-4">
+          <div class="col-md-6 col-xl-3">
             <article class="public-level-card-premium h-100" [ngClass]="'public-level-card-premium--' + level.accent">
               <div
                 class="school-photo-card school-photo-card--mini"
@@ -281,6 +281,9 @@
               </div>
               <div class="public-level-card-premium__body">
                 <span class="public-badge public-badge--academic mb-2">{{ level.name }}</span>
+                @if (level.name === 'CEBA') {
+                  <p class="text-muted small mb-1">Educación Básica Alternativa</p>
+                }
                 <h3 class="h5 text-horizonte-blue fw-bold mb-1">{{ level.ages }}</h3>
                 <p class="text-muted small mb-2"><strong>Grados:</strong> {{ level.grades }}</p>
                 <p class="text-muted small mb-3">{{ level.text }}</p>

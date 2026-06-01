@@ -21,7 +21,7 @@ export class About {
     {
       icon: 'bi-award-fill',
       title: 'Trayectoria sólida',
-      text: 'Más de 25 años formando generaciones en Huancayo con resultados académicos consistentes.',
+      text: 'Más de 25 años formando generaciones en San Martín de Pangoa con resultados académicos consistentes.',
     },
     {
       icon: 'bi-heart-pulse-fill',

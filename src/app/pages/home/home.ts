@@ -41,7 +41,7 @@ export class Home {
     { icon: 'bi-award-fill', value: '25+', label: 'años de experiencia', accent: 'yellow' },
     { icon: 'bi-people-fill', value: '850', label: 'estudiantes', accent: 'blue' },
     { icon: 'bi-person-workspace', value: '65', label: 'docentes', accent: 'red' },
-    { icon: 'bi-layers-fill', value: '3', label: 'niveles educativos', accent: 'blue' },
+    { icon: 'bi-layers-fill', value: '4', label: 'niveles educativos', accent: 'blue' },
   ];
 
   protected readonly schoolPhotos = [
@@ -158,6 +158,15 @@ export class Home {
       text: 'Preparación académica, orientación vocacional y liderazgo estudiantil.',
       accent: 'secundaria',
       photoVariant: 'tech',
+    },
+    {
+      name: 'CEBA',
+      icon: 'bi-journal-bookmark-fill',
+      ages: 'Jóvenes y adultos',
+      grades: '1.° a 5.° año',
+      text: 'Educación básica alternativa con modalidad flexible para continuar o culminar estudios.',
+      accent: 'ceba',
+      photoVariant: 'teachers',
     },
   ];
 

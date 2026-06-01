@@ -1,7 +1,7 @@
 <div class="public-premium-page">
   <app-page-header
     title="Niveles educativos"
-    subtitle="Una propuesta formativa continua desde la primera infancia hasta la secundaria."
+    subtitle="Propuesta formativa desde Inicial hasta Secundaria y CEBA."
   />
 
   <section class="public-section-premium pt-4 public-section-tinted">
@@ -15,7 +15,7 @@
 
       <div class="row g-4 mb-5">
         @for (level of levels; track level.name) {
-          <div class="col-lg-4">
+          <div class="col-md-6 col-xl-3">
             <article class="public-level-card-premium h-100" [ngClass]="'public-level-card-premium--' + level.accent">
               <div
                 class="school-photo-card school-photo-card--mini"
@@ -31,6 +31,9 @@
               </div>
               <div class="public-level-card-premium__body d-flex flex-column">
                 <span class="public-badge public-badge--academic mb-2">{{ level.name }}</span>
+                @if (level.name === 'CEBA') {
+                  <p class="text-muted small mb-1">Educación Básica Alternativa</p>
+                }
                 <h2 class="h4 text-horizonte-blue fw-bold">{{ level.ages }}</h2>
                 <p class="text-muted small mb-2"><strong>Grados:</strong> {{ level.grades }}</p>
                 <p class="text-muted">{{ level.description }}</p>

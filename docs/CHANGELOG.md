@@ -12,6 +12,32 @@ Cambios pendientes de registrar en la próxima fase autorizada.
 
 ---
 
+## [1.6.4] — 2026-05-31 — Corrección: Web pública profesional, CEBA y Plataforma útil
+
+### Completado
+
+- **Corrección v1.6.4** — Ubicación institucional, CEBA, footer legible y replanteo de `/plataforma`.
+
+### Cambiado
+
+- **Ubicación** — Textos públicos actualizados de Huancayo a **San Martín de Pangoa** (Home, Nosotros, Contacto, Footer, Chatbot).
+- **Footer** — Badge `.footer-badge` con contraste amarillo/azul oscuro legible.
+- **Niveles** — Agregado **CEBA** (Educación Básica Alternativa) en Home y `/niveles`; métrica de 4 niveles.
+- **Plataforma Digital** — Enfoque en guías de uso, beneficios por perfil, manuales rápidos, FAQ y acceso seguro (sin listado técnico de módulos ERP).
+- **Badge académico global** — Mejor contraste en `.public-badge--academic`.
+
+### Sin cambios
+
+- Intranet `/admin/*`, AuthService, guards, servicios mock.
+- Cypress `data-cy` conservados.
+
+### Verificación
+
+- `npm run build` — OK.
+- `npm run e2e:local` — OK.
+
+---
+
 ## [1.6.3] — 2026-05-31 — Mejora: Horario semanal premium tipo calendario académico
 
 ### Completado

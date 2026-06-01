@@ -83,7 +83,7 @@ export class PublicChatbot {
     }
 
     if (this.matches(text, ['contacto', 'telefono', 'correo', 'direccion', 'ubicacion'])) {
-      return 'Puedes contactarnos al (064) 555-123, escribir a informes@iephorizonte.edu.pe o visitarnos en Av. Los Educadores 123, Huancayo.';
+      return 'Puedes contactarnos al (064) 555-123, escribir a informes@iephorizonte.edu.pe o visitarnos en Av. Los Educadores 123, San Martín de Pangoa.';
     }
 
     if (this.matches(text, ['intranet', 'login', 'plataforma', 'horizonte digital'])) {

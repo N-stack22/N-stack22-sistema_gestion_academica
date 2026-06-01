@@ -4,7 +4,7 @@
 
 Guía para instalar dependencias y ejecutar el proyecto en desarrollo local.
 
-**Estado actual:** Mejora v1.6.0 completada — web pública con hero premium y visuales institucionales; intranet sin cambios.
+**Estado actual:** Corrección v1.6.4 — San Martín de Pangoa, CEBA, Plataforma con guías; intranet sin cambios.
 
 ---
 
@@ -407,6 +407,21 @@ npm run e2e
 | `npm run build` | ✅ OK |
 | `npm run e2e:local` | ✅ OK |
 | **Versión actual** | **1.6.0** |
+
+---
+
+## 25. Corrección v1.6.4 — Web pública profesional
+
+| Elemento | Estado |
+|----------|--------|
+| Ubicación San Martín de Pangoa | ✅ Home, Nosotros, Contacto, Footer, Chatbot |
+| Nivel CEBA | ✅ Home y `/niveles` |
+| Plataforma con guías y FAQ | ✅ `/plataforma` replanteado |
+| Footer badge legible | ✅ `.footer-badge` |
+| Intranet `/admin/*` | ✅ Sin cambios |
+| `npm run build` | ✅ OK |
+| `npm run e2e:local` | ✅ OK |
+| **Versión actual** | **1.6.4** |
 
 ---
 

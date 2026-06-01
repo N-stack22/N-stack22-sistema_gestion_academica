@@ -2,28 +2,27 @@ import { NgClass } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-interface RoleModule {
-  title: string;
-  icon: string;
-  items: string[];
-}
-
-interface FlowStep {
-  step: string;
-  title: string;
-  text: string;
-}
-
-interface BenefitItem {
+interface PurposeCard {
   icon: string;
   title: string;
   text: string;
 }
 
-interface FloatingModule {
+interface ProfileAccess {
+  title: string;
   icon: string;
-  label: string;
-  className: string;
+  text: string;
+}
+
+interface QuickManual {
+  title: string;
+  icon: string;
+  description: string;
+}
+
+interface FaqItem {
+  question: string;
+  answer: string;
 }
 
 @Component({
@@ -33,72 +32,108 @@ interface FloatingModule {
   styleUrl: './platform.scss',
 })
 export class Platform {
-  protected readonly floatingModules: FloatingModule[] = [
-    { icon: 'bi-journal-check', label: 'Notas', className: 'platform-float--notes' },
-    { icon: 'bi-calendar-week', label: 'Horarios', className: 'platform-float--schedule' },
-    { icon: 'bi-clipboard-check', label: 'Asistencia', className: 'platform-float--attendance' },
-    { icon: 'bi-cash-coin', label: 'Pensiones', className: 'platform-float--pensions' },
-    { icon: 'bi-megaphone', label: 'Comunicados', className: 'platform-float--announcements' },
+  protected readonly purposeCards: PurposeCard[] = [
+    {
+      icon: 'bi-journal-text',
+      title: 'Consultar información académica',
+      text: 'Accede a notas, horarios, tareas y recursos según tu perfil institucional.',
+    },
+    {
+      icon: 'bi-megaphone-fill',
+      title: 'Revisar comunicados institucionales',
+      text: 'Mantente informado con avisos oficiales y novedades del colegio.',
+    },
+    {
+      icon: 'bi-graph-up',
+      title: 'Acompañar el progreso del estudiante',
+      text: 'Familias y docentes pueden seguir el avance escolar de forma organizada.',
+    },
+    {
+      icon: 'bi-folder2-open',
+      title: 'Acceder a recursos y tareas',
+      text: 'Material de apoyo y actividades disponibles en un solo portal.',
+    },
   ];
 
-  protected readonly roles: RoleModule[] = [
+  protected readonly profileAccess: ProfileAccess[] = [
     {
       title: 'Estudiantes',
       icon: 'bi-mortarboard-fill',
-      items: ['Consulta de notas', 'Horarios', 'Tareas', 'Recursos', 'Asistencia'],
+      text: 'Pueden revisar sus notas, horarios, tareas, asistencia y recursos académicos.',
     },
     {
       title: 'Docentes',
       icon: 'bi-person-workspace',
-      items: ['Gestión de cursos', 'Registro de tareas', 'Seguimiento de asistencia', 'Recursos académicos'],
+      text: 'Pueden organizar cursos, tareas, asistencia, recursos y seguimiento académico.',
     },
     {
       title: 'Padres de familia',
       icon: 'bi-people-fill',
-      items: ['Seguimiento académico', 'Pensiones informativas', 'Pagos simulados', 'Comunicados'],
+      text: 'Pueden acompañar el avance académico del estudiante, revisar comunicados, asistencia y pensiones informativas.',
     },
     {
       title: 'Administración',
       icon: 'bi-building-fill-gear',
-      items: ['Estudiantes', 'Docentes', 'Matrículas', 'Reportes', 'Pensiones'],
+      text: 'Puede gestionar información institucional, reportes y seguimiento académico de manera organizada.',
     },
   ];
 
-  protected readonly flowSteps: FlowStep[] = [
+  protected readonly quickManuals: QuickManual[] = [
     {
-      step: '1',
-      title: 'El colegio centraliza información',
-      text: 'Datos académicos e institucionales organizados en un solo ecosistema digital.',
+      title: 'Manual para estudiantes',
+      icon: 'bi-mortarboard',
+      description: 'Aprende a consultar notas, horarios, tareas y recursos desde tu portal.',
     },
     {
-      step: '2',
-      title: 'Los docentes actualizan avances',
-      text: 'Cursos, tareas, asistencia y recursos disponibles para la comunidad.',
+      title: 'Manual para docentes',
+      icon: 'bi-easel-fill',
+      description: 'Guía para registrar actividades, recursos y seguimiento de tus cursos.',
     },
     {
-      step: '3',
-      title: 'Las familias consultan seguimiento',
-      text: 'Padres acceden a notas, horarios, pensiones simuladas y comunicados oficiales.',
+      title: 'Manual para padres de familia',
+      icon: 'bi-people',
+      description: 'Orientación para acompañar el progreso académico y revisar comunicados.',
     },
     {
-      step: '4',
-      title: 'La administración toma decisiones',
-      text: 'Reportes, matrículas y gestión visual para la dirección institucional.',
+      title: 'Manual para administración',
+      icon: 'bi-shield-lock',
+      description: 'Referencia de gestión institucional y reportes académicos simulados.',
     },
   ];
 
-  protected readonly benefits: BenefitItem[] = [
-    { icon: 'bi-chat-square-text-fill', title: 'Comunicación más clara', text: 'Comunicados y avisos accesibles para toda la comunidad.' },
-    { icon: 'bi-graph-up-arrow', title: 'Seguimiento académico oportuno', text: 'Notas, asistencia y tareas visibles según el rol del usuario.' },
-    { icon: 'bi-folder2-open', title: 'Información organizada', text: 'Módulos estructurados como un ERP escolar moderno.' },
-    { icon: 'bi-heart-fill', title: 'Mejor experiencia para las familias', text: 'Portal apoderado con seguimiento del progreso estudiantil.' },
-    { icon: 'bi-bar-chart-fill', title: 'Gestión administrativa visual', text: 'Dashboard ejecutivo y reportes simulados para administración.' },
+  protected readonly securityTips = [
+    'No compartir credenciales con otras personas.',
+    'Cerrar sesión al terminar de usar la plataforma.',
+    'Usar un correo institucional válido asignado por el colegio.',
+    'Consultar solo la información correspondiente a tu perfil.',
   ];
 
-  protected readonly securityPoints = [
-    'Acceso privado por roles',
-    'Datos simulados en esta versión académica',
-    'Sin pagos reales ni procesamiento financiero',
-    'Diseñada como frontend institucional',
+  protected readonly faqs: FaqItem[] = [
+    {
+      question: '¿Cómo ingreso a la plataforma?',
+      answer:
+        'Desde la opción Ingresar a la intranet en esta página o en el menú principal. Usa las credenciales de prueba según tu rol.',
+    },
+    {
+      question: '¿Qué hago si olvido mi contraseña?',
+      answer:
+        'En esta versión académica el acceso es simulado. Consulta la tabla de credenciales demo en la página de login o contacta al colegio.',
+    },
+    {
+      question: '¿Los pagos son reales?',
+      answer: 'No. Los módulos de pensiones y pagos son informativos y no procesan transacciones reales.',
+    },
+    {
+      question: '¿La información es simulada?',
+      answer:
+        'Sí. HORIZONTE DIGITAL es un frontend académico con datos referenciales para demostración y aprendizaje.',
+    },
+    {
+      question: '¿Puedo usar la plataforma desde celular?',
+      answer:
+        'Sí. El portal está diseñado con diseño responsive y puede consultarse desde dispositivos móviles.',
+    },
   ];
+
+  protected readonly educationLevels = ['Inicial', 'Primaria', 'Secundaria', 'CEBA'];
 }

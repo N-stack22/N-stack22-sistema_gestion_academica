@@ -21,7 +21,8 @@ describe('Web pública', () => {
     cy.url().should('include', '/plataforma');
     cy.get('[data-cy="platform-page"]').should('be.visible');
     cy.get('[data-cy="platform-page"]').should('contain.text', 'Plataforma Digital Horizonte');
-    cy.get('[data-cy="platform-page"]').should('contain.text', 'La plataforma que conecta');
+    cy.get('[data-cy="platform-page"]').should('contain.text', 'Manuales rápidos');
+    cy.get('[data-cy="platform-page"]').should('contain.text', 'Preguntas frecuentes');
     cy.get('[data-cy="platform-login-cta"]').first().click();
     cy.url().should('include', '/login');
     cy.get('[data-cy="login-form"]').should('be.visible');
