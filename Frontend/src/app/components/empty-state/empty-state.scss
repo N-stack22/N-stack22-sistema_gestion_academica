@@ -1,0 +1,11 @@
+.empty-state__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: var(--horizonte-gray-light);
+  color: var(--horizonte-gray);
+  font-size: 1.75rem;
+}

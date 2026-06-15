@@ -1,0 +1,45 @@
+<div class="public-premium-page">
+  <app-page-header
+    title="Galería"
+    subtitle="Momentos destacados de la vida académica, cultural y deportiva en Horizonte."
+  />
+
+  <section class="public-section-premium pt-4">
+    <div class="container">
+      <div class="public-section-head mb-4">
+        <p class="public-section-head__lead">
+          Registro visual de actividades institucionales con placeholders premium (sin imágenes externas).
+        </p>
+      </div>
+
+      <div class="row g-4 mb-5">
+        @for (item of items; track item.title) {
+          <div class="col-sm-6 col-lg-3">
+            <div class="public-gallery-tile gallery-tile h-100">
+              <div class="public-gallery-tile__visual gallery-tile__visual" [style.background]="item.gradient">
+                <i class="bi" [ngClass]="item.icon" aria-hidden="true"></i>
+              </div>
+              <div class="gallery-tile__body p-3 bg-white">
+                <span class="public-badge public-badge--info small mb-2">{{ item.category }}</span>
+                <h2 class="h6 text-horizonte-blue mb-1">{{ item.title }}</h2>
+                <p class="text-muted small mb-0">{{ item.caption }}</p>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="public-cta-premium public-cta-premium--blue text-center text-md-start">
+        <div class="row align-items-center g-3">
+          <div class="col-md-8">
+            <h2 class="h5 fw-bold mb-1">Vive la experiencia Horizonte</h2>
+            <p class="mb-0 opacity-90">Conoce nuestra propuesta educativa y proceso de admisión.</p>
+          </div>
+          <div class="col-md-4 text-md-end">
+            <a class="btn btn-light fw-semibold px-4" routerLink="/nosotros">Sobre nosotros</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

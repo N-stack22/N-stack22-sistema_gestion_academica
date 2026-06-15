@@ -1,0 +1,17 @@
+.gallery-tile__visual {
+  height: 11rem;
+  transition: transform 0.3s ease;
+  font-size: 2.25rem;
+}
+
+.gallery-tile:hover .gallery-tile__visual {
+  transform: scale(1.04);
+}
+
+.gallery-tile__body {
+  border-top: 1px solid rgba(11, 31, 58, 0.06);
+}
+
+.public-gallery-tile__visual i {
+  opacity: 0.9;
+}

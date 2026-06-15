@@ -1,0 +1,22 @@
+.admission-notice {
+  border-left: 4px solid var(--horizonte-yellow);
+  background: rgba(244, 196, 48, 0.1);
+}
+
+.admission-notice__icon {
+  font-size: 1.5rem;
+  color: var(--horizonte-blue);
+  flex-shrink: 0;
+}
+
+.admission-req-card {
+  border-top: 4px solid var(--horizonte-red);
+  position: sticky;
+  top: 6rem;
+}
+
+@media (max-width: 991.98px) {
+  .admission-req-card {
+    position: static;
+  }
+}

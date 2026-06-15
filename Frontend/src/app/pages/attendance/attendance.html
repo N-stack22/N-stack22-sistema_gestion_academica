@@ -1,0 +1,166 @@
+<div class="admin-page erp-module-shell">
+  <header class="admin-page-header">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+      <div>
+        <span class="badge admin-page__badge-module admin-badge mb-2">Asistencia</span>
+        <h1 class="admin-page-title">
+          <i class="bi bi-calendar-check horizonte-icon-inline" aria-hidden="true"></i>
+          @if (roleContext.isStudent()) {
+            Mi asistencia
+          } @else if (roleContext.isParent()) {
+            Asistencia del estudiante
+          } @else if (roleContext.isTeacher()) {
+            Asistencia de mis cursos
+          } @else {
+            Asistencia
+          }
+        </h1>
+        <p class="admin-page-subtitle">
+          @if (roleContext.isParent()) {
+            Registro de asistencia de {{ roleContext.getActiveStudent()?.fullName }}.
+          } @else if (roleContext.isStudent()) {
+            Tu historial de asistencia reciente.
+          } @else if (roleContext.isTeacher()) {
+            Marca presente, tarde, falta o justificado por curso y fecha.
+          } @else {
+            Control administrativo de asistencia.
+          }
+        </p>
+      </div>
+    </div>
+  </header>
+
+  @if (roleContext.isTeacher()) {
+    <div class="form-panel admin-card mb-4">
+      <div class="form-panel__header">
+        <h2 class="form-panel__title">{{ editMode() ? 'Editar asistencia' : 'Registrar asistencia' }}</h2>
+      </div>
+      <div class="form-panel__body">
+        @if (successMessage()) { <div class="form-success-card mb-3">{{ successMessage() }}</div> }
+        @if (errorMessage()) { <div class="alert alert-danger mb-3">{{ errorMessage() }}</div> }
+        <div class="row g-3 align-items-end">
+          <div class="col-md-3">
+            <label class="form-label">Curso</label>
+            <select class="form-select" [value]="cursoId()" (change)="onCursoChange($any($event.target).value)" [disabled]="editMode()">
+              <option value="">Seleccionar</option>
+              @for (c of cursos(); track c.id) { <option [value]="c.id">{{ c.name }}</option> }
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-control" [value]="fecha()" (input)="fecha.set($any($event.target).value)" [readonly]="editMode()" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Estudiante</label>
+            <select class="form-select" [value]="estudianteId()" (change)="estudianteId.set($any($event.target).value)" [disabled]="editMode()">
+              <option value="">Seleccionar</option>
+              @for (e of cursoEstudiantes(); track e.id) { <option [value]="e.id">{{ e.fullName }}</option> }
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Estado</label>
+            <select class="form-select" [value]="estadoCodigo()" (change)="estadoCodigo.set($any($event.target).value)">
+              @for (e of estados; track e.codigo) { <option [value]="e.codigo">{{ e.nombre }}</option> }
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Observación</label>
+            <input class="form-control" [value]="observacion()" (input)="observacion.set($any($event.target).value)" placeholder="Opcional" />
+          </div>
+          <div class="col-md-8 d-flex gap-2">
+            <button type="button" class="btn btn-horizonte-primary" (click)="guardarAsistencia()">
+              {{ editMode() ? 'Actualizar' : 'Guardar' }}
+            </button>
+            @if (editMode()) {
+              <button type="button" class="btn btn-outline-secondary" (click)="cancelarEdicion()">Cancelar</button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (roleContext.isStudent() || roleContext.isParent()) {
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="admin-card p-3 text-center">
+          <div class="text-muted small">Asistencia general</div>
+          <div class="fs-4 fw-bold">{{ attendanceStats().asistencia }}%</div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="admin-card p-3 text-center">
+          <div class="text-muted small">Presentes</div>
+          <div class="fs-4 fw-bold">{{ attendanceStats().presentes }}</div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="admin-card p-3 text-center">
+          <div class="text-muted small">Tardanzas</div>
+          <div class="fs-4 fw-bold">{{ attendanceStats().tardes }}</div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="admin-card p-3 text-center">
+          <div class="text-muted small">Faltas</div>
+          <div class="fs-4 fw-bold">{{ attendanceStats().faltas }}</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="admin-card p-3 text-center">
+          <div class="text-muted small">Justificados</div>
+          <div class="fs-4 fw-bold">{{ attendanceStats().justificados }}</div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="form-panel admin-card mb-4">
+    <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2></div>
+    <div class="form-panel__body">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+          <label class="form-label">Curso</label>
+          <select class="form-select" [value]="draftFiltroCurso()" (change)="draftFiltroCurso.set($any($event.target).value)">
+            <option value="">Todos</option>
+            @for (c of cursos(); track c.id) { <option [value]="c.id">{{ c.name }}</option> }
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Fecha</label>
+          <input type="date" class="form-control" [value]="draftFiltroFecha()" (input)="draftFiltroFecha.set($any($event.target).value)" />
+        </div>
+        @if (!roleContext.isStudent() && !roleContext.isParent()) {
+          <div class="col-md-3">
+            <label class="form-label">Estudiante</label>
+            <select class="form-select" [value]="draftFiltroEstudiante()" (change)="draftFiltroEstudiante.set($any($event.target).value)">
+              <option value="">Todos</option>
+              @for (e of estudiantes(); track e.id) { <option [value]="e.id">{{ e.fullName }}</option> }
+            </select>
+          </div>
+        }
+        <div class="col-md-2">
+          <label class="form-label">Estado</label>
+          <select class="form-select" [value]="draftFiltroEstado()" (change)="draftFiltroEstado.set($any($event.target).value)">
+            <option value="">Todos</option>
+            @for (e of estados; track e.codigo) { <option [value]="e.codigo">{{ e.nombre }}</option> }
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscar()">Buscar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-data-table
+    [title]="roleContext.isInstitutional() ? 'Control de asistencia' : 'Registro de asistencia'"
+    subtitle="Asistencia con fecha, estado y observaciones."
+    icon="bi-calendar-check"
+    [columns]="columns()"
+    [rows]="rows()"
+    [showActions]="canEdit()"
+    detailLabel="Editar"
+    (detailClick)="editarAsistencia($event)"
+  />
+</div>

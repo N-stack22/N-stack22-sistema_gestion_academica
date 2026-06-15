@@ -1,0 +1,191 @@
+<div class="admin-page erp-module-shell">
+  <header class="mb-4">
+    <div>
+      <span class="badge admin-page__badge-module mb-2">Comunicación</span>
+      <h1 class="h4 text-horizonte-blue fw-bold mb-1">
+        <i class="bi bi-megaphone horizonte-icon-inline" aria-hidden="true"></i>
+        @if (roleContext.isTeacher()) { Comunicados } @else { Comunicación institucional }
+      </h1>
+      <p class="text-muted mb-0">
+        @if (roleContext.isTeacher()) {
+          Comunicados dirigidos a docentes o a tus secciones asignadas.
+        } @else {
+          Comunicados inmediatos y eventos programados para la comunidad educativa.
+        }
+      </p>
+    </div>
+  </header>
+
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <button type="button" class="nav-link" [class.active]="activeTab() === 'comunicados'" (click)="setTab('comunicados')">
+        Comunicados
+      </button>
+    </li>
+    <li class="nav-item">
+      <button type="button" class="nav-link" [class.active]="activeTab() === 'eventos'" (click)="setTab('eventos')">
+        Eventos
+      </button>
+    </li>
+  </ul>
+
+  @if (successMessage()) {
+    <div class="form-success-card mb-3">{{ successMessage() }}</div>
+  }
+  @if (errorMessage()) {
+    <div class="alert alert-danger mb-3">{{ errorMessage() }}</div>
+  }
+
+  @if (activeTab() === 'comunicados') {
+    @if (isInstitutional()) {
+    <div class="form-panel admin-card mb-4">
+      <div class="form-panel__header">
+        <h2 class="form-panel__title">{{ editModeComunicado() ? 'Editar comunicado' : 'Nuevo comunicado' }}</h2>
+        <p class="form-panel__subtitle mb-0">Mensaje inmediato para roles o toda la comunidad.</p>
+      </div>
+      <div class="form-panel__body">
+        <div class="row g-3">
+          <div class="col-md-8">
+            <label class="form-label">Título</label>
+            <input class="form-control" [value]="titulo()" (input)="titulo.set($any($event.target).value)" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Destinatario (rol)</label>
+            <select class="form-select" [value]="rolDestino()" (change)="rolDestino.set($any($event.target).value)">
+              <option value="">Todos</option>
+              @for (rol of roles(); track rol.codigo) {
+                <option [value]="rol.codigo">{{ rol.nombre }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Contenido</label>
+            <textarea class="form-control" rows="4" [value]="contenido()" (input)="contenido.set($any($event.target).value)"></textarea>
+          </div>
+          <div class="col-12 d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-horizonte-primary" (click)="guardarComunicado()">
+              {{ editModeComunicado() ? 'Guardar cambios' : 'Publicar comunicado' }}
+            </button>
+            @if (editModeComunicado()) {
+              <button type="button" class="btn btn-outline-secondary" (click)="cancelarEdicionComunicado()">Cancelar</button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+
+    <app-data-table
+      [title]="isInstitutional() ? 'Comunicados publicados' : 'Comunicados recibidos'"
+      [subtitle]="isInstitutional() ? 'Use Editar o Eliminar en cada fila.' : 'Haz clic en Ver detalle para leer el contenido completo.'"
+      icon="bi-megaphone"
+      [columns]="comunicadoColumns"
+      [rows]="comunicadoRows()"
+      [showActions]="true"
+      [detailLabel]="isInstitutional() ? 'Editar' : 'Ver detalle'"
+      [secondaryDetailLabel]="isInstitutional() ? 'Eliminar' : ''"
+      (detailClick)="editarComunicado($event)"
+      (secondaryDetailClick)="eliminarComunicado($event)"
+    />
+
+    @if (selectedComunicado(); as detalle) {
+      <div class="form-panel admin-card mt-4">
+        <div class="form-panel__header d-flex justify-content-between align-items-start">
+          <div>
+            <h2 class="form-panel__title">{{ detalle.title }}</h2>
+            <p class="form-panel__subtitle mb-0">{{ detalle.audience }} · {{ detalle.date }}</p>
+          </div>
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="cerrarDetalle()">Cerrar</button>
+        </div>
+        <div class="form-panel__body">
+          <p class="mb-2"><strong>Estado:</strong> {{ detalle.status }}</p>
+          <div class="border rounded p-3 bg-light mb-3" style="white-space: pre-wrap">{{ detalle.content }}</div>
+          @if (detalle.fileUrl) {
+            <a [href]="detalle.fileUrl" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">
+              Ver archivo adjunto
+            </a>
+          }
+        </div>
+      </div>
+    } @else if (detailLoading()) {
+      <p class="text-muted mt-3">Cargando detalle...</p>
+    }
+  } @else {
+    @if (isInstitutional()) {
+    <div class="form-panel admin-card mb-4">
+      <div class="form-panel__header">
+        <h2 class="form-panel__title">{{ editModeEvento() ? 'Editar evento' : 'Programar evento' }}</h2>
+        <p class="form-panel__subtitle mb-0">Actividades con fecha, lugar y audiencia. Aparecen en el dashboard como próximos eventos.</p>
+      </div>
+      <div class="form-panel__body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Título del evento</label>
+            <input class="form-control" [value]="eventoTitulo()" (input)="eventoTitulo.set($any($event.target).value)" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Lugar</label>
+            <input class="form-control" placeholder="Ej. Auditorio" [value]="eventoLugar()" (input)="eventoLugar.set($any($event.target).value)" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Inicio</label>
+            <input type="datetime-local" class="form-control" [value]="eventoInicio()" (input)="eventoInicio.set($any($event.target).value)" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Fin (opcional)</label>
+            <input type="datetime-local" class="form-control" [value]="eventoFin()" (input)="eventoFin.set($any($event.target).value)" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Destinatario (rol)</label>
+            <select class="form-select" [value]="eventoRolDestino()" (change)="eventoRolDestino.set($any($event.target).value)">
+              <option value="">Toda la comunidad</option>
+              @for (rol of roles(); track rol.codigo) {
+                <option [value]="rol.codigo">{{ rol.nombre }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Descripción</label>
+            <textarea class="form-control" rows="3" [value]="eventoDescripcion()" (input)="eventoDescripcion.set($any($event.target).value)"></textarea>
+          </div>
+          <div class="col-12 d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-horizonte-primary" (click)="guardarEvento()">
+              {{ editModeEvento() ? 'Guardar cambios' : 'Programar evento' }}
+            </button>
+            @if (editModeEvento()) {
+              <button type="button" class="btn btn-outline-secondary" (click)="cancelarEdicionEvento()">Cancelar</button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+
+    <app-data-table
+      title="Próximos eventos"
+      subtitle="Eventos programados a partir de hoy."
+      icon="bi-calendar-event"
+      [columns]="eventoColumns"
+      [rows]="proximosEventos()"
+      [showActions]="isInstitutional()"
+      detailLabel="Editar"
+      secondaryDetailLabel="Eliminar"
+      (detailClick)="editarEvento($event)"
+      (secondaryDetailClick)="eliminarEvento($event)"
+    />
+
+    <app-data-table
+      class="d-block mt-4"
+      title="Eventos anteriores"
+      subtitle="Historial de eventos ya realizados."
+      icon="bi-archive"
+      [columns]="eventoColumns"
+      [rows]="eventosPasados()"
+      [showActions]="isInstitutional()"
+      detailLabel="Editar"
+      secondaryDetailLabel="Eliminar"
+      (detailClick)="editarEvento($event)"
+      (secondaryDetailClick)="eliminarEvento($event)"
+    />
+  }
+</div>

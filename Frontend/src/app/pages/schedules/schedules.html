@@ -1,0 +1,293 @@
+<div class="admin-page erp-module-shell schedules-page">
+  <nav class="schedule-breadcrumb" aria-label="Miga de pan">
+    <a routerLink="/admin/dashboard">Dashboard</a>
+    <i class="bi bi-chevron-right" aria-hidden="true"></i>
+    <span>Horario</span>
+  </nav>
+
+  <header class="mb-4">
+    <span class="badge admin-page__badge-module admin-badge mb-2">Horario académico</span>
+    <h1 class="admin-page-title mb-1">
+      <i class="bi bi-calendar-week horizonte-icon-inline" aria-hidden="true"></i>
+      {{ pageTitle() }}
+    </h1>
+    <p class="admin-page-subtitle mb-0">{{ pageSubtitle() }}</p>
+  </header>
+
+  @if (roleContext.isInstitutional()) {
+    <div class="form-panel admin-card mb-4">
+      <div class="form-panel__header">
+        <h2 class="form-panel__title">{{ editMode() ? 'Editar bloque horario' : 'Registrar bloque horario' }}</h2>
+        <p class="form-panel__subtitle mb-0">Paso a paso: ubicación → curso con docente → día y hora.</p>
+      </div>
+      <div class="form-panel__body">
+        @if (successMessage()) { <div class="form-success-card mb-3">{{ successMessage() }}</div> }
+        @if (errorMessage()) { <div class="alert alert-danger mb-3">{{ errorMessage() }}</div> }
+
+        <div class="schedule-step-label mb-2">
+          <span class="schedule-step-label__badge">1</span>
+          <span class="fw-semibold">Ubicación académica</span>
+        </div>
+        <div class="row g-3 align-items-end mb-4">
+          <div class="col-md-3">
+            <label class="form-label">Año</label>
+            <select class="form-select" [value]="anioId()" (change)="onAnioChange($any($event.target).value)">
+              @for (a of anios(); track a.id) { <option [value]="a.id">{{ a.anio }}</option> }
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Nivel</label>
+            <select class="form-select" [value]="nivelId()" (change)="onNivelChange($any($event.target).value)">
+              <option value="">Seleccionar nivel</option>
+              @for (n of niveles(); track n.id) { <option [value]="n.id">{{ n.nombre }}</option> }
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Grado</label>
+            <select class="form-select" [value]="gradoId()" (change)="onGradoChange($any($event.target).value)" [disabled]="!nivelId()">
+              <option value="">Seleccionar grado</option>
+              @for (g of grados(); track g.id) { <option [value]="g.id">{{ g.nombre }}</option> }
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Sección</label>
+            <select
+              class="form-select"
+              [value]="seccionId()"
+              (change)="onSeccionChange($any($event.target).value)"
+              [disabled]="!gradoId()"
+            >
+              <option value="">Seleccionar sección</option>
+              @for (s of secciones(); track s.id) { <option [value]="s.id">{{ s.label || s.nombre }}</option> }
+            </select>
+          </div>
+        </div>
+
+        @if (seccionId() || editMode()) {
+          <div class="schedule-step-label mb-2">
+            <span class="schedule-step-label__badge">2</span>
+            <span class="fw-semibold">Curso y docente</span>
+          </div>
+          <div class="row g-3 align-items-end mb-3">
+            <div class="col-md-8">
+              <label class="form-label">Curso asignado</label>
+              <select class="form-select" [value]="cursoId()" (change)="onCursoChange($any($event.target).value)">
+                <option value="">Seleccionar curso</option>
+                @for (c of cursos(); track c.id) {
+                  <option [value]="c.id">
+                    {{ c.label || c.name }}
+                    @if (c.scheduleCount) { · {{ c.scheduleCount }} bloque(s) }
+                  </option>
+                }
+              </select>
+              <small class="text-muted d-block mt-1">Cada opción incluye asignatura, docente y sección.</small>
+            </div>
+          </div>
+
+          @if (cursoSeleccionado(); as curso) {
+            <div class="schedule-course-card mb-4">
+              <div class="schedule-course-card__icon"><i class="bi bi-journal-bookmark"></i></div>
+              <div>
+                <div class="schedule-course-card__title">{{ curso.name }}</div>
+                <div class="schedule-course-card__meta">
+                  Docente: <strong>{{ curso.teacherName }}</strong>
+                  @if (curso.teacherCode) { ({{ curso.teacherCode }}) }
+                  · {{ curso.level }} {{ curso.grade }} {{ curso.section }}
+                  @if (curso.sectionRoom) { · Aula sugerida: {{ curso.sectionRoom }} }
+                </div>
+              </div>
+            </div>
+          } @else if (cursos().length === 0) {
+            <div class="alert alert-warning">No hay cursos asignados a esta sección. Asigne cursos desde el módulo Docentes.</div>
+          }
+
+          @if (cursoId() || editMode()) {
+            <div class="schedule-step-label mb-2">
+              <span class="schedule-step-label__badge">3</span>
+              <span class="fw-semibold">Día, hora y aula</span>
+            </div>
+            <div class="row g-3 align-items-end">
+              <div class="col-md-2">
+                <label class="form-label">Día</label>
+                <select class="form-select" [value]="diaSemana()" (change)="diaSemana.set(+$any($event.target).value)">
+                  @for (d of diasSemana; track d.order) {
+                    <option [value]="d.order">{{ d.nombre }}</option>
+                  }
+                </select>
+              </div>
+              <div class="col-md-2">
+                <label class="form-label">Inicio</label>
+                <input type="time" class="form-control" [value]="horaInicio()" (input)="horaInicio.set($any($event.target).value)" />
+              </div>
+              <div class="col-md-2">
+                <label class="form-label">Fin</label>
+                <input type="time" class="form-control" [value]="horaFin()" (input)="horaFin.set($any($event.target).value)" />
+              </div>
+              <div class="col-md-2">
+                <label class="form-label">Aula</label>
+                <input class="form-control" [value]="aula()" (input)="aula.set($any($event.target).value)" placeholder="Ej. A-201" />
+              </div>
+              <div class="col-md-4 d-flex gap-2">
+                <button type="button" class="btn btn-horizonte-primary flex-grow-1" (click)="guardarHorario()">
+                  {{ editMode() ? 'Actualizar' : 'Guardar bloque' }}
+                </button>
+                @if (editMode()) {
+                  <button type="button" class="btn btn-outline-danger" (click)="eliminarHorario()">Eliminar</button>
+                  <button type="button" class="btn btn-outline-secondary" (click)="cancelarEdicion()">Cancelar</button>
+                }
+              </div>
+            </div>
+          }
+        } @else {
+          <div class="alert alert-info mb-0">Seleccione nivel, grado y sección para ver los cursos disponibles.</div>
+        }
+      </div>
+    </div>
+
+    @if (seccionId() && horarioSemanal().length) {
+      <div class="form-panel admin-card mb-4">
+        <div class="form-panel__header">
+          <h2 class="form-panel__title">Vista semanal de la sección</h2>
+          @if (seccionSeleccionada(); as sec) {
+            <p class="form-panel__subtitle mb-0">{{ sec.label || sec.nombre }}</p>
+          }
+        </div>
+        <div class="form-panel__body p-0">
+          <div class="table-responsive">
+            <table class="table table-sm table-bordered mb-0 schedule-week-table">
+              <thead class="table-light">
+                <tr>
+                  <th style="width: 8rem">Día</th>
+                  <th>Bloques programados</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (d of diasSemana; track d.order) {
+                  <tr>
+                    <td class="fw-semibold">{{ d.nombre }}</td>
+                    <td>
+                      @if (horarioPorDia().get(d.order)?.length) {
+                        <div class="d-flex flex-wrap gap-2">
+                          @for (h of horarioPorDia().get(d.order)!; track h.id) {
+                            <span class="schedule-week-chip">
+                              <strong>{{ h.startTime }}–{{ h.endTime }}</strong>
+                              {{ h.course }} · {{ h.teacher }}
+                              @if (h.classroom) { · {{ h.classroom }} }
+                            </span>
+                          }
+                        </div>
+                      } @else {
+                        <span class="text-muted small">Sin clases</span>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    }
+  }
+
+  @if ((roleContext.isStudent() || roleContext.isParent()) && horarioSemanal().length) {
+    <div class="form-panel admin-card mb-4">
+      <div class="form-panel__header">
+        <h2 class="form-panel__title">Mi horario semanal</h2>
+        <p class="form-panel__subtitle mb-0">Clases de tu sección matriculada.</p>
+      </div>
+      <div class="form-panel__body p-0">
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered mb-0 schedule-week-table">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 8rem">Día</th>
+                <th>Bloques programados</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (d of diasSemana; track d.order) {
+                <tr>
+                  <td class="fw-semibold">{{ d.nombre }}</td>
+                  <td>
+                    @if (horarioPorDia().get(d.order)?.length) {
+                      <div class="d-flex flex-wrap gap-2">
+                        @for (h of horarioPorDia().get(d.order)!; track h.id) {
+                          <span class="schedule-week-chip">
+                            <strong>{{ h.startTime }}–{{ h.endTime }}</strong>
+                            {{ h.course }} · {{ h.teacher ?? h.teacherName }}
+                            @if (h.classroom) { · {{ h.classroom }} }
+                          </span>
+                        }
+                      </div>
+                    } @else {
+                      <span class="text-muted small">Sin clases</span>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  } @else if ((roleContext.isStudent() || roleContext.isParent()) && !horarioSemanal().length) {
+    <div class="admin-card p-4 text-center text-muted mb-4">
+      <p class="mb-0">Aún no se ha registrado horario para tu sección.</p>
+    </div>
+  }
+
+  @if (roleContext.isTeacher() && horarioSemanal().length) {
+    <div class="form-panel admin-card mb-4">
+      <div class="form-panel__header">
+        <h2 class="form-panel__title">Mi horario semanal</h2>
+        <p class="form-panel__subtitle mb-0">Clases de tus cursos asignados (solo lectura).</p>
+      </div>
+      <div class="form-panel__body p-0">
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered mb-0 schedule-week-table">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 8rem">Día</th>
+                <th>Bloques programados</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (d of diasSemana; track d.order) {
+                <tr>
+                  <td class="fw-semibold">{{ d.nombre }}</td>
+                  <td>
+                    @if (horarioPorDia().get(d.order)?.length) {
+                      <div class="d-flex flex-wrap gap-2">
+                        @for (h of horarioPorDia().get(d.order)!; track h.id) {
+                          <span class="schedule-week-chip">
+                            <strong>{{ h.startTime }}–{{ h.endTime }}</strong>
+                            {{ h.course }} · {{ h.section }}
+                            @if (h.classroom) { · {{ h.classroom }} }
+                          </span>
+                        }
+                      </div>
+                    } @else {
+                      <span class="text-muted small">Sin clases</span>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  }
+
+  <app-data-table
+    title="Horarios registrados"
+    subtitle="El sistema impide que un docente o sección tenga dos clases al mismo tiempo."
+    icon="bi-calendar-week"
+    [columns]="columns"
+    [rows]="rows()"
+    [showActions]="roleContext.isInstitutional()"
+    detailLabel="Editar"
+    (detailClick)="onEditar($event)"
+  />
+</div>

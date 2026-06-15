@@ -1,0 +1,108 @@
+<div class="admin-page erp-module-shell payments-page">
+  <header class="erp-hero mb-4">
+    <div>
+      <span class="badge admin-page__badge-module admin-badge mb-2">
+        {{ isParentView() ? 'Portal padre de familia' : 'Gestión institucional' }}
+      </span>
+      <h1 class="erp-hero__title h4 fw-bold mb-2">
+        <i class="bi bi-credit-card horizonte-icon-inline" aria-hidden="true"></i>
+        {{ isParentView() ? 'Pagos del estudiante' : 'Gestión de pagos' }}
+      </h1>
+      <p class="erp-hero__subtitle mb-0">
+        @if (isParentView()) {
+          Consulta los pagos registrados del estudiante seleccionado.
+        } @else {
+          Un pago válido por pensión, monto exacto. Los pagos erróneos se anulan sin borrarlos de la base de datos.
+        }
+      </p>
+    </div>
+  </header>
+
+  @if (roleContext.isInstitutional()) {
+    <div class="form-panel admin-card mb-4">
+      <div class="form-panel__header"><h2 class="form-panel__title">Registrar pago</h2></div>
+      <div class="form-panel__body">
+        @if (successMessage()) { <div class="form-success-card mb-3">{{ successMessage() }}</div> }
+        @if (errorMessage()) { <div class="alert alert-danger mb-3">{{ errorMessage() }}</div> }
+        <div class="row g-3 align-items-end">
+          <div class="col-md-3">
+            <label class="form-label">Estudiante</label>
+            <select class="form-select" [value]="estudianteId()" (change)="onEstudianteChange($any($event.target).value)">
+              <option value="">Seleccionar</option>
+              @for (e of estudiantes(); track e.id) {
+                <option [value]="e.id">{{ e.fullName }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Pensión pendiente</label>
+            <select class="form-select" [value]="pensionId()" (change)="onPensionChange($any($event.target).value)">
+              <option value="">Seleccionar</option>
+              @for (p of pensiones(); track p.id) {
+                <option [value]="p.id">{{ p.label }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Monto (S/)</label>
+            <input
+              type="number"
+              class="form-control"
+              [value]="monto()"
+              [readOnly]="!!pensionId()"
+              (input)="monto.set(+$any($event.target).value)"
+            />
+            @if (pensionSeleccionada(); as pen) {
+              <small class="text-muted d-block mt-1">Monto fijo de la pensión: S/ {{ pen.amount }}</small>
+            }
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Método</label>
+            <select class="form-select" [value]="metodoPago()" (change)="metodoPago.set($any($event.target).value)">
+              @for (m of metodos(); track m.codigo) {
+                <option [value]="m.codigo">{{ m.nombre }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-horizonte-primary w-100" [disabled]="!pensionId()" (click)="registrarPago()">
+              Guardar pago
+            </button>
+            <small class="text-muted d-block mt-1">Código de operación automático.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <section class="erp-metric-grid mb-4">
+    <div class="row g-3">
+      @for (metric of metrics(); track metric.id) {
+        <div class="col-sm-6 col-lg-3">
+          <app-stat-card [title]="metric.title" [value]="metric.value" [description]="metric.description" [icon]="metric.icon" [variant]="metric.variant" />
+        </div>
+      }
+    </div>
+  </section>
+
+  <app-data-table
+    title="Pagos válidos"
+    subtitle="Registros activos. Use Anular en pagos erróneos."
+    icon="bi-credit-card"
+    [columns]="columns"
+    [rows]="validosRows()"
+    [showActions]="roleContext.isInstitutional()"
+    detailLabel="Anular"
+    (detailClick)="anularPago($event)"
+  />
+
+  <app-data-table
+    class="d-block mt-4"
+    title="Pagos anulados"
+    subtitle="Historial de pagos anulados; no cuentan como válidos."
+    icon="bi-archive"
+    [columns]="columns"
+    [rows]="anuladosRows()"
+    [showActions]="false"
+  />
+</div>

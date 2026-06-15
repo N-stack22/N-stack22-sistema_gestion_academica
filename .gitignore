@@ -1,0 +1,24 @@
+# Dependencies
+Frontend/node_modules/
+Backend/.venv/
+
+# Secrets
+Backend/.env
+**/.env
+
+# Build & cache
+Frontend/dist/
+Frontend/.angular/cache/
+Backend/**/__pycache__/
+Backend/**/*.pyc
+
+# Test artifacts
+Frontend/cypress/screenshots/
+Frontend/cypress/videos/
+Frontend/cypress/downloads/
+Frontend/coverage/
+
+# IDE & OS
+.idea/
+.DS_Store
+Thumbs.db

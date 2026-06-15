@@ -1,0 +1,270 @@
+<div class="admin-page erp-module-shell profile-page">
+  <header class="admin-page-header mb-4">
+    <div>
+      <span class="badge admin-page__badge-module admin-badge mb-2">Mi cuenta</span>
+      <h1 class="admin-page-title">
+        <i class="bi bi-person-circle horizonte-icon-inline" aria-hidden="true"></i>
+        Perfil de usuario
+      </h1>
+      <p class="admin-page-subtitle mb-0">Información de tu cuenta y datos asociados al portal académico.</p>
+    </div>
+  </header>
+
+  @if (auth.currentUser(); as user) {
+    <div class="admin-card profile-summary mb-4">
+      <div class="profile-summary__body">
+        <div class="profile-avatar" aria-hidden="true">{{ userInitials(user.fullName) }}</div>
+        <div class="profile-summary__info">
+          <h2 class="profile-summary__name mb-1">{{ user.fullName }}</h2>
+          <p class="profile-summary__email mb-2">{{ user.email }}</p>
+          <div class="d-flex flex-wrap gap-2 align-items-center">
+            <span class="badge text-bg-primary">{{ roleLabel(user.role) }}</span>
+            <span class="badge profile-summary__status">Sesión activa</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    @if (loading()) {
+      <div class="admin-card p-4 text-center text-muted">
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        Cargando datos del perfil...
+      </div>
+    } @else {
+      <div class="row g-4">
+        @if (roleContext.isTeacher() && teacher(); as t) {
+          <div class="col-lg-6">
+            <div class="admin-card profile-card h-100">
+              <div class="card-body p-4">
+                <h3 class="profile-card__title">
+                  <i class="bi bi-briefcase horizonte-icon-inline" aria-hidden="true"></i>
+                  Datos laborales
+                </h3>
+                <dl class="profile-details">
+                  <div class="profile-details__row">
+                    <dt>Código docente</dt>
+                    <dd>{{ t.code }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Especialidad</dt>
+                    <dd>{{ t.specialty || '—' }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Cargo</dt>
+                    <dd>{{ t.cargo || '—' }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Grado académico</dt>
+                    <dd>{{ t.degree || '—' }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Estado</dt>
+                    <dd>{{ t.status || '—' }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Cursos asignados</dt>
+                    <dd>{{ t.coursesCount ?? teacherContext.courses().length }}</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="admin-card profile-card h-100">
+              <div class="card-body p-4">
+                <h3 class="profile-card__title">
+                  <i class="bi bi-telephone horizonte-icon-inline" aria-hidden="true"></i>
+                  Contacto
+                </h3>
+                <dl class="profile-details">
+                  <div class="profile-details__row">
+                    <dt>Correo institucional</dt>
+                    <dd>{{ t.email || user.email }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Teléfono</dt>
+                    <dd>{{ t.phone || '—' }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>DNI</dt>
+                    <dd>{{ t.dni || '—' }}</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        } @else if (roleContext.isStudent() && student(); as s) {
+          <div class="col-lg-6">
+            <div class="admin-card profile-card h-100">
+              <div class="card-body p-4">
+                <h3 class="profile-card__title">
+                  <i class="bi bi-mortarboard horizonte-icon-inline" aria-hidden="true"></i>
+                  Datos académicos
+                </h3>
+                <dl class="profile-details">
+                  <div class="profile-details__row">
+                    <dt>Código estudiante</dt>
+                    <dd>{{ s.code }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Nivel</dt>
+                    <dd>{{ s.level || studentContext.enrollment()?.level || '—' }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Grado y sección</dt>
+                    <dd>{{ s.grade || studentContext.enrollment()?.grade || '—' }} {{ s.section || studentContext.enrollment()?.section || '' }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Año académico</dt>
+                    <dd>{{ s.academicYear || studentContext.enrollment()?.year || '—' }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Estado de matrícula</dt>
+                    <dd>{{ s.enrollmentStatus || studentContext.enrollment()?.enrollmentStatus || '—' }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Estado</dt>
+                    <dd>{{ s.status || '—' }}</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="admin-card profile-card h-100">
+              <div class="card-body p-4">
+                <h3 class="profile-card__title">
+                  <i class="bi bi-person-lines-fill horizonte-icon-inline" aria-hidden="true"></i>
+                  Contacto y apoderados
+                </h3>
+                <dl class="profile-details">
+                  <div class="profile-details__row">
+                    <dt>Correo institucional</dt>
+                    <dd>{{ s.email || user.email }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Teléfono</dt>
+                    <dd>{{ s.phone || '—' }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>DNI</dt>
+                    <dd>{{ s.dni || '—' }}</dd>
+                  </div>
+                  @if (s.guardians?.length) {
+                    @for (g of s.guardians; track g.id ?? g.fullName) {
+                      <div class="profile-details__row">
+                        <dt>{{ g.isPrimary ? 'Apoderado principal' : 'Apoderado' }}</dt>
+                        <dd>{{ g.fullName }} · {{ g.relationship }} · {{ g.phone || g.email || '—' }}</dd>
+                      </div>
+                    }
+                  } @else {
+                    <div class="profile-details__row">
+                      <dt>Apoderado</dt>
+                      <dd>—</dd>
+                    </div>
+                  }
+                </dl>
+              </div>
+            </div>
+          </div>
+        } @else if (roleContext.isParent() && familyProfile(); as family) {
+          <div class="col-lg-6">
+            <div class="admin-card profile-card h-100">
+              <div class="card-body p-4">
+                <h3 class="profile-card__title">
+                  <i class="bi bi-person-hearts horizonte-icon-inline" aria-hidden="true"></i>
+                  Datos del apoderado
+                </h3>
+                <dl class="profile-details">
+                  <div class="profile-details__row">
+                    <dt>Nombre</dt>
+                    <dd>{{ family.guardianName }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Parentesco</dt>
+                    <dd>{{ family.relationship }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Teléfono</dt>
+                    <dd>{{ family.phone || '—' }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Correo</dt>
+                    <dd>{{ family.email || user.email }}</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="admin-card profile-card h-100">
+              <div class="card-body p-4">
+                <h3 class="profile-card__title">
+                  <i class="bi bi-mortarboard horizonte-icon-inline" aria-hidden="true"></i>
+                  Hijos asociados
+                </h3>
+                @if (family.students.length) {
+                  <dl class="profile-details">
+                    @for (student of family.students; track student.id) {
+                      <div class="profile-details__row">
+                        <dt>{{ student.isPrimary ? 'Apoderado principal de' : student.relationship || 'Estudiante' }}</dt>
+                        <dd>
+                          {{ student.fullName }} · {{ student.code }}
+                          <span class="text-muted d-block small">
+                            {{ student.level || '—' }} · {{ student.grade || '—' }} {{ student.section || '' }}
+                          </span>
+                        </dd>
+                      </div>
+                    }
+                  </dl>
+                  <p class="text-muted small mb-0">La relación con los estudiantes solo puede modificarse desde administración.</p>
+                } @else {
+                  <p class="text-muted mb-0">No hay estudiantes asociados registrados.</p>
+                }
+              </div>
+            </div>
+          </div>
+        } @else {
+          <div class="col-lg-6">
+            <div class="admin-card profile-card h-100">
+              <div class="card-body p-4">
+                <h3 class="profile-card__title">
+                  <i class="bi bi-shield-check horizonte-icon-inline" aria-hidden="true"></i>
+                  Acceso institucional
+                </h3>
+                <dl class="profile-details">
+                  <div class="profile-details__row">
+                    <dt>Rol en el sistema</dt>
+                    <dd>{{ roleLabel(user.role) }}</dd>
+                  </div>
+                  <div class="profile-details__row">
+                    <dt>Correo de acceso</dt>
+                    <dd>{{ user.email }}</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="admin-card profile-card h-100">
+              <div class="card-body p-4">
+                <h3 class="profile-card__title">
+                  <i class="bi bi-gear horizonte-icon-inline" aria-hidden="true"></i>
+                  Configuración personal
+                </h3>
+                <p class="text-muted mb-3">
+                  Actualiza preferencias, notificaciones y contraseña desde el módulo de configuración.
+                </p>
+                @if (roleContext.isInstitutional()) {
+                  <a routerLink="/admin/configuracion" class="btn btn-horizonte-primary btn-sm">
+                    Ir a configuración
+                  </a>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

@@ -1,0 +1,115 @@
+<div class="admin-page erp-module-shell">
+  <header class="mb-4">
+    <div>
+      <span class="badge admin-page__badge-module mb-2">Módulo económico</span>
+      <h1 class="h4 text-horizonte-blue fw-bold mb-1">
+        <i class="bi bi-bag-check horizonte-icon-inline" aria-hidden="true"></i>
+        Ventas
+      </h1>
+      <p class="text-muted mb-0">Registro de ventas internas del colegio.</p>
+    </div>
+  </header>
+
+  <div class="row g-3 mb-4">
+    @for (metric of metrics(); track metric.id) {
+      <div class="col-md-3">
+        <app-stat-card
+          [title]="metric.title"
+          [value]="metric.value"
+          [description]="metric.description"
+          [icon]="metric.icon"
+          [variant]="metric.variant"
+        />
+      </div>
+    }
+  </div>
+
+  <div class="form-panel admin-card mb-4">
+    <div class="form-panel__header">
+      <h2 class="form-panel__title">Registrar venta</h2>
+    </div>
+    <div class="form-panel__body">
+      @if (successMessage()) {
+        <div class="form-success-card mb-3">{{ successMessage() }}</div>
+      }
+      @if (errorMessage()) {
+        <div class="alert alert-danger mb-3">{{ errorMessage() }}</div>
+      }
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label">Estudiante</label>
+          <select class="form-select" [value]="estudianteId()" (change)="estudianteId.set($any($event.target).value)">
+            <option value="">Seleccionar</option>
+            @for (e of estudiantes(); track e.id) {
+              <option [value]="e.id">{{ e.fullName }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Producto</label>
+          <select class="form-select" [value]="productoId()" (change)="productoId.set($any($event.target).value)">
+            <option value="">Seleccionar</option>
+            @for (p of productos(); track p.id) {
+              <option [value]="p.id">{{ p.nombre }} — S/ {{ p.precio }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Método de pago</label>
+          <select class="form-select" [value]="metodoPago()" (change)="metodoPago.set($any($event.target).value)">
+            <option value="EFECTIVO">Efectivo</option>
+            <option value="YAPE">Yape</option>
+            <option value="PLIN">Plin</option>
+            <option value="TRANSFERENCIA">Transferencia</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-horizonte-primary w-100" (click)="registrarVenta()">Registrar venta</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if (selected(); as detail) {
+    <div class="admin-card p-3 mb-4">
+      <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+        <h2 class="h6 fw-bold mb-0">Detalle de venta</h2>
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="cerrarDetalle()">Cerrar</button>
+      </div>
+      <p class="mb-1"><strong>Código:</strong> {{ detail.code }}</p>
+      <p class="mb-1"><strong>Cliente:</strong> {{ detail.clientName }}</p>
+      <p class="mb-1"><strong>Fecha:</strong> {{ detail.date }} · <strong>Método:</strong> {{ detail.method }}</p>
+      <p class="mb-1"><strong>Estado:</strong> {{ detail.status }}</p>
+      <p class="mb-2"><strong>Total:</strong> S/ {{ detail.amount }}</p>
+      @if (detail.items?.length) {
+        <ul class="mb-3">
+          @for (item of detail.items; track item.productName) {
+            <li>{{ item.productName }} — {{ item.quantity }} x S/ {{ item.unitPrice }}</li>
+          }
+        </ul>
+      }
+      @if (detail.canVoid) {
+        <button type="button" class="btn btn-sm btn-outline-danger" (click)="anularVenta()">Anular venta</button>
+      }
+    </div>
+  }
+
+  <app-data-table
+    title="Ventas válidas"
+    subtitle="Haga clic en Detalle para ver la venta. Las anuladas no cuentan en el resumen."
+    icon="bi-bag-check"
+    [columns]="columns"
+    [rows]="validasRows()"
+    (detailClick)="onDetail($event)"
+  />
+
+  <app-data-table
+    class="d-block mt-4"
+    title="Ventas anuladas"
+    subtitle="Historial de ventas anuladas por registro erróneo."
+    icon="bi-archive"
+    [columns]="columns"
+    [rows]="anuladasRows()"
+    [showActions]="false"
+  />
+</div>

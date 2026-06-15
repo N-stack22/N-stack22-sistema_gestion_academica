@@ -1,0 +1,212 @@
+<div class="public-premium-page public-contact-shell">
+  <app-page-header
+    title="Contacto"
+    subtitle="Estamos atentos para orientarte sobre admisión, niveles educativos y servicios institucionales."
+  />
+
+  <section class="public-section-premium pt-4 public-section-tinted">
+    <div class="container">
+      <div class="row g-3 public-page-visual-strip mb-4">
+        <div class="col-md-4">
+          <div class="school-photo-card school-photo-card--community h-100">
+            <div class="school-photo-card__icon"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i></div>
+            <div class="school-photo-card__overlay">
+              <span>Visítanos en Huancayo</span>
+              <small>Atención personalizada</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="school-photo-card school-photo-card--teachers h-100">
+            <div class="school-photo-card__icon"><i class="bi bi-chat-heart-fill" aria-hidden="true"></i></div>
+            <div class="school-photo-card__overlay">
+              <span>Equipo de admisiones</span>
+              <small>Te orientamos con claridad</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="school-photo-card school-photo-card--tech h-100">
+            <div class="school-photo-card__icon"><i class="bi bi-envelope-heart-fill" aria-hidden="true"></i></div>
+            <div class="school-photo-card__overlay">
+              <span>Respuesta oportuna</span>
+              <small>Formulario simulado</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <div class="col-lg-5">
+          <div class="public-card-lift p-4 p-md-5 h-100 contact-info-card">
+            <span class="public-badge public-badge--info mb-3">Atención institucional</span>
+            <h2 class="h5 text-horizonte-blue mb-4">
+              <i class="bi bi-building horizonte-icon-inline" aria-hidden="true"></i>
+              Información de contacto
+            </h2>
+            <ul class="list-unstyled contact-info-list mb-4">
+              <li class="mb-3">
+                <span class="contact-info-list__icon"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i></span>
+                <span>Av. Los Educadores 123, Huancayo</span>
+              </li>
+              <li class="mb-3">
+                <span class="contact-info-list__icon"><i class="bi bi-telephone-fill" aria-hidden="true"></i></span>
+                <span>(064) 555-123</span>
+              </li>
+              <li class="mb-3">
+                <span class="contact-info-list__icon"><i class="bi bi-envelope-fill" aria-hidden="true"></i></span>
+                <span>informes&#64;iephorizonte.edu.pe</span>
+              </li>
+            </ul>
+            <div class="contact-schedule mb-4">
+              <h3 class="h6 text-horizonte-blue fw-bold mb-2">
+                <i class="bi bi-clock-fill horizonte-icon-inline" aria-hidden="true"></i>
+                Horario de atención
+              </h3>
+              <p class="text-muted small mb-0">
+                Lunes a viernes: 8:00 a.m. – 4:30 p.m.<br />
+                Sábados: 8:00 a.m. – 12:00 p.m. (solo admisiones)
+              </p>
+            </div>
+            <div class="contact-map-premium" aria-hidden="true">
+              <div class="contact-map-premium__pin">
+                <i class="bi bi-geo-alt-fill"></i>
+              </div>
+              <p class="contact-map-premium__label mb-0">I.E.P. HORIZONTE</p>
+              <p class="contact-map-premium__city mb-0">Huancayo, Junín</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-7">
+          <div class="public-card-lift p-4 p-md-5 h-100 contact-form-card">
+            <div class="mb-4">
+              <h2 class="h5 text-horizonte-blue fw-bold mb-1">
+                <i class="bi bi-chat-dots-fill horizonte-icon-inline" aria-hidden="true"></i>
+                Escríbenos
+              </h2>
+              <p class="text-muted small mb-0">
+                Completa el formulario. El envío es simulado y no se conecta a un servidor real.
+              </p>
+            </div>
+
+            @if (successMessage()) {
+              <div class="form-success-card mb-4" role="status" data-cy="contact-success">
+                <i class="bi bi-check-circle-fill horizonte-icon-inline" aria-hidden="true"></i>
+                {{ successMessage() }}
+              </div>
+            }
+
+            <form novalidate (submit)="onSubmit($event)" data-cy="contact-form">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label" for="contact-name">Nombre completo</label>
+                  <input
+                    class="form-control"
+                    id="contact-name"
+                    type="text"
+                    data-cy="contact-name"
+                    [class.is-invalid]="submitted() && fullNameError()"
+                    [value]="fullName()"
+                    (input)="fullName.set($any($event.target).value)"
+                    placeholder="Ej. María García"
+                  />
+                  @if (submitted() && fullNameError()) {
+                    <div class="invalid-feedback d-block">{{ fullNameError() }}</div>
+                  }
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label" for="contact-email">Correo electrónico</label>
+                  <input
+                    class="form-control"
+                    id="contact-email"
+                    type="email"
+                    data-cy="contact-email"
+                    [class.is-invalid]="submitted() && emailError()"
+                    [value]="email()"
+                    (input)="email.set($any($event.target).value)"
+                    placeholder="correo@ejemplo.com"
+                  />
+                  @if (submitted() && emailError()) {
+                    <div class="invalid-feedback d-block">{{ emailError() }}</div>
+                  }
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label" for="contact-phone">Teléfono</label>
+                  <input
+                    class="form-control"
+                    id="contact-phone"
+                    type="tel"
+                    data-cy="contact-phone"
+                    [class.is-invalid]="submitted() && phoneError()"
+                    [value]="phone()"
+                    (input)="phone.set($any($event.target).value)"
+                    placeholder="987654321"
+                  />
+                  @if (submitted() && phoneError()) {
+                    <div class="invalid-feedback d-block">{{ phoneError() }}</div>
+                  }
+                  <p class="form-help-text">9 dígitos, sin espacios.</p>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label" for="contact-subject">Asunto</label>
+                  <input
+                    class="form-control"
+                    id="contact-subject"
+                    type="text"
+                    data-cy="contact-subject"
+                    [class.is-invalid]="submitted() && subjectError()"
+                    [value]="subject()"
+                    (input)="subject.set($any($event.target).value)"
+                    placeholder="Consulta de admisión"
+                  />
+                  @if (submitted() && subjectError()) {
+                    <div class="invalid-feedback d-block">{{ subjectError() }}</div>
+                  }
+                </div>
+                <div class="col-12">
+                  <label class="form-label" for="contact-message">Mensaje</label>
+                  <textarea
+                    class="form-control"
+                    id="contact-message"
+                    rows="5"
+                    data-cy="contact-message"
+                    [class.is-invalid]="submitted() && messageError()"
+                    [value]="message()"
+                    (input)="message.set($any($event.target).value)"
+                    placeholder="Escribe tu consulta..."
+                  ></textarea>
+                  @if (submitted() && messageError()) {
+                    <div class="invalid-feedback d-block">{{ messageError() }}</div>
+                  }
+                </div>
+                <div class="col-12">
+                  <button
+                    type="submit"
+                    class="btn btn-horizonte-primary btn-lg px-4"
+                    data-cy="contact-submit"
+                    [disabled]="submitted() && !isFormValid()"
+                  >
+                    Enviar mensaje
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="public-cta-premium public-cta-premium--v16 text-center text-md-start">
+        <div class="row align-items-center g-3">
+          <div class="col-md-8">
+            <h2 class="h5 fw-bold mb-1">¿Prefieres visitarnos?</h2>
+            <p class="mb-0 opacity-90">Agenda una cita presencial con el equipo de admisiones.</p>
+          </div>
+          <div class="col-md-4 text-md-end">
+            <a class="btn btn-light fw-semibold px-4" routerLink="/admision">Ver admisión</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

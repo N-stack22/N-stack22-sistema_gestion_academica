@@ -1,0 +1,111 @@
+from src.repository.helpers import nombre_completo, normalizar_grado_nombre
+from src.services.database import get_supabase
+
+
+class SeguimientoRepository:
+    def listar(
+        self,
+        nivel_id: str | None = None,
+        grado_id: str | None = None,
+        seccion_id: str | None = None,
+        estado_codigo: str | None = None,
+        busqueda: str | None = None,
+        comunicacion: str | None = None,
+        estudiante_id: str | None = None,
+    ) -> list[dict]:
+        client = get_supabase()
+        query = (
+            client.table("seguimiento_academico")
+            .select(
+                "id,observacion,ultima_comunicacion,estudiante_id,"
+                "estudiantes(id,codigo_estudiante,perfiles(nombres,apellidos),"
+                "matriculas(secciones(id,nombre,grados(id,nombre,niveles_educativos(id,nombre))))),"
+                "apoderados(perfiles(nombres,apellidos)),"
+                "estados_seguimiento(codigo,nombre)"
+            )
+        )
+        if estudiante_id:
+            query = query.eq("estudiante_id", estudiante_id)
+        response = query.execute()
+        rows = []
+        for r in response.data or []:
+            mapped = self._map_row(r)
+            est = r.get("estudiantes") or {}
+            matriculas = est.get("matriculas") or []
+            mat = matriculas[-1] if matriculas else {}
+            sec = mat.get("secciones") or {}
+            grado = sec.get("grados") or {}
+            nivel = grado.get("niveles_educativos") or {}
+            estado = r.get("estados_seguimiento") or {}
+
+            if nivel_id and nivel.get("id") != nivel_id:
+                continue
+            if grado_id and grado.get("id") != grado_id:
+                continue
+            if seccion_id and sec.get("id") != seccion_id:
+                continue
+            if estado_codigo and estado.get("codigo") != estado_codigo.upper():
+                continue
+            if busqueda:
+                term = busqueda.lower()
+                if term not in mapped["studentName"].lower() and term not in mapped["parentName"].lower():
+                    continue
+            if comunicacion == "al_dia" and mapped["communicationStatus"] != "Al día":
+                continue
+            if comunicacion == "pendiente" and mapped["communicationStatus"] != "Pendiente":
+                continue
+            rows.append(mapped)
+        return rows
+
+    def crear(self, data: dict) -> dict:
+        client = get_supabase()
+        estado_resp = (
+            client.table("estados_seguimiento")
+            .select("id")
+            .eq("codigo", data["estado_codigo"].upper())
+            .limit(1)
+            .execute()
+        )
+        if not estado_resp.data:
+            raise ValueError("Estado de seguimiento no encontrado")
+        resp = (
+            client.table("seguimiento_academico")
+            .insert(
+                {
+                    "estudiante_id": data["estudiante_id"],
+                    "apoderado_id": data.get("apoderado_id"),
+                    "estado_id": estado_resp.data[0]["id"],
+                    "observacion": data.get("observacion"),
+                    "ultima_comunicacion": data.get("ultima_comunicacion"),
+                    "registrado_por_perfil_id": data.get("registrado_por_perfil_id"),
+                }
+            )
+            .execute()
+        )
+        if not resp.data:
+            raise ValueError("No se pudo registrar seguimiento")
+        return self.listar()[0]
+
+    def _map_row(self, row: dict) -> dict:
+        est = row.get("estudiantes") or {}
+        ap = row.get("apoderados") or {}
+        estado = row.get("estados_seguimiento") or {}
+        matriculas = est.get("matriculas") or []
+        mat = matriculas[-1] if matriculas else {}
+        sec = mat.get("secciones") or {}
+        grado = sec.get("grados") or {}
+        nivel = grado.get("niveles_educativos") or {}
+        return {
+            "id": row["id"],
+            "studentId": est.get("id", ""),
+            "studentName": nombre_completo(est.get("perfiles")),
+            "parentId": ap.get("id", ""),
+            "parentName": nombre_completo(ap.get("perfiles")) if ap else "—",
+            "level": nivel.get("nombre", ""),
+            "grade": normalizar_grado_nombre(grado.get("nombre", "")),
+            "section": sec.get("nombre", ""),
+            "academicStatus": estado.get("nombre", ""),
+            "communicationStatus": "Al día" if row.get("ultima_comunicacion") else "Pendiente",
+            "lastContact": str(row.get("ultima_comunicacion", "")),
+            "notes": row.get("observacion", ""),
+        }

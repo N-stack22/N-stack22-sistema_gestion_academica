@@ -1,0 +1,34 @@
+.about-hero-photo {
+  min-height: 10rem;
+}
+
+.about-identity-panel {
+  background: linear-gradient(135deg, var(--horizonte-blue), var(--horizonte-dark)) !important;
+}
+
+.about-color-swatch {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.35rem;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+}
+
+.about-color-swatch--blue {
+  background: var(--horizonte-blue);
+}
+
+.about-color-swatch--red {
+  background: var(--horizonte-red);
+}
+
+.about-color-swatch--yellow {
+  background: var(--horizonte-yellow);
+}
+
+.about-mv-card {
+  border-top: 4px solid var(--horizonte-yellow);
+}
+
+.about-history {
+  border-left: 4px solid var(--horizonte-red);
+}

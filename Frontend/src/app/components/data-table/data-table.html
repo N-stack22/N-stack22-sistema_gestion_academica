@@ -1,0 +1,104 @@
+<div class="erp-table-card data-table">
+  @if (title()) {
+    <div class="erp-table-header">
+      <div class="erp-table-header__main">
+        <span class="erp-table-header__icon" aria-hidden="true">
+          <i class="bi" [ngClass]="icon()"></i>
+        </span>
+        <div>
+          <h3 class="erp-table-title mb-0">{{ title() }}</h3>
+          @if (subtitle()) {
+            <p class="erp-table-subtitle mb-0">{{ subtitle() }}</p>
+          }
+        </div>
+      </div>
+      <div class="erp-table-toolbar">
+        <span class="erp-table-count">
+          <i class="bi bi-list-ul me-1" aria-hidden="true"></i>
+          {{ recordCount() }} registro{{ recordCount() === 1 ? '' : 's' }}
+        </span>
+        @if (showSearch()) {
+          <label class="erp-table-search-wrap mb-0">
+            <span class="visually-hidden">Buscar en tabla</span>
+            <i class="bi bi-search erp-table-search__icon" aria-hidden="true"></i>
+            <input
+              type="search"
+              class="form-control form-control-sm erp-table-search"
+              placeholder="Buscar..."
+              [value]="searchTerm()"
+              (input)="onSearchInput($any($event.target).value)"
+            />
+          </label>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="data-table__body">
+    @if (filteredRows().length === 0) {
+      <app-empty-state
+        title="Sin registros"
+        message="No hay datos para mostrar en esta tabla."
+        icon="bi-inbox"
+      />
+    } @else {
+      <div class="table-responsive">
+        <table class="table erp-table mb-0">
+          <thead>
+            <tr>
+              @for (column of columns(); track column.key) {
+                <th scope="col">{{ column.label }}</th>
+              }
+              @if (showActions()) {
+                <th scope="col" class="text-end">Acciones</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of filteredRows(); track rowTrack(row, $index)) {
+              <tr>
+                @for (column of columns(); track column.key) {
+                  <td>
+                    @if (isStatusValue(cellValue(row, column.key))) {
+                      <span [ngClass]="statusBadgeClass(cellValue(row, column.key))">
+                        {{ cellValue(row, column.key) }}
+                      </span>
+                    } @else {
+                      {{ cellValue(row, column.key) }}
+                    }
+                  </td>
+                }
+                @if (showActions()) {
+                  <td class="text-end text-nowrap">
+                    @if (showViewButton()) {
+                      <button type="button" class="btn btn-sm erp-action-btn" disabled title="No disponible">
+                        <i class="bi bi-eye" aria-hidden="true"></i>
+                        Ver
+                      </button>
+                    }
+                    @if (secondaryDetailLabel()) {
+                      <button
+                        type="button"
+                        class="btn btn-sm erp-action-btn me-1"
+                        (click)="onSecondaryDetail(row)"
+                      >
+                        {{ secondaryDetailLabel() }}
+                      </button>
+                    }
+                    <button
+                      type="button"
+                      class="btn btn-sm erp-action-btn erp-action-btn--ghost"
+                      (click)="onDetail(row)"
+                    >
+                      {{ detailLabel() }}
+                    </button>
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>

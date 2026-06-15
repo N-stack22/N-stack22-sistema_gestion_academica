@@ -1,0 +1,67 @@
+.footer__brand {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.footer__tagline {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.82rem;
+  letter-spacing: 0.01em;
+}
+
+.footer__heading {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--horizonte-yellow);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.footer__text,
+.footer__copy {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.9rem;
+}
+
+.footer__links a,
+.footer__contact li {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.footer__links a:hover {
+  color: var(--horizonte-yellow);
+}
+
+.footer__divider {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.public-footer {
+  position: relative;
+}
+
+.public-footer__cta {
+  background: linear-gradient(135deg, var(--horizonte-blue), #0d2847);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.public-footer__cta-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.public-footer__cta-text {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.9rem;
+}
+
+.public-footer__accent {
+  height: 4px;
+  background: linear-gradient(90deg, var(--horizonte-red), var(--horizonte-yellow), var(--horizonte-blue));
+}
