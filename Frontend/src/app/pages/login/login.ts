@@ -1,13 +1,19 @@
 import { NgClass } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { email, form, FormField, FormRoot, required } from '@angular/forms/signals';
+import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { RoleContextService } from '../../services/role-context.service';
-import { isValidEmail } from '../../utils/form-validation';
+
+interface LoginModel {
+  email: string;
+  password: string;
+}
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, NgClass],
+  imports: [RouterLink, NgClass, FormField, FormRoot],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -17,11 +23,22 @@ export class Login {
   private readonly route = inject(ActivatedRoute);
   private readonly roleContext = inject(RoleContextService);
 
-  protected readonly email = signal('');
-  protected readonly password = signal('');
-  protected readonly submitted = signal(false);
   protected readonly authError = signal('');
-  protected readonly isSubmitting = signal(false);
+  protected readonly loginModel = signal<LoginModel>({ email: '', password: '' });
+
+  protected readonly loginForm = form(
+    this.loginModel,
+    (fields) => {
+      required(fields.email, { message: 'El correo es obligatorio.' });
+      email(fields.email, { message: 'Ingresa un correo válido.' });
+      required(fields.password, { message: 'La contraseña es obligatoria.' });
+    },
+    {
+      submission: {
+        action: async () => this.performLogin(),
+      },
+    },
+  );
 
   protected readonly intranetBenefits = [
     { icon: 'bi-person-badge', text: 'Acceso diferenciado por rol.' },
@@ -29,66 +46,35 @@ export class Login {
     { icon: 'bi-grid-1x2', text: 'Gestión escolar conectada a Supabase.' },
   ];
 
-  protected readonly emailError = computed(() => {
-    if (!this.submitted() && !this.email()) {
-      return '';
-    }
-    const value = this.email().trim();
-    if (!value) {
-      return 'El correo es obligatorio.';
-    }
-    if (!isValidEmail(value)) {
-      return 'Ingresa un correo válido.';
-    }
-    return '';
-  });
-
-  protected readonly passwordError = computed(() => {
-    if (!this.submitted() && !this.password()) {
-      return '';
-    }
-    if (!this.password()) {
-      return 'La contraseña es obligatoria.';
-    }
-    return '';
-  });
-
-  protected readonly isFormValid = computed(() => !this.emailError() && !this.passwordError());
-
   constructor() {
     if (this.auth.isAuthenticated()) {
       this.router.navigate(['/admin/dashboard']);
     }
+
+    effect(() => {
+      this.loginModel();
+      this.authError.set('');
+    });
   }
 
-  protected onSubmit(event: Event): void {
-    event.preventDefault();
-    this.submitted.set(true);
+  private async performLogin(): Promise<void> {
     this.authError.set('');
+    const { email: emailValue, password } = this.loginModel();
 
-    if (!this.isFormValid()) {
-      return;
+    try {
+      await firstValueFrom(
+        this.auth.login({
+          email: emailValue.trim(),
+          password,
+        }),
+      );
+      this.roleContext.reset();
+      this.roleContext.loadContext();
+      const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') ?? '/admin/dashboard';
+      await this.router.navigateByUrl(returnUrl);
+    } catch (err: unknown) {
+      const detail = (err as { error?: { detail?: string } })?.error?.detail;
+      this.authError.set(detail ?? 'Credenciales incorrectas. Verifica tu correo y contraseña.');
     }
-
-    this.isSubmitting.set(true);
-
-    this.auth
-      .login({
-        email: this.email().trim(),
-        password: this.password(),
-      })
-      .subscribe({
-        next: () => {
-          this.roleContext.reset();
-          this.roleContext.loadContext();
-          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') ?? '/admin/dashboard';
-          this.router.navigateByUrl(returnUrl);
-          this.isSubmitting.set(false);
-        },
-        error: (err) => {
-          this.authError.set(err.error?.detail ?? 'Credenciales incorrectas. Verifica tu correo y contraseña.');
-          this.isSubmitting.set(false);
-        },
-      });
   }
 }

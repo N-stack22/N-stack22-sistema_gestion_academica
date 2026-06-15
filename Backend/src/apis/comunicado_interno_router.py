@@ -11,8 +11,9 @@ service = ComunicadoService()
 def listar_comunicados_internos(
     docente_id: str | None = Query(default=None),
     estudiante_id: str | None = Query(default=None),
+    familia: bool = Query(default=False),
 ):
-    return service.listar_todos(docente_id=docente_id, estudiante_id=estudiante_id)
+    return service.listar_todos(docente_id=docente_id, estudiante_id=estudiante_id, familia=familia)
 
 
 @router.post("", status_code=201)

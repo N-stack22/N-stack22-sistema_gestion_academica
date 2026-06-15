@@ -153,7 +153,7 @@ class AuthRepository:
                     "id,perfiles(telefono),"
                     "apoderado_estudiante(parentesco,es_principal,"
                     "estudiantes(id,codigo_estudiante,perfiles(nombres,apellidos),"
-                    "matriculas(secciones(nombre,grados(nombre,niveles_educativos(nombre)))))"
+                    "matriculas(secciones(nombre,grados(nombre,niveles_educativos(nombre)))))))"
                 )
                 .eq("perfil_id", user_id)
                 .limit(1)

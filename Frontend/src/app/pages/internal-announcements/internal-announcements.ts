@@ -123,7 +123,8 @@ export class InternalAnnouncements implements OnInit {
       (this.roleContext.isStudent() || this.roleContext.isParent()) && this.roleContext.getStudentId()
         ? this.roleContext.getStudentId()!
         : undefined;
-    this.announcementService.listar(docenteId, estudianteId).subscribe({
+    const familia = this.roleContext.isParent();
+    this.announcementService.listar(docenteId, estudianteId, familia).subscribe({
       next: (items) =>
         this.comunicadoRows.set(
           items.map((a) => ({

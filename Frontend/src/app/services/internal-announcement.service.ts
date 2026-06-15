@@ -19,10 +19,11 @@ export class InternalAnnouncementService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${API_BASE_URL}/api/comunicados-internos`;
 
-  listar(docenteId?: string, estudianteId?: string): Observable<InternalAnnouncement[]> {
+  listar(docenteId?: string, estudianteId?: string, familia = false): Observable<InternalAnnouncement[]> {
     const params = new URLSearchParams();
     if (docenteId) params.set('docente_id', docenteId);
     if (estudianteId) params.set('estudiante_id', estudianteId);
+    if (familia) params.set('familia', 'true');
     const q = params.toString() ? `?${params}` : '';
     return this.http.get<InternalAnnouncement[]>(`${this.baseUrl}${q}`);
   }

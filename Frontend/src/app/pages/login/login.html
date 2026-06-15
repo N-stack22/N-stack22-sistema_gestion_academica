@@ -46,7 +46,7 @@
                 <div class="alert alert-danger py-2" role="alert" data-cy="login-error">{{ authError() }}</div>
               }
 
-              <form novalidate (submit)="onSubmit($event)" data-cy="login-form">
+              <form [formRoot]="loginForm" data-cy="login-form">
                 <div class="mb-3">
                   <label class="form-label" for="login-email">Correo</label>
                   <input
@@ -54,14 +54,15 @@
                     type="email"
                     class="form-control form-control-lg"
                     data-cy="login-email"
-                    [class.is-invalid]="submitted() && emailError()"
-                    [value]="email()"
-                    (input)="email.set($any($event.target).value); authError.set('')"
+                    [formField]="loginForm.email"
+                    [class.is-invalid]="loginForm.email().touched() && loginForm.email().invalid()"
                     autocomplete="username"
                     placeholder="admin@horizonte.edu.pe"
                   />
-                  @if (submitted() && emailError()) {
-                    <div class="invalid-feedback d-block">{{ emailError() }}</div>
+                  @if (loginForm.email().touched() && loginForm.email().invalid()) {
+                    @for (error of loginForm.email().errors(); track error.kind) {
+                      <div class="invalid-feedback d-block">{{ error.message }}</div>
+                    }
                   }
                 </div>
 
@@ -72,14 +73,15 @@
                     type="password"
                     class="form-control form-control-lg"
                     data-cy="login-password"
-                    [class.is-invalid]="submitted() && passwordError()"
-                    [value]="password()"
-                    (input)="password.set($any($event.target).value); authError.set('')"
+                    [formField]="loginForm.password"
+                    [class.is-invalid]="loginForm.password().touched() && loginForm.password().invalid()"
                     autocomplete="current-password"
                     placeholder="••••••••"
                   />
-                  @if (submitted() && passwordError()) {
-                    <div class="invalid-feedback d-block">{{ passwordError() }}</div>
+                  @if (loginForm.password().touched() && loginForm.password().invalid()) {
+                    @for (error of loginForm.password().errors(); track error.kind) {
+                      <div class="invalid-feedback d-block">{{ error.message }}</div>
+                    }
                   }
                 </div>
 
@@ -87,9 +89,9 @@
                   type="submit"
                   class="btn btn-horizonte-primary btn-lg w-100 premium-button"
                   data-cy="login-submit"
-                  [disabled]="isSubmitting() || (submitted() && !isFormValid())"
+                  [disabled]="loginForm().submitting() || (loginForm().touched() && loginForm().invalid())"
                 >
-                  Ingresar
+                  {{ loginForm().submitting() ? 'Ingresando...' : 'Ingresar' }}
                 </button>
               </form>
 

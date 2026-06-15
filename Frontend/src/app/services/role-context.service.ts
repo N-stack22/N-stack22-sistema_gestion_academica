@@ -97,14 +97,13 @@ export class RoleContextService {
   private readonly teacherCourses = signal<{ id: string; name: string }[]>([]);
 
   private readonly loaded = signal(false);
+  private readonly contextError = signal('');
 
   private contextUserId: string | null = null;
 
-
-
   readonly isReady = computed(() => this.isContextReady());
-
   readonly activeStudentId = computed(() => this.studentId());
+  readonly contextLoadError = computed(() => this.contextError());
 
 
 
@@ -131,7 +130,7 @@ export class RoleContextService {
     this.teacherCourses.set([]);
 
     this.loaded.set(false);
-
+    this.contextError.set('');
     this.contextUserId = null;
 
     sessionStorage.removeItem('horizonte-selected-student');
@@ -163,6 +162,7 @@ export class RoleContextService {
     this.teacherCourses.set([]);
 
     this.loaded.set(false);
+    this.contextError.set('');
 
 
 
@@ -302,12 +302,16 @@ export class RoleContextService {
           }
 
           this.loaded.set(true);
+          this.contextError.set('');
 
         },
 
         error: () => {
 
           this.loaded.set(false);
+          this.contextError.set(
+            'No se pudo cargar los estudiantes asociados. Verifique que el backend esté activo y vuelva a iniciar sesión.',
+          );
 
         },
 

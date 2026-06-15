@@ -14,7 +14,10 @@ class ComunicadoService:
         self,
         docente_id: str | None = None,
         estudiante_id: str | None = None,
+        familia: bool = False,
     ) -> list[dict]:
+        if estudiante_id and familia:
+            return self._repository.find_for_apoderado(estudiante_id)
         if estudiante_id:
             return self._repository.find_for_estudiante(estudiante_id)
         if docente_id:

@@ -122,6 +122,53 @@ class ComunicadoRepository:
                 rows.append(self._map_admin_row(row))
         return rows
 
+    def find_for_apoderado(self, estudiante_id: str) -> list[dict]:
+        """Comunicados visibles para padre: rol APODERADO, alcance del hijo y generales."""
+        client = get_supabase()
+        ctx = obtener_contexto_academico_estudiante(estudiante_id)
+        if not ctx:
+            return []
+
+        seccion_id = ctx.get("seccion_id")
+        grado_id = ctx.get("grado_id")
+        nivel_id = ctx.get("nivel_id")
+        apoderado_rol_id = obtener_rol_id("APODERADO")
+        estudiante_rol_id = obtener_rol_id("ESTUDIANTE")
+
+        response = (
+            client.table("comunicados")
+            .select(
+                "id,titulo,contenido,publicado,publicado_en,archivo_url,"
+                "rol_destinatario_id,nivel_id,grado_id,seccion_id,"
+                "roles(codigo,nombre),niveles_educativos(nombre),grados(nombre),secciones(nombre)"
+            )
+            .eq("publicado", True)
+            .order("publicado_en", desc=True)
+            .execute()
+        )
+        rows = []
+        for row in response.data or []:
+            rol_id = row.get("rol_destinatario_id")
+            row_nivel = row.get("nivel_id")
+            row_grado = row.get("grado_id")
+            row_seccion = row.get("seccion_id")
+            es_global = not rol_id and not row_nivel and not row_grado and not row_seccion
+            es_para_apoderado = apoderado_rol_id and rol_id == apoderado_rol_id
+            es_para_estudiante = estudiante_rol_id and rol_id == estudiante_rol_id
+            es_para_seccion = row_seccion and row_seccion == seccion_id
+            es_para_grado = row_grado and row_grado == grado_id
+            es_para_nivel = row_nivel and row_nivel == nivel_id
+            if (
+                es_global
+                or es_para_apoderado
+                or es_para_estudiante
+                or es_para_seccion
+                or es_para_grado
+                or es_para_nivel
+            ):
+                rows.append(self._map_admin_row(row))
+        return rows
+
     def obtener(self, comunicado_id: str) -> dict | None:
         client = get_supabase()
         response = (
