@@ -11,6 +11,7 @@ import { ThemeService } from '../../services/theme.service';
 import { TeacherContextService } from '../../services/teacher-context.service';
 import { StudentContextService } from '../../services/student-context.service';
 import { ParentContextService } from '../../services/parent-context.service';
+import { API_BASE_URL } from '../../config/api.config';
 
 @Component({
   selector: 'app-admin-layout',
@@ -79,7 +80,7 @@ export class AdminLayout implements OnInit, OnDestroy {
       next: (health) => {
         if (health.status !== 'ok') {
           this.backendOk.set(false);
-          this.backendWarning.set('No se pudo conectar con el backend. Inicie uvicorn en el puerto 8000.');
+          this.backendWarning.set(`No se pudo conectar con el backend configurado en ${API_BASE_URL}.`);
           return;
         }
         if ((health.anios_academicos ?? 0) === 0) {
@@ -90,7 +91,7 @@ export class AdminLayout implements OnInit, OnDestroy {
       },
       error: () => {
         this.backendOk.set(false);
-        this.backendWarning.set('Backend no disponible en http://localhost:8000. Ejecute: uv run uvicorn src.main:app --reload');
+        this.backendWarning.set(`Backend no disponible en ${API_BASE_URL}.`);
       },
     });
   }
