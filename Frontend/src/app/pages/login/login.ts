@@ -25,6 +25,7 @@ export class Login {
 
   protected readonly authError = signal('');
   protected readonly loginModel = signal<LoginModel>({ email: '', password: '' });
+  protected readonly showPassword = signal(false);
 
   protected readonly loginForm = form(
     this.loginModel,
@@ -45,6 +46,10 @@ export class Login {
     { icon: 'bi-people', text: 'Seguimiento académico para familias.' },
     { icon: 'bi-grid-1x2', text: 'Gestión escolar conectada a Supabase.' },
   ];
+
+  protected togglePasswordVisibility(): void {
+    this.showPassword.update((isVisible) => !isVisible);
+  }
 
   constructor() {
     if (this.auth.isAuthenticated()) {

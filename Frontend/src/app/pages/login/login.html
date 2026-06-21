@@ -68,16 +68,28 @@
 
                 <div class="mb-4">
                   <label class="form-label" for="login-password">Contraseña</label>
-                  <input
-                    id="login-password"
-                    type="password"
-                    class="form-control form-control-lg"
-                    data-cy="login-password"
-                    [formField]="loginForm.password"
-                    [class.is-invalid]="loginForm.password().touched() && loginForm.password().invalid()"
-                    autocomplete="current-password"
-                    placeholder="••••••••"
-                  />
+                  <div class="login-password-field">
+                    <input
+                      id="login-password"
+                      [type]="showPassword() ? 'text' : 'password'"
+                      class="form-control form-control-lg login-password-field__input"
+                      data-cy="login-password"
+                      [formField]="loginForm.password"
+                      [class.is-invalid]="loginForm.password().touched() && loginForm.password().invalid()"
+                      autocomplete="current-password"
+                      placeholder="••••••••"
+                    />
+                    <button
+                      type="button"
+                      class="login-password-field__toggle"
+                      [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                      [attr.title]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                      [attr.aria-pressed]="showPassword()"
+                      (click)="togglePasswordVisibility()"
+                    >
+                      <i class="bi" [ngClass]="showPassword() ? 'bi-eye-slash' : 'bi-eye'" aria-hidden="true"></i>
+                    </button>
+                  </div>
                   @if (loginForm.password().touched() && loginForm.password().invalid()) {
                     @for (error of loginForm.password().errors(); track error.kind) {
                       <div class="invalid-feedback d-block">{{ error.message }}</div>
