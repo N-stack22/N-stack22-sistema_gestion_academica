@@ -17,6 +17,9 @@ Crear `Backend/.env` localmente. Este archivo no debe subirse al repositorio.
 ```env
 SUPABASE_URL=https://TU-PROYECTO.supabase.co
 SUPABASE_KEY=SERVICE_ROLE_KEY
+SUPABASE_RESOURCE_BUCKET=recursos-academicos
+RESOURCE_UPLOAD_MAX_MB=15
+SUPABASE_RESOURCE_SIGNED_URL_SECONDS=3600
 DATABASE_URL=postgresql://postgres:...
 CORS_ORIGINS=http://localhost:4200,https://USUARIO.github.io,https://USUARIO.github.io/colegio-horizonte
 ENVIRONMENT=development

@@ -12,5 +12,6 @@ export interface Resource {
   status: string;
   description?: string;
   fileUrl?: string;
+  fileStorageRef?: string;
   fileName?: string;
 }

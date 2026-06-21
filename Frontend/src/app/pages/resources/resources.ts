@@ -29,6 +29,7 @@ export class Resources implements OnInit {
   protected readonly resourceUrl = signal('');
   protected readonly selectedFile = signal<File | null>(null);
   protected readonly submitted = signal(false);
+  protected readonly saving = signal(false);
   protected readonly successMessage = signal('');
   protected readonly errorMessage = signal('');
 
@@ -188,6 +189,7 @@ export class Resources implements OnInit {
             _courseId: r.courseId ?? '',
             _description: r.description ?? '',
             _fileUrl: r.fileUrl ?? '',
+            _fileStorageRef: r.fileStorageRef ?? '',
             _fileName: r.fileName ?? '',
             recurso: r.title,
             curso: r.courseLabel ?? r.course,
@@ -207,11 +209,10 @@ export class Resources implements OnInit {
     this.submitted.set(true);
     this.successMessage.set('');
     this.errorMessage.set('');
-    if (!this.isFormValid()) return;
+    if (!this.isFormValid() || this.saving()) return;
 
     const url = this.resourceUrl().trim();
     const file = this.selectedFile();
-    const archivoUrl = url || (file ? `simulado://${file.name}` : undefined);
 
     const payload: Record<string, unknown> = {
       titulo: this.title().trim(),
@@ -220,17 +221,40 @@ export class Resources implements OnInit {
       tipo_recurso_codigo: this.typeCode(),
       docente_id: this.roleContext.getTeacherId() ?? undefined,
     };
-    if (archivoUrl) {
-      payload['archivo_url'] = archivoUrl;
-      payload['nombre_archivo'] = file?.name || url || this.title().trim();
+
+    if (file) {
+      this.saving.set(true);
+      this.resourceService.upload(file).subscribe({
+        next: (uploaded) => {
+          payload['archivo_url'] = uploaded.archivo_url;
+          payload['nombre_archivo'] = uploaded.nombre_archivo;
+          this.saveResource(payload);
+        },
+        error: (err) => {
+          this.saving.set(false);
+          this.errorMessage.set(err?.error?.detail ?? 'No se pudo subir el archivo al bucket de recursos.');
+        },
+      });
+      return;
     }
 
+    if (url) {
+      payload['archivo_url'] = url;
+      payload['nombre_archivo'] = url || this.title().trim();
+    }
+
+    this.saving.set(true);
+    this.saveResource(payload);
+  }
+
+  private saveResource(payload: Record<string, unknown>): void {
     const request = this.editMode()
       ? this.resourceService.actualizar(this.editId(), payload)
       : this.resourceService.crear(payload);
 
     request.subscribe({
       next: () => {
+        this.saving.set(false);
         this.successMessage.set(
           this.editMode()
             ? `Recurso "${this.title()}" actualizado correctamente.`
@@ -239,11 +263,13 @@ export class Resources implements OnInit {
         this.cancelEdit();
         this.loadRecursos();
       },
-      error: (err) =>
+      error: (err) => {
+        this.saving.set(false);
         this.errorMessage.set(
           err?.error?.detail ??
             (this.editMode() ? 'No se pudo actualizar el recurso.' : 'No se pudo registrar el recurso.'),
-        ),
+        );
+      },
     });
   }
 
@@ -256,7 +282,8 @@ export class Resources implements OnInit {
     this.courseId.set(String(row['_courseId'] ?? ''));
     this.typeCode.set(String(row['_typeCode'] ?? 'PDF'));
     const fileUrl = String(row['_fileUrl'] ?? '');
-    this.resourceUrl.set(fileUrl.startsWith('simulado://') ? '' : fileUrl);
+    const storageRef = String(row['_fileStorageRef'] ?? '');
+    this.resourceUrl.set((storageRef || fileUrl.startsWith('simulado://')) ? '' : fileUrl);
     this.selectedFile.set(null);
     this.submitted.set(false);
     this.successMessage.set('');
@@ -288,7 +315,7 @@ export class Resources implements OnInit {
     }
     if (url.startsWith('simulado://')) {
       const fileName = url.replace('simulado://', '') || name;
-      window.alert(`Archivo registrado para fines académicos: ${fileName}`);
+      this.errorMessage.set(`"${fileName}" fue registrado antes de habilitar la subida real. Edite el recurso y vuelva a subir el PDF.`);
       return;
     }
     window.open(url, '_blank', 'noopener');

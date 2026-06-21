@@ -122,17 +122,18 @@
                 id="resource-file"
                 type="file"
                 class="form-control"
+                accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.png,.jpg,.jpeg,application/pdf"
                 [class.is-invalid]="submitted() && resourceLinkError()"
                 (change)="onFileSelected($event)"
               />
-              <small class="text-muted">Puede usar URL, archivo, o ambos. Si solo sube archivo, se guardará como enlace académico.</small>
+              <small class="text-muted">Puede usar URL, archivo, o ambos. El archivo se subirá al bucket de recursos.</small>
               @if (submitted() && resourceLinkError()) {
                 <div class="invalid-feedback d-block">{{ resourceLinkError() }}</div>
               }
             </div>
             <div class="col-12 d-flex flex-wrap gap-2">
-              <button type="submit" class="btn btn-horizonte-primary" [disabled]="submitted() && !isFormValid()">
-                {{ editMode() ? 'Guardar cambios' : 'Registrar recurso' }}
+              <button type="submit" class="btn btn-horizonte-primary" [disabled]="saving() || (submitted() && !isFormValid())">
+                {{ saving() ? 'Guardando...' : editMode() ? 'Guardar cambios' : 'Registrar recurso' }}
               </button>
               @if (editMode()) {
                 <button type="button" class="btn btn-outline-secondary" (click)="cancelEdit()">Cancelar</button>

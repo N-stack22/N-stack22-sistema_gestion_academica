@@ -6,6 +6,7 @@ from src.repository.helpers import (
     obtener_ids_cursos_estudiante,
 )
 from src.services.database import get_supabase
+from src.services.storage_service import is_storage_reference, resolve_storage_url
 
 
 class RecursoRepository:
@@ -214,6 +215,8 @@ class RecursoRepository:
         archivo = archivos[0] if archivos else {}
         archivo_url = (archivo.get("archivo_url") or "").strip()
         nombre_archivo = (archivo.get("nombre_archivo") or "").strip()
+        storage_ref = archivo_url if is_storage_reference(archivo_url) else ""
+        public_file_url = resolve_storage_url(archivo_url) if archivo_url else ""
         return {
             "id": row["id"],
             "title": row.get("titulo", ""),
@@ -227,6 +230,7 @@ class RecursoRepository:
             "active": activo,
             "statusCode": "DISPONIBLE" if activo else "ARCHIVADO",
             "status": "Disponible" if activo else "Archivado",
-            "fileUrl": archivo_url,
+            "fileUrl": public_file_url,
+            "fileStorageRef": storage_ref,
             "fileName": nombre_archivo or archivo_url,
         }

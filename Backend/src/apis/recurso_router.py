@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, File, HTTPException, UploadFile, Query, status
 
 from src.schemas.requests import RecursoCreateRequest, RecursoUpdateRequest
 from src.services.recurso_service import RecursoService
+from src.services.storage_service import upload_resource_file
 
 router = APIRouter(prefix="/api/recursos", tags=["recursos"])
 service = RecursoService()
@@ -19,6 +20,15 @@ def listar_recursos(
 @router.post("", status_code=201)
 def crear_recurso(body: RecursoCreateRequest):
     return service.crear(body.model_dump())
+
+
+@router.post("/upload")
+async def subir_archivo_recurso(file: UploadFile = File(...)):
+    content = await file.read()
+    try:
+        return upload_resource_file(file.filename or "recurso.pdf", content, file.content_type)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
 
 @router.put("/{recurso_id}")

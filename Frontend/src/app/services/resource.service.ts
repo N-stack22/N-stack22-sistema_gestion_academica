@@ -22,6 +22,15 @@ export class ResourceService {
     return this.http.post<Resource>(this.baseUrl, payload);
   }
 
+  upload(file: File): Observable<{ archivo_url: string; nombre_archivo: string; fileUrl: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<{ archivo_url: string; nombre_archivo: string; fileUrl: string }>(
+      `${this.baseUrl}/upload`,
+      formData,
+    );
+  }
+
   archivar(recursoId: string): Observable<Resource> {
     return this.http.post<Resource>(`${this.baseUrl}/${recursoId}/archivar`, {});
   }
