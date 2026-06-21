@@ -22,6 +22,7 @@ CORS_ORIGINS=http://localhost:4200,https://USUARIO.github.io,https://USUARIO.git
 ENVIRONMENT=development
 DB_POOL_MIN_SIZE=1
 DB_POOL_MAX_SIZE=10
+DB_FUNCTION_CACHE_ENABLED=false
 DB_FUNCTION_CACHE_TTL_SECONDS=0
 ```
 
@@ -57,7 +58,7 @@ Para que los dashboards y listados carguen rapido:
    - `sql/17_funciones_listados.sql`
    - `sql/18_funciones_dashboard.sql`
    - `sql/19_indices_performance.sql`
-3. Mantener `DB_FUNCTION_CACHE_TTL_SECONDS=0` para evitar listados obsoletos despues de registrar datos. Solo subirlo a 10-30 segundos en pantallas estrictamente consultivas.
+3. Mantener `DB_FUNCTION_CACHE_ENABLED=false` y `DB_FUNCTION_CACHE_TTL_SECONDS=0` para evitar listados obsoletos despues de registrar datos. Solo activar cache en pantallas estrictamente consultivas.
 
 Si `DATABASE_URL` no esta configurada, el backend conserva fallback por Supabase REST, pero sera mas lento.
 

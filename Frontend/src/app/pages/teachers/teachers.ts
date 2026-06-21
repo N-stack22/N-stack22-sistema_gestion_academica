@@ -224,6 +224,7 @@ export class Teachers implements OnInit {
         } else {
           this.resetForm();
         }
+        this.catalogService.invalidate();
         this.loadTeachers();
       },
       error: (err) => this.errorMessage.set(err?.error?.detail ?? 'Error al guardar docente.'),
@@ -249,6 +250,7 @@ export class Teachers implements OnInit {
         next: () => {
           this.successMessage.set('Curso asignado al docente correctamente.');
           this.errorMessage.set('');
+          this.catalogService.invalidate();
           this.refreshDetail(teacher.id);
           this.loadTeachers();
         },
@@ -262,6 +264,7 @@ export class Teachers implements OnInit {
     this.courseService.eliminar(cursoId).subscribe({
       next: () => {
         this.successMessage.set('Curso desasignado.');
+        this.catalogService.invalidate();
         this.refreshDetail(teacher.id);
         this.loadTeachers();
       },
@@ -276,6 +279,7 @@ export class Teachers implements OnInit {
       next: (updated) => {
         this.selectedTeacher.set(updated);
         this.successMessage.set(`Estado actualizado: ${updated.status}`);
+        this.catalogService.invalidate();
         this.loadTeachers();
       },
     });

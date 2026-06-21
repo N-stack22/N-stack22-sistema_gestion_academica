@@ -197,6 +197,7 @@ export class Courses implements OnInit {
       next: () => {
         this.successMessage.set('Asignatura registrada.');
         this.nuevaAsignatura.set('');
+        this.catalogService.invalidate();
         this.catalogService.asignaturas().subscribe({
           next: (a) => this.asignaturas.set(a as { id: string; nombre: string }[]),
         });
@@ -216,6 +217,7 @@ export class Courses implements OnInit {
       .subscribe({
         next: () => {
           this.successMessage.set('Curso asignado correctamente.');
+          this.catalogService.invalidate();
           this.loadCursos();
         },
       });

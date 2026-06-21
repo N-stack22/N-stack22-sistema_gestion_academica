@@ -135,6 +135,7 @@ export class Parents implements OnInit {
       .subscribe({
         next: () => {
           this.successMessage.set('Apoderado registrado y vinculado correctamente.');
+          this.catalogService.invalidate();
           this.loadParents();
           this.firstName.set('');
           this.lastName.set('');

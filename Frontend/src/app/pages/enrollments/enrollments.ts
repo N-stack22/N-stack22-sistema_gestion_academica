@@ -304,6 +304,7 @@ export class Enrollments implements OnInit {
         } else {
           this.onEstudianteChange(this.estudianteId());
         }
+        this.catalogService.invalidate();
         this.loadSecciones();
         this.loadMatriculas();
       },

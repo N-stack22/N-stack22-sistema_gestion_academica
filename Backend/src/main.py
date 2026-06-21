@@ -83,6 +83,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.middleware("http")
+async def clear_query_cache_after_mutation(request, call_next):
+    response = await call_next(request)
+    if request.method in {"POST", "PUT", "PATCH", "DELETE"} and 200 <= response.status_code < 400:
+        from src.repository.db_functions import clear_function_cache
+
+        clear_function_cache()
+    return response
+
 app.include_router(auth_router)
 app.include_router(dashboard_router)
 app.include_router(catalogo_router)

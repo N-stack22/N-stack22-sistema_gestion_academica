@@ -213,6 +213,10 @@ export class Payments implements OnInit {
       .subscribe({
         next: () => {
           this.successMessage.set('Pago registrado. Pendiente de validación administrativa.');
+          const studentId = this.estudianteId();
+          this.pensionId.set('');
+          this.monto.set(0);
+          if (studentId) this.cargarPensionesPendientes(studentId);
           this.loadPagos();
         },
         error: (err: { error?: { detail?: string } }) =>
@@ -226,6 +230,8 @@ export class Payments implements OnInit {
     this.paymentService.anular(String(id)).subscribe({
       next: () => {
         this.successMessage.set('Pago anulado.');
+        const studentId = this.estudianteId();
+        if (studentId) this.cargarPensionesPendientes(studentId);
         this.loadPagos();
       },
       error: (err) => this.errorMessage.set(err?.error?.detail ?? 'No se pudo anular.'),

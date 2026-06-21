@@ -8,6 +8,7 @@ import { RoleContextService } from '../../services/role-context.service';
 import { StudentService } from '../../services/student.service';
 import { CourseService } from '../../services/course.service';
 import { ParentService } from '../../services/parent.service';
+import { CatalogService } from '../../services/catalog.service';
 import {
   birthDateNotFuture,
   dniEightDigits,
@@ -27,6 +28,7 @@ export class Students implements OnInit {
   private readonly studentService = inject(StudentService);
   private readonly parentService = inject(ParentService);
   private readonly courseService = inject(CourseService);
+  private readonly catalogService = inject(CatalogService);
   private readonly router = inject(Router);
   protected readonly roleContext = inject(RoleContextService);
 
@@ -225,6 +227,7 @@ export class Students implements OnInit {
               : `Estudiante ${student.fullName} registrado. Código: ${student.code}`,
           );
           this.resetForm();
+          this.catalogService.invalidate();
           this.loadStudents();
         },
         error: (err) => {
@@ -283,6 +286,7 @@ export class Students implements OnInit {
       .subscribe({
         next: () => {
           this.linkSuccess.set('Apoderado asociado correctamente.');
+          this.catalogService.invalidate();
           this.studentService.obtener(student.id).subscribe({
             next: (updated) => this.selectedStudent.set(updated),
           });

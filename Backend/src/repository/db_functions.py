@@ -18,6 +18,9 @@ _CACHE: dict[str, tuple[float, Any]] = {}
 
 
 def _cache_ttl_seconds() -> int:
+    enabled = (os.getenv("DB_FUNCTION_CACHE_ENABLED") or "").strip().lower()
+    if enabled not in {"1", "true", "yes", "on"}:
+        return 0
     try:
         return int(os.getenv("DB_FUNCTION_CACHE_TTL_SECONDS", "0"))
     except ValueError:

@@ -92,6 +92,7 @@ export class Users implements OnInit {
       .subscribe({
         next: (updated) => {
           this.selectedUser.set(updated);
+          this.catalogService.invalidate();
           this.loadUsers();
         },
       });
@@ -120,6 +121,7 @@ export class Users implements OnInit {
           this.nombres.set('');
           this.apellidos.set('');
           this.correo.set('');
+          this.catalogService.invalidate();
           this.loadUsers();
         },
       });

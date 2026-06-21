@@ -174,6 +174,11 @@ export class Settings implements OnInit {
     });
   }
 
+  private reloadInstitutionalData(): void {
+    this.catalogService.invalidate();
+    this.loadInstitucional();
+  }
+
   protected selectSection(key: string): void {
     this.activeSection.set(key);
     this.errorMessage.set('');
@@ -211,7 +216,7 @@ export class Settings implements OnInit {
     this.settingsService.actualizarAnio(anioId, { activo: true }).subscribe({
       next: () => {
         this.successMessage.set('Año académico activo actualizado.');
-        this.loadInstitucional();
+        this.reloadInstitutionalData();
       },
       error: (err) => this.errorMessage.set(err?.error?.detail ?? 'No se pudo activar el año.'),
     });
@@ -237,7 +242,7 @@ export class Settings implements OnInit {
           this.nuevoAnio.set(anio + 1);
           this.nuevoAnioInicio.set(`${anio + 1}-03-01`);
           this.nuevoAnioFin.set(`${anio + 1}-12-20`);
-          this.loadInstitucional();
+          this.reloadInstitutionalData();
         },
         error: (err) => this.errorMessage.set(err?.error?.detail ?? 'No se pudo crear el año académico.'),
       });
@@ -265,7 +270,7 @@ export class Settings implements OnInit {
           this.periodoOrden.set(this.periodsForSelectedYear().length + 2);
           this.periodoInicio.set('');
           this.periodoFin.set('');
-          this.loadInstitucional();
+          this.reloadInstitutionalData();
         },
         error: (err) => this.errorMessage.set(err?.error?.detail ?? 'No se pudo crear el periodo.'),
       });
@@ -284,7 +289,7 @@ export class Settings implements OnInit {
           this.errorMessage.set('');
           this.metodoCodigo.set('');
           this.metodoNombre.set('');
-          this.loadInstitucional();
+          this.reloadInstitutionalData();
         },
         error: (err) => this.errorMessage.set(err?.error?.detail ?? 'No se pudo agregar el método.'),
       });
@@ -295,7 +300,7 @@ export class Settings implements OnInit {
     this.settingsService.actualizarMetodoPago(metodo.id, { activo: false }).subscribe({
       next: () => {
         this.successMessage.set(`Método "${metodo.nombre}" desactivado.`);
-        this.loadInstitucional();
+        this.reloadInstitutionalData();
       },
       error: (err) => this.errorMessage.set(err?.error?.detail ?? 'No se pudo quitar el método.'),
     });
@@ -305,7 +310,7 @@ export class Settings implements OnInit {
     this.settingsService.actualizarMetodoPago(metodo.id, { activo: true }).subscribe({
       next: () => {
         this.successMessage.set(`Método "${metodo.nombre}" reactivado.`);
-        this.loadInstitucional();
+        this.reloadInstitutionalData();
       },
       error: (err) => this.errorMessage.set(err?.error?.detail ?? 'No se pudo reactivar el método.'),
     });
@@ -340,7 +345,7 @@ export class Settings implements OnInit {
         next: () => {
           this.successMessage.set('Sección creada correctamente.');
           this.errorMessage.set('');
-          this.loadInstitucional();
+          this.reloadInstitutionalData();
         },
         error: (err) => this.errorMessage.set(err?.error?.detail ?? 'No se pudo crear la sección.'),
       });
@@ -366,7 +371,7 @@ export class Settings implements OnInit {
       .subscribe({
         next: () => {
           this.successMessage.set('Sección actualizada.');
-          this.loadInstitucional();
+          this.reloadInstitutionalData();
         },
         error: (err) => this.errorMessage.set(err?.error?.detail ?? 'No se pudo actualizar la sección.'),
       });
