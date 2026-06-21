@@ -23,8 +23,17 @@ export class ParentService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${API_BASE_URL}/api/apoderados`;
 
-  listar(): Observable<Parent[]> {
-    return this.http.get<Parent[]>(this.baseUrl);
+  listar(filters?: {
+    busqueda?: string;
+    parentesco?: string;
+    estado?: string;
+  }): Observable<Parent[]> {
+    const params = new URLSearchParams();
+    if (filters?.busqueda) params.set('busqueda', filters.busqueda);
+    if (filters?.parentesco) params.set('parentesco', filters.parentesco);
+    if (filters?.estado) params.set('estado', filters.estado);
+    const q = params.toString() ? `?${params}` : '';
+    return this.http.get<Parent[]>(`${this.baseUrl}${q}`);
   }
 
   obtener(id: string): Observable<Parent> {

@@ -75,12 +75,45 @@
     </div>
     }
 
+    <div class="form-panel admin-card mb-4">
+      <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
+      <div class="form-panel__body">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-4">
+            <label class="form-label">Buscar</label>
+            <input class="form-control" placeholder="Título o destinatario" [value]="draftFiltroComBusqueda()" (input)="draftFiltroComBusqueda.set($any($event.target).value)" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Destinatario</label>
+            <select class="form-select" [value]="draftFiltroComDestinatario()" (change)="draftFiltroComDestinatario.set($any($event.target).value)">
+              <option value="">Todos</option>
+              @for (rol of roles(); track rol.codigo) {
+                <option [value]="rol.nombre">{{ rol.nombre }}</option>
+              }
+              <option value="Todos">Todos (público)</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Estado</label>
+            <select class="form-select" [value]="draftFiltroComEstado()" (change)="draftFiltroComEstado.set($any($event.target).value)">
+              <option value="">Todos</option>
+              <option value="Publicado">Publicado</option>
+              <option value="Borrador">Borrador</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscarComunicados()">Buscar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <app-data-table
       [title]="isInstitutional() ? 'Comunicados publicados' : 'Comunicados recibidos'"
       [subtitle]="isInstitutional() ? 'Use Editar o Eliminar en cada fila.' : 'Haz clic en Ver detalle para leer el contenido completo.'"
       icon="bi-megaphone"
       [columns]="comunicadoColumns"
-      [rows]="comunicadoRows()"
+      [rows]="comunicadoRowsFiltrados()"
       [showActions]="true"
       [detailLabel]="isInstitutional() ? 'Editar' : 'Ver detalle'"
       [secondaryDetailLabel]="isInstitutional() ? 'Eliminar' : ''"
@@ -160,6 +193,38 @@
       </div>
     </div>
     }
+
+    <div class="form-panel admin-card mb-4">
+      <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
+      <div class="form-panel__body">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-4">
+            <label class="form-label">Buscar</label>
+            <input class="form-control" placeholder="Evento, lugar o destinatario" [value]="draftFiltroEvtBusqueda()" (input)="draftFiltroEvtBusqueda.set($any($event.target).value)" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Destinatario</label>
+            <select class="form-select" [value]="draftFiltroEvtDestinatario()" (change)="draftFiltroEvtDestinatario.set($any($event.target).value)">
+              <option value="">Todos</option>
+              @for (rol of roles(); track rol.codigo) {
+                <option [value]="rol.nombre">{{ rol.nombre }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Periodo</label>
+            <select class="form-select" [value]="draftFiltroEvtPeriodo()" (change)="draftFiltroEvtPeriodo.set($any($event.target).value)">
+              <option value="">Todos</option>
+              <option value="proximos">Próximos</option>
+              <option value="pasados">Anteriores</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscarEventos()">Buscar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <app-data-table
       title="Próximos eventos"

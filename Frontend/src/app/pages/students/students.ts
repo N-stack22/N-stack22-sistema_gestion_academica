@@ -42,6 +42,8 @@ export class Students implements OnInit {
   protected readonly successMessage = signal('');
   protected readonly errorMessage = signal('');
   protected readonly loading = signal(false);
+  protected readonly draftSearchFilter = signal('');
+  protected readonly draftCourseId = signal('');
   protected readonly searchFilter = signal('');
   protected readonly selectedCourseId = signal('');
 
@@ -135,8 +137,9 @@ export class Students implements OnInit {
     }
   }
 
-  protected onCourseFilterChange(cursoId: string): void {
-    this.selectedCourseId.set(cursoId);
+  protected buscar(): void {
+    this.searchFilter.set(this.draftSearchFilter().trim());
+    this.selectedCourseId.set(this.draftCourseId());
     this.loadStudents();
   }
 

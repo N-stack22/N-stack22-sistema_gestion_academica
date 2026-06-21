@@ -23,6 +23,10 @@ export class Pensions implements OnInit {
   protected readonly anio = signal(2026);
   protected readonly mes = signal(3);
   protected readonly monto = signal(450);
+  protected readonly draftNivelId = signal('');
+  protected readonly draftGradoId = signal('');
+  protected readonly draftSeccionId = signal('');
+  protected readonly draftEstadoFiltro = signal('');
   protected readonly nivelId = signal('');
   protected readonly gradoId = signal('');
   protected readonly seccionId = signal('');
@@ -80,6 +84,41 @@ export class Pensions implements OnInit {
       },
     });
     this.roleContext.whenReady(() => this.loadPensiones());
+  }
+
+  protected onDraftNivelChange(nivelId: string): void {
+    this.draftNivelId.set(nivelId);
+    this.draftGradoId.set('');
+    this.draftSeccionId.set('');
+    this.secciones.set([]);
+    if (nivelId) {
+      this.catalogService.grados(nivelId).subscribe({
+        next: (g) => this.grados.set(g as { id: string; nombre: string }[]),
+      });
+    } else {
+      this.grados.set([]);
+    }
+  }
+
+  protected onDraftGradoChange(gradoId: string): void {
+    this.draftGradoId.set(gradoId);
+    this.draftSeccionId.set('');
+    const anioActivo = this.anios()[0]?.id;
+    if (anioActivo && gradoId) {
+      this.catalogService.secciones(anioActivo, gradoId).subscribe({
+        next: (s) => this.secciones.set(s as { id: string; nombre: string }[]),
+      });
+    } else {
+      this.secciones.set([]);
+    }
+  }
+
+  protected buscar(): void {
+    this.nivelId.set(this.draftNivelId());
+    this.gradoId.set(this.draftGradoId());
+    this.seccionId.set(this.draftSeccionId());
+    this.estadoFiltro.set(this.draftEstadoFiltro());
+    this.loadPensiones();
   }
 
   protected onNivelChange(nivelId: string): void {

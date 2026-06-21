@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 
 from src.schemas.requests import PagoAnularRequest, VentaCreateRequest
 from src.services.venta_service import VentaService
@@ -8,8 +8,18 @@ service = VentaService()
 
 
 @router.get("")
-def listar_ventas():
-    return service.listar()
+def listar_ventas(
+    estado: str | None = Query(default=None),
+    busqueda: str | None = Query(default=None),
+    fecha_desde: str | None = Query(default=None),
+    fecha_hasta: str | None = Query(default=None),
+):
+    return service.listar(
+        estado=estado,
+        busqueda=busqueda,
+        fecha_desde=fecha_desde,
+        fecha_hasta=fecha_hasta,
+    )
 
 
 @router.get("/productos")

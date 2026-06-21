@@ -14,6 +14,22 @@ DIAS = {1: "Lunes", 2: "Martes", 3: "Miércoles", 4: "Jueves", 5: "Viernes", 6: 
 
 class EstudianteDashboardRepository:
     def resumen(self, estudiante_id: str) -> dict:
+        from src.repository.db_functions import DbFunctionError, call_object_function
+        from src.services.db_connection import has_database_url
+
+        if has_database_url():
+            try:
+                data = call_object_function(
+                    "fn_dashboard_student",
+                    {"p_estudiante_id": estudiante_id},
+                )
+                if data and data.get("student"):
+                    return data
+                if data is not None and not data.get("student"):
+                    raise ValueError("Estudiante no encontrado")
+            except DbFunctionError:
+                pass
+
         client = get_supabase()
         est_resp = (
             client.table("estudiantes")
@@ -139,20 +155,16 @@ class EstudianteDashboardRepository:
 
         cursos_detalle = []
         if ctx and curso_ids:
-            for cid in curso_ids:
-                curso_full = (
-                    client.table("cursos_asignados")
-                    .select(
-                        "id,asignaturas(nombre),"
-                        "docentes(codigo_docente,perfiles(nombres,apellidos))"
-                    )
-                    .eq("id", cid)
-                    .limit(1)
-                    .execute()
+            curso_full_resp = (
+                client.table("cursos_asignados")
+                .select(
+                    "id,asignaturas(nombre),"
+                    "docentes(codigo_docente,perfiles(nombres,apellidos))"
                 )
-                if not curso_full.data:
-                    continue
-                row = curso_full.data[0]
+                .in_("id", curso_ids)
+                .execute()
+            )
+            for row in curso_full_resp.data or []:
                 asig = row.get("asignaturas") or {}
                 doc = row.get("docentes") or {}
                 cursos_detalle.append(

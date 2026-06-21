@@ -3,6 +3,27 @@ from src.services.database import get_supabase
 
 
 class DashboardRepository:
+    def resumen_completo(self) -> dict:
+        from src.repository.db_functions import DbFunctionError, call_object_function
+        from src.services.db_connection import has_database_url
+
+        if has_database_url():
+            try:
+                data = call_object_function("fn_dashboard_admin", {})
+                if data and data.get("summary"):
+                    activities = data.get("activities") or []
+                    if isinstance(activities, list):
+                        data["activities"] = activities[:5]
+                    return data
+            except DbFunctionError:
+                pass
+
+        return {
+            "summary": self.get_summary(),
+            "activities": self.get_recent_activities(),
+            "events": self.get_upcoming_events(),
+        }
+
     def get_summary(self) -> dict:
         client = get_supabase()
         estudiantes = client.table("estudiantes").select("id", count="exact").execute()
@@ -15,16 +36,22 @@ class DashboardRepository:
             .eq("publicado", True)
             .execute()
         )
-        pensiones_pend = (
-            client.table("pensiones")
-            .select("id,estados_pago(codigo)", count="exact")
+        estados_pend = (
+            client.table("estados_pago")
+            .select("id")
+            .in_("codigo", ["PENDIENTE", "VENCIDA"])
             .execute()
         )
         pendientes = 0
-        for p in pensiones_pend.data or []:
-            estado = (p.get("estados_pago") or {}).get("codigo", "")
-            if estado in ("PENDIENTE", "VENCIDA"):
-                pendientes += 1
+        estado_ids = [e["id"] for e in estados_pend.data or []]
+        if estado_ids:
+            pensiones_pend = (
+                client.table("pensiones")
+                .select("id", count="exact")
+                .in_("estado_pago_id", estado_ids)
+                .execute()
+            )
+            pendientes = pensiones_pend.count or 0
 
         anio = obtener_anio_activo()
         return {

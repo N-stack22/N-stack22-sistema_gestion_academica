@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 
 from src.schemas.requests import (
     ApoderadoCreateRequest,
@@ -12,8 +12,12 @@ service = ApoderadoService()
 
 
 @router.get("")
-def listar_apoderados():
-    return service.listar()
+def listar_apoderados(
+    busqueda: str | None = Query(default=None),
+    parentesco: str | None = Query(default=None),
+    estado: str | None = Query(default=None),
+):
+    return service.listar(busqueda=busqueda, parentesco=parentesco, estado=estado)
 
 
 @router.get("/{apoderado_id}")

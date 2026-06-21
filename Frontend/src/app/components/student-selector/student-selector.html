@@ -15,13 +15,13 @@
       </div>
     } @else {
       <div class="row g-2 align-items-center">
-        <div class="col-md-auto">
+        <div class="col-12 col-md-auto">
           <label class="form-label mb-0 fw-semibold" for="linked-student-select">
             <i class="bi bi-people-fill horizonte-icon-inline" aria-hidden="true"></i>
             Estudiante a consultar
           </label>
         </div>
-        <div class="col-md-6 col-lg-4">
+        <div class="col-12 col-md-6 col-lg-4">
           <select
             id="linked-student-select"
             class="form-select"
@@ -34,7 +34,7 @@
           </select>
         </div>
         @if (parentContext.selectedStudent(); as student) {
-          <div class="col-md text-muted small">
+          <div class="col-12 col-md text-muted small">
             {{ student.level }} · {{ student.grade }} {{ student.section }}
           </div>
         }

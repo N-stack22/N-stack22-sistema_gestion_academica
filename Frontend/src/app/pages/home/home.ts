@@ -127,7 +127,7 @@ export class Home {
     {
       icon: 'bi-shield-lock-fill',
       title: 'Administración',
-      text: 'Gestiona matrículas, pensiones, pagos simulados y reportes.',
+      text: 'Gestiona matrículas, pensiones, pagos registrados y reportes.',
     },
   ];
 

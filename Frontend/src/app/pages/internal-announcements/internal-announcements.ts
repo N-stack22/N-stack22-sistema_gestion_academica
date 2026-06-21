@@ -64,6 +64,20 @@ export class InternalAnnouncements implements OnInit {
   protected readonly comunicadoRows = signal<DataTableRow[]>([]);
   protected readonly eventoRows = signal<DataTableRow[]>([]);
 
+  protected readonly draftFiltroComBusqueda = signal('');
+  protected readonly draftFiltroComDestinatario = signal('');
+  protected readonly draftFiltroComEstado = signal('');
+  protected readonly filtroComBusqueda = signal('');
+  protected readonly filtroComDestinatario = signal('');
+  protected readonly filtroComEstado = signal('');
+
+  protected readonly draftFiltroEvtBusqueda = signal('');
+  protected readonly draftFiltroEvtDestinatario = signal('');
+  protected readonly draftFiltroEvtPeriodo = signal('');
+  protected readonly filtroEvtBusqueda = signal('');
+  protected readonly filtroEvtDestinatario = signal('');
+  protected readonly filtroEvtPeriodo = signal('');
+
   protected readonly selectedComunicado = signal<{
     title: string;
     content: string;
@@ -76,12 +90,56 @@ export class InternalAnnouncements implements OnInit {
 
   protected readonly proximosEventos = computed(() => {
     const hoy = new Date().toISOString().slice(0, 10);
-    return this.eventoRows().filter((e) => String(e['inicio'] ?? '').slice(0, 10) >= hoy);
+    return this.eventoRowsFiltrados().filter((e) => String(e['inicio'] ?? '').slice(0, 10) >= hoy);
   });
 
   protected readonly eventosPasados = computed(() => {
     const hoy = new Date().toISOString().slice(0, 10);
-    return this.eventoRows().filter((e) => String(e['inicio'] ?? '').slice(0, 10) < hoy);
+    return this.eventoRowsFiltrados().filter((e) => String(e['inicio'] ?? '').slice(0, 10) < hoy);
+  });
+
+  protected readonly comunicadoRowsFiltrados = computed(() => {
+    let rows = this.comunicadoRows();
+    const q = this.filtroComBusqueda().toLowerCase();
+    if (q) {
+      rows = rows.filter(
+        (r) =>
+          String(r['titulo'] ?? '').toLowerCase().includes(q) ||
+          String(r['destinatario'] ?? '').toLowerCase().includes(q),
+      );
+    }
+    if (this.filtroComDestinatario()) {
+      rows = rows.filter((r) => String(r['destinatario'] ?? '').includes(this.filtroComDestinatario()));
+    }
+    if (this.filtroComEstado()) {
+      rows = rows.filter((r) => String(r['estado'] ?? '') === this.filtroComEstado());
+    }
+    return rows;
+  });
+
+  protected readonly eventoRowsFiltrados = computed(() => {
+    let rows = this.eventoRows();
+    const q = this.filtroEvtBusqueda().toLowerCase();
+    if (q) {
+      rows = rows.filter(
+        (r) =>
+          String(r['titulo'] ?? '').toLowerCase().includes(q) ||
+          String(r['lugar'] ?? '').toLowerCase().includes(q) ||
+          String(r['destinatario'] ?? '').toLowerCase().includes(q),
+      );
+    }
+    if (this.filtroEvtDestinatario()) {
+      rows = rows.filter((r) => String(r['destinatario'] ?? '').includes(this.filtroEvtDestinatario()));
+    }
+    const periodo = this.filtroEvtPeriodo();
+    if (periodo) {
+      const hoy = new Date().toISOString().slice(0, 10);
+      rows = rows.filter((r) => {
+        const fecha = String(r['inicio'] ?? '').slice(0, 10);
+        return periodo === 'proximos' ? fecha >= hoy : fecha < hoy;
+      });
+    }
+    return rows;
   });
 
   constructor() {
@@ -94,11 +152,9 @@ export class InternalAnnouncements implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.isInstitutional()) {
-      this.catalogService.roles().subscribe({
-        next: (roles) => this.roles.set(roles as { codigo: string; nombre: string }[]),
-      });
-    }
+    this.catalogService.roles().subscribe({
+      next: (roles) => this.roles.set(roles as { codigo: string; nombre: string }[]),
+    });
     this.roleContext.whenReady(() => this.loadAnnouncements());
     this.loadEventos();
   }
@@ -107,6 +163,18 @@ export class InternalAnnouncements implements OnInit {
     this.activeTab.set(tab);
     this.successMessage.set('');
     this.errorMessage.set('');
+  }
+
+  protected buscarComunicados(): void {
+    this.filtroComBusqueda.set(this.draftFiltroComBusqueda().trim());
+    this.filtroComDestinatario.set(this.draftFiltroComDestinatario());
+    this.filtroComEstado.set(this.draftFiltroComEstado());
+  }
+
+  protected buscarEventos(): void {
+    this.filtroEvtBusqueda.set(this.draftFiltroEvtBusqueda().trim());
+    this.filtroEvtDestinatario.set(this.draftFiltroEvtDestinatario());
+    this.filtroEvtPeriodo.set(this.draftFiltroEvtPeriodo());
   }
 
   protected loadAnnouncements(): void {

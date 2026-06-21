@@ -11,6 +11,25 @@ from src.services.database import get_supabase
 
 class DocenteDashboardRepository:
     def resumen(self, docente_id: str) -> dict:
+        from src.repository.db_functions import DbFunctionError, call_object_function
+        from src.services.db_connection import has_database_url
+
+        if has_database_url():
+            try:
+                data = call_object_function(
+                    "fn_dashboard_docente",
+                    {"p_docente_id": docente_id},
+                )
+                if data and data.get("teacher"):
+                    return data
+                if data is not None and not data.get("teacher"):
+                    raise ValueError("Docente no encontrado")
+            except DbFunctionError:
+                pass
+
+        return self._resumen_supabase(docente_id)
+
+    def _resumen_supabase(self, docente_id: str) -> dict:
         client = get_supabase()
         doc_resp = (
             client.table("docentes")
@@ -91,8 +110,9 @@ class DocenteDashboardRepository:
             notas_recientes = notas_resp.count or 0
 
         cursos_detalle = []
-        for c in cursos:
-            curso_full = (
+        if cursos:
+            curso_ids = [c["id"] for c in cursos]
+            curso_full_resp = (
                 client.table("cursos_asignados")
                 .select(
                     "id,"
@@ -100,32 +120,33 @@ class DocenteDashboardRepository:
                     "secciones(nombre,aula,grados(nombre,niveles_educativos(nombre))),"
                     "anios_academicos(anio)"
                 )
-                .eq("id", c["id"])
-                .limit(1)
+                .in_("id", curso_ids)
                 .execute()
             )
-            if not curso_full.data:
-                continue
-            row = curso_full.data[0]
-            asig = row.get("asignaturas") or {}
-            sec = row.get("secciones") or {}
-            grado = sec.get("grados") or {}
-            nivel = grado.get("niveles_educativos") or {}
-            anio = row.get("anios_academicos") or {}
-            est_count = len(obtener_estudiantes_ids_por_docente(docente_id, curso_id=c["id"]))
-            cursos_detalle.append(
-                {
-                    "id": row["id"],
-                    "name": asig.get("nombre", ""),
-                    "code": asig.get("codigo", ""),
-                    "level": nivel.get("nombre", ""),
-                    "grade": normalizar_grado_nombre(grado.get("nombre", "")),
-                    "section": sec.get("nombre", ""),
-                    "year": anio.get("anio", ""),
-                    "classroom": sec.get("aula", ""),
-                    "studentCount": est_count,
-                }
-            )
+            count_cache: dict[str, int] = {}
+            for c in cursos:
+                count_cache[c["id"]] = len(
+                    obtener_estudiantes_ids_por_docente(docente_id, curso_id=c["id"])
+                )
+            for row in curso_full_resp.data or []:
+                asig = row.get("asignaturas") or {}
+                sec = row.get("secciones") or {}
+                grado = sec.get("grados") or {}
+                nivel = grado.get("niveles_educativos") or {}
+                anio = row.get("anios_academicos") or {}
+                cursos_detalle.append(
+                    {
+                        "id": row["id"],
+                        "name": asig.get("nombre", ""),
+                        "code": asig.get("codigo", ""),
+                        "level": nivel.get("nombre", ""),
+                        "grade": normalizar_grado_nombre(grado.get("nombre", "")),
+                        "section": sec.get("nombre", ""),
+                        "year": anio.get("anio", ""),
+                        "classroom": sec.get("aula", ""),
+                        "studentCount": count_cache.get(row["id"], 0),
+                    }
+                )
 
         return {
             "teacher": {

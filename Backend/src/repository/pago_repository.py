@@ -13,20 +13,66 @@ class PagoRepository:
         self,
         estudiante_id: str | None = None,
         solo_validos: bool = False,
+        estado_codigo: str | None = None,
+        busqueda: str | None = None,
+        fecha_desde: str | None = None,
+        fecha_hasta: str | None = None,
+        metodo: str | None = None,
     ) -> list[dict]:
+        from src.repository.db_functions import DbFunctionError, call_list_function
+        from src.services.db_connection import has_database_url
+
+        estado = estado_codigo or ("PAGADO" if solo_validos else None)
+
+        if has_database_url():
+            try:
+                return call_list_function(
+                    "fn_listar_pagos",
+                    {
+                        "p_estudiante_id": estudiante_id,
+                        "p_estado_codigo": estado,
+                        "p_busqueda": busqueda,
+                        "p_fecha_desde": fecha_desde,
+                        "p_fecha_hasta": fecha_hasta,
+                        "p_metodo": metodo,
+                    },
+                )
+            except DbFunctionError:
+                pass
+
         client = get_supabase()
         query = client.table("pagos").select(
             "id,monto,fecha_pago,codigo_operacion,pension_id,motivo_anulacion,"
             "estudiantes(perfiles(nombres,apellidos)),"
             "apoderados(perfiles(nombres,apellidos)),"
-            "metodos_pago(nombre),"
+            "metodos_pago(nombre,codigo),"
             "estados_pago(codigo,nombre)"
         )
         if estudiante_id:
             query = query.eq("estudiante_id", estudiante_id)
+        if estado:
+            estado_id = self._estado_id(client, estado)
+            if estado_id:
+                query = query.eq("estado_pago_id", estado_id)
+        if fecha_desde:
+            query = query.gte("fecha_pago", fecha_desde)
+        if fecha_hasta:
+            query = query.lte("fecha_pago", fecha_hasta)
         response = query.order("fecha_pago", desc=True).execute()
         rows = [self._map_row(r) for r in response.data or []]
-        if solo_validos:
+        if busqueda:
+            q = busqueda.lower()
+            rows = [
+                r
+                for r in rows
+                if q in (r.get("operationCode") or "").lower()
+                or q in (r.get("studentName") or "").lower()
+                or q in (r.get("parentName") or "").lower()
+            ]
+        if metodo:
+            m = metodo.lower()
+            rows = [r for r in rows if m in (r.get("method") or "").lower()]
+        if solo_validos and not estado_codigo:
             rows = [r for r in rows if r.get("statusCode") == _ESTADO_PAGO_VALIDO]
         return rows
 

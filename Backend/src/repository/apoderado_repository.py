@@ -3,7 +3,28 @@ from src.services.database import get_supabase
 
 
 class ApoderadoRepository:
-    def find_all(self) -> list[dict]:
+    def find_all(
+        self,
+        busqueda: str | None = None,
+        parentesco: str | None = None,
+        estado: str | None = None,
+    ) -> list[dict]:
+        from src.repository.db_functions import DbFunctionError, call_list_function
+        from src.services.db_connection import has_database_url
+
+        if has_database_url():
+            try:
+                return call_list_function(
+                    "fn_listar_apoderados",
+                    {
+                        "p_busqueda": busqueda,
+                        "p_parentesco": parentesco,
+                        "p_estado": estado,
+                    },
+                )
+            except DbFunctionError:
+                pass
+
         client = get_supabase()
         response = (
             client.table("apoderados")
@@ -22,6 +43,31 @@ class ApoderadoRepository:
                 continue
             for link in links:
                 rows.append(self._map_row(row, link, link.get("estudiantes")))
+        return self._filtrar(rows, busqueda, parentesco, estado)
+
+    @staticmethod
+    def _filtrar(
+        rows: list[dict],
+        busqueda: str | None,
+        parentesco: str | None,
+        estado: str | None,
+    ) -> list[dict]:
+        if busqueda:
+            q = busqueda.lower()
+            rows = [
+                r
+                for r in rows
+                if q in (r.get("fullName") or "").lower()
+                or q in (r.get("studentName") or "").lower()
+                or q in (r.get("email") or "").lower()
+                or q in (r.get("phone") or "").lower()
+            ]
+        if parentesco:
+            rows = [r for r in rows if r.get("relationship") == parentesco]
+        if estado == "activo":
+            rows = [r for r in rows if r.get("status") == "Activo"]
+        elif estado == "inactivo":
+            rows = [r for r in rows if r.get("status") == "Inactivo"]
         return rows
 
     def find_by_id(self, apoderado_id: str) -> dict | None:

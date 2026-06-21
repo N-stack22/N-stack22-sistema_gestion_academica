@@ -1,8 +1,12 @@
 import os
 from contextlib import asynccontextmanager
+from pathlib import Path
 
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+load_dotenv(Path(__file__).resolve().parents[1] / ".env", override=True)
 
 from src.apis.apoderado_router import router as apoderado_router
 from src.apis.asistencia_router import router as asistencia_router
@@ -35,7 +39,12 @@ from src.services.database import init_database
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     init_database()
-    yield
+    try:
+        yield
+    finally:
+        from src.services.db_connection import close_pool
+
+        close_pool()
 
 
 app = FastAPI(title="Horizonte API", version="0.2.0", lifespan=lifespan)
@@ -84,18 +93,29 @@ app.include_router(nivel_educativo_router)
 
 @app.get("/api/health")
 def health_check():
+    from pathlib import Path
+
+    from dotenv import load_dotenv
+
     from src.services.database import get_supabase
+    from src.services.db_connection import has_database_url, ping_postgres
+
+    load_dotenv(Path(__file__).resolve().parents[1] / ".env", override=True)
 
     try:
         client = get_supabase()
         perfiles = client.table("perfiles").select("id", count="exact").limit(1).execute()
         anios = client.table("anios_academicos").select("id", count="exact").limit(1).execute()
-        return {
+        payload = {
             "status": "ok",
             "database": "connected",
             "perfiles": perfiles.count,
             "anios_academicos": anios.count,
+            "postgres_direct": "not_configured",
         }
+        if has_database_url():
+            payload["postgres_direct"] = "connected" if ping_postgres() else "error"
+        return payload
     except Exception as exc:
         return {"status": "error", "database": str(exc)}
 

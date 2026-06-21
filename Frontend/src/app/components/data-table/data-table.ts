@@ -17,6 +17,8 @@ export class DataTable {
   readonly rows = input.required<DataTableRow[]>();
   readonly showActions = input<boolean>(true);
   readonly showSearch = input<boolean>(true);
+  readonly showPagination = input<boolean>(true);
+  readonly pageSize = input<number>(10);
   readonly showViewButton = input<boolean>(false);
   readonly detailLabel = input<string>('Detalle');
   readonly secondaryDetailLabel = input<string>('');
@@ -25,11 +27,25 @@ export class DataTable {
   readonly secondaryDetailClick = output<DataTableRow>();
 
   protected readonly searchTerm = signal('');
+  protected readonly currentPage = signal(1);
 
   constructor() {
     effect(() => {
       this.rows();
       this.searchTerm.set('');
+      this.currentPage.set(1);
+    });
+
+    effect(() => {
+      this.searchTerm();
+      this.currentPage.set(1);
+    });
+
+    effect(() => {
+      const totalPages = this.totalPages();
+      if (this.currentPage() > totalPages) {
+        this.currentPage.set(totalPages);
+      }
     });
   }
 
@@ -45,6 +61,36 @@ export class DataTable {
 
   protected readonly recordCount = computed(() => this.filteredRows().length);
 
+  protected readonly totalPages = computed(() => {
+    const total = this.filteredRows().length;
+    const size = Math.max(1, this.pageSize());
+    return Math.max(1, Math.ceil(total / size));
+  });
+
+  protected readonly paginatedRows = computed(() => {
+    const rows = this.filteredRows();
+    if (!this.showPagination()) {
+      return rows;
+    }
+    const start = (this.currentPage() - 1) * this.pageSize();
+    return rows.slice(start, start + this.pageSize());
+  });
+
+  protected readonly pageStart = computed(() => {
+    if (this.filteredRows().length === 0) {
+      return 0;
+    }
+    return (this.currentPage() - 1) * this.pageSize() + 1;
+  });
+
+  protected readonly pageEnd = computed(() =>
+    Math.min(this.currentPage() * this.pageSize(), this.filteredRows().length),
+  );
+
+  protected readonly canGoPrevious = computed(() => this.currentPage() > 1);
+
+  protected readonly canGoNext = computed(() => this.currentPage() < this.totalPages());
+
   protected rowTrack(_row: DataTableRow, index: number): string {
     const id = _row['_id']?.trim();
     return id ? `${id}::${index}` : `row-${index}`;
@@ -52,6 +98,18 @@ export class DataTable {
 
   protected onSearchInput(value: string): void {
     this.searchTerm.set(value);
+  }
+
+  protected goToPage(page: number): void {
+    this.currentPage.set(Math.min(Math.max(1, page), this.totalPages()));
+  }
+
+  protected previousPage(): void {
+    this.goToPage(this.currentPage() - 1);
+  }
+
+  protected nextPage(): void {
+    this.goToPage(this.currentPage() + 1);
   }
 
   protected onDetail(row: DataTableRow): void {

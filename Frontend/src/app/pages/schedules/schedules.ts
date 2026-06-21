@@ -44,6 +44,11 @@ export class Schedules implements OnInit {
   protected readonly rows = signal<DataTableRow[]>([]);
   protected readonly horarioSemanal = signal<Schedule[]>([]);
 
+  protected readonly draftFiltroBusqueda = signal('');
+  protected readonly draftFiltroDia = signal('');
+  protected readonly filtroBusqueda = signal('');
+  protected readonly filtroDia = signal('');
+
   protected readonly editMode = computed(() => !!this.editId());
 
   protected readonly seccionSeleccionada = computed(
@@ -199,6 +204,8 @@ export class Schedules implements OnInit {
     if (this.anioId()) params['anio_id'] = this.anioId();
     if (this.seccionId()) params['seccion_id'] = this.seccionId();
     if (this.cursoId()) params['curso_id'] = this.cursoId();
+    if (this.filtroBusqueda()) params['busqueda'] = this.filtroBusqueda();
+    if (this.filtroDia()) params['dia_semana'] = this.filtroDia();
     if (this.roleContext.isTeacher() && this.roleContext.getTeacherId()) {
       params['docente_id'] = this.roleContext.getTeacherId()!;
     }
@@ -223,6 +230,12 @@ export class Schedules implements OnInit {
         );
       },
     });
+  }
+
+  protected buscarHorarios(): void {
+    this.filtroBusqueda.set(this.draftFiltroBusqueda().trim());
+    this.filtroDia.set(this.draftFiltroDia());
+    this.loadHorarios();
   }
 
   protected guardarHorario(): void {

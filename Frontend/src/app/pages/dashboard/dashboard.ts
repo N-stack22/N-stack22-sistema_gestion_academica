@@ -103,8 +103,13 @@ export class Dashboard implements OnInit {
   ngOnInit(): void {
     const role = this.auth.currentUser()?.role;
     if (role === 'ADMIN' || role === 'DIRECTOR') {
+      this.loading.set(true);
       this.dashboardService.obtenerResumen().subscribe({
-        next: (data) => this.apiData.set(data),
+        next: (data) => {
+          this.apiData.set(data);
+          this.loading.set(false);
+        },
+        error: () => this.loading.set(false),
       });
       return;
     }

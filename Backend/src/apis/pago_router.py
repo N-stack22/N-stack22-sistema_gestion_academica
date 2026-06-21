@@ -11,8 +11,21 @@ service = PagoService()
 def listar_pagos(
     estudiante_id: str | None = Query(default=None),
     solo_validos: bool = Query(default=False),
+    estado: str | None = Query(default=None),
+    busqueda: str | None = Query(default=None),
+    fecha_desde: str | None = Query(default=None),
+    fecha_hasta: str | None = Query(default=None),
+    metodo: str | None = Query(default=None),
 ):
-    return service.listar(estudiante_id, solo_validos=solo_validos)
+    return service.listar(
+        estudiante_id,
+        solo_validos=solo_validos,
+        estado=estado,
+        busqueda=busqueda,
+        fecha_desde=fecha_desde,
+        fecha_hasta=fecha_hasta,
+        metodo=metodo,
+    )
 
 
 @router.get("/{pago_id}")

@@ -35,11 +35,7 @@ class AuthRepository:
         )
 
         if not perfil_resp.data:
-            raise ValueError(
-                "Usuario autenticado sin perfil en la base de datos. "
-                "Ejecuta Backend/sql/03_fix_login.sql en Supabase SQL Editor "
-                "y usa la service_role key en Backend/.env"
-            )
+            raise ValueError("Usuario sin perfil institucional asignado. Contacte a administracion.")
 
         perfil = perfil_resp.data[0]
         if perfil.get("estado") is False:
@@ -55,7 +51,7 @@ class AuthRepository:
         )
 
         if not roles_resp.data:
-            raise ValueError("El usuario no tiene un rol asignado")
+            raise ValueError("Usuario sin rol institucional asignado. Contacte a administracion.")
 
         rol_data = roles_resp.data[0].get("roles") or {}
         codigo = (rol_data.get("codigo") or "").upper()

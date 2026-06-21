@@ -20,13 +20,38 @@ export class ParentTracking implements OnInit {
   protected readonly roleContext = inject(RoleContextService);
   protected readonly parentContext = inject(ParentContextService);
 
+  protected readonly draftBusqueda = signal('');
+  protected readonly draftNivelId = signal('');
+  protected readonly draftGradoId = signal('');
+  protected readonly draftSeccionId = signal('');
+  protected readonly draftEstadoFiltro = signal('');
+  protected readonly draftComunicacionFiltro = signal('');
+
   protected readonly busqueda = signal('');
   protected readonly nivelId = signal('');
   protected readonly gradoId = signal('');
   protected readonly seccionId = signal('');
   protected readonly estadoFiltro = signal('');
   protected readonly comunicacionFiltro = signal('');
-  protected readonly rows = signal<DataTableRow[]>([]);
+  protected readonly rows = computed(() => {
+    let data = this.allRows();
+    const estado = this.estadoFiltro();
+    if (estado) {
+      data = data.filter((r) =>
+        String(r['estadoAcademico'] ?? '')
+          .toUpperCase()
+          .includes(estado),
+      );
+    }
+    const q = this.busqueda().trim().toLowerCase();
+    if (!q) return data;
+    return data.filter((r) =>
+      Object.values(r)
+        .map((v) => String(v ?? '').toLowerCase())
+        .some((v) => v.includes(q)),
+    );
+  });
+  protected readonly allRows = signal<DataTableRow[]>([]);
   protected readonly rawItems = signal<Record<string, string>[]>([]);
   protected readonly selectedCase = signal<Record<string, string> | null>(null);
 
@@ -93,6 +118,45 @@ export class ParentTracking implements OnInit {
     this.load();
   }
 
+  protected onDraftNivelChange(nivelId: string): void {
+    this.draftNivelId.set(nivelId);
+    this.draftGradoId.set('');
+    this.draftSeccionId.set('');
+    this.secciones.set([]);
+    if (nivelId) {
+      this.catalogService.grados(nivelId).subscribe({
+        next: (g) => this.grados.set(g as { id: string; nombre: string }[]),
+      });
+    } else {
+      this.grados.set([]);
+    }
+  }
+
+  protected onDraftGradoChange(gradoId: string): void {
+    this.draftGradoId.set(gradoId);
+    this.draftSeccionId.set('');
+    if (this.anioId() && gradoId) {
+      this.catalogService.secciones(this.anioId(), gradoId).subscribe({
+        next: (s) => this.secciones.set(s as { id: string; nombre: string }[]),
+      });
+    } else {
+      this.secciones.set([]);
+    }
+  }
+
+  protected buscar(): void {
+    this.busqueda.set(this.draftBusqueda().trim());
+    this.estadoFiltro.set(this.draftEstadoFiltro());
+    if (this.isParentView()) {
+      return;
+    }
+    this.nivelId.set(this.draftNivelId());
+    this.gradoId.set(this.draftGradoId());
+    this.seccionId.set(this.draftSeccionId());
+    this.comunicacionFiltro.set(this.draftComunicacionFiltro());
+    this.load();
+  }
+
   protected onNivelChange(nivelId: string): void {
     this.nivelId.set(nivelId);
     this.gradoId.set('');
@@ -120,7 +184,7 @@ export class ParentTracking implements OnInit {
     if (this.roleContext.isParent()) {
       const studentId = this.parentContext.selectedStudentId();
       if (!studentId) {
-        this.rows.set([]);
+        this.allRows.set([]);
         return;
       }
       params['estudiante_id'] = studentId;
@@ -137,7 +201,7 @@ export class ParentTracking implements OnInit {
       next: (items) => {
         const list = items as Record<string, string>[];
         this.rawItems.set(list);
-        this.rows.set(
+        this.allRows.set(
           list.map((r) =>
             this.isParentView()
               ? {

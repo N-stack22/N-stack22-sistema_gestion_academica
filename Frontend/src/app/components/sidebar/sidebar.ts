@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, output } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { RoleContextService } from '../../services/role-context.service';
@@ -25,6 +25,8 @@ interface SidebarGroup {
   styleUrl: './sidebar.scss',
 })
 export class Sidebar {
+  readonly navigate = output<void>();
+
   protected readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly roleContext = inject(RoleContextService);

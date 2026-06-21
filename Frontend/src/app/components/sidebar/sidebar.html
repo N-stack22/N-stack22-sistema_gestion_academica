@@ -31,6 +31,7 @@
                 [routerLink]="link.route"
                 routerLinkActive="sidebar__link--active"
                 [routerLinkActiveOptions]="{ exact: true }"
+                (click)="navigate.emit()"
               >
                 <i class="bi sidebar__link-icon" [class]="link.icon" aria-hidden="true"></i>
                 {{ link.label }}

@@ -42,7 +42,46 @@
         icon="bi-inbox"
       />
     } @else {
-      <div class="table-responsive">
+      <div class="data-table__cards d-md-none">
+        @for (row of paginatedRows(); track rowTrack(row, $index)) {
+          <article class="data-table-card">
+            @for (column of columns(); track column.key) {
+              <div class="data-table-card__row">
+                <span class="data-table-card__label">{{ column.label }}</span>
+                <span class="data-table-card__value">
+                  @if (isStatusValue(cellValue(row, column.key))) {
+                    <span [ngClass]="statusBadgeClass(cellValue(row, column.key))">
+                      {{ cellValue(row, column.key) }}
+                    </span>
+                  } @else {
+                    {{ cellValue(row, column.key) }}
+                  }
+                </span>
+              </div>
+            }
+            @if (showActions()) {
+              <div class="data-table-card__actions">
+                @if (showViewButton()) {
+                  <button type="button" class="btn btn-sm erp-action-btn w-100" disabled title="No disponible">
+                    <i class="bi bi-eye" aria-hidden="true"></i>
+                    Ver
+                  </button>
+                }
+                @if (secondaryDetailLabel()) {
+                  <button type="button" class="btn btn-sm erp-action-btn" (click)="onSecondaryDetail(row)">
+                    {{ secondaryDetailLabel() }}
+                  </button>
+                }
+                <button type="button" class="btn btn-sm erp-action-btn erp-action-btn--ghost" (click)="onDetail(row)">
+                  {{ detailLabel() }}
+                </button>
+              </div>
+            }
+          </article>
+        }
+      </div>
+
+      <div class="table-responsive d-none d-md-block">
         <table class="table erp-table mb-0">
           <thead>
             <tr>
@@ -55,7 +94,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (row of filteredRows(); track rowTrack(row, $index)) {
+            @for (row of paginatedRows(); track rowTrack(row, $index)) {
               <tr>
                 @for (column of columns(); track column.key) {
                   <td>
@@ -99,6 +138,37 @@
           </tbody>
         </table>
       </div>
+
+      @if (showPagination() && recordCount() > 0) {
+        <div class="data-table__pagination">
+          <p class="data-table__pagination-info mb-0">
+            Mostrando {{ pageStart() }}–{{ pageEnd() }} de {{ recordCount() }}
+          </p>
+          <nav class="data-table__pagination-nav" aria-label="Paginación de tabla">
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-secondary data-table__pagination-btn"
+              [disabled]="!canGoPrevious()"
+              (click)="previousPage()"
+            >
+              <i class="bi bi-chevron-left" aria-hidden="true"></i>
+              Anterior
+            </button>
+            <span class="data-table__pagination-status">
+              Página {{ currentPage() }} de {{ totalPages() }}
+            </span>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-secondary data-table__pagination-btn"
+              [disabled]="!canGoNext()"
+              (click)="nextPage()"
+            >
+              Siguiente
+              <i class="bi bi-chevron-right" aria-hidden="true"></i>
+            </button>
+          </nav>
+        </div>
+      }
     }
   </div>
 </div>

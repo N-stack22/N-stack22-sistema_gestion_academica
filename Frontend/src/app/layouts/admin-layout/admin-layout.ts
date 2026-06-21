@@ -1,5 +1,6 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
 import { Sidebar } from '../../components/sidebar/sidebar';
 import { StudentSelector } from '../../components/student-selector/student-selector';
 import { AuthService } from '../../services/auth.service';
@@ -17,9 +18,10 @@ import { ParentContextService } from '../../services/parent-context.service';
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.scss',
 })
-export class AdminLayout implements OnInit {
+export class AdminLayout implements OnInit, OnDestroy {
   protected readonly auth = inject(AuthService);
   protected readonly roleContext = inject(RoleContextService);
+  private readonly router = inject(Router);
   private readonly healthService = inject(HealthService);
   private readonly settingsService = inject(SettingsService);
   private readonly themeService = inject(ThemeService);
@@ -29,6 +31,9 @@ export class AdminLayout implements OnInit {
 
   protected readonly backendOk = signal(true);
   protected readonly backendWarning = signal('');
+  protected readonly sidebarOpen = signal(false);
+
+  private navSub?: Subscription;
 
   ngOnInit(): void {
     this.themeService.loadFromCache();
@@ -51,6 +56,22 @@ export class AdminLayout implements OnInit {
       }
     });
     setTimeout(() => this.checkHealth(), 0);
+
+    this.navSub = this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => this.sidebarOpen.set(false));
+  }
+
+  ngOnDestroy(): void {
+    this.navSub?.unsubscribe();
+  }
+
+  protected toggleSidebar(): void {
+    this.sidebarOpen.update((open) => !open);
+  }
+
+  protected closeSidebar(): void {
+    this.sidebarOpen.set(false);
   }
 
   private checkHealth(): void {

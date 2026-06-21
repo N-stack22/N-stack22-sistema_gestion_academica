@@ -1,8 +1,22 @@
 import re
+import time
 
 from src.services.database import get_supabase
 
 _ESTADOS_MATRICULA_VIGENTE = frozenset({"ACTIVA", "PENDIENTE"})
+_TTL_CACHE: dict[str, tuple[float, object]] = {}
+
+
+def _cache_get(key: str):
+    item = _TTL_CACHE.get(key)
+    if item and item[0] > time.monotonic():
+        return item[1]
+    return None
+
+
+def _cache_set(key: str, value, ttl_seconds: int = 300):
+    _TTL_CACHE[key] = (time.monotonic() + ttl_seconds, value)
+    return value
 
 
 def normalizar_grado_nombre(nombre: str) -> str:
@@ -23,6 +37,9 @@ def estado_texto(activo: bool | None) -> str:
 
 
 def obtener_anio_activo() -> dict | None:
+    cached = _cache_get("anio_activo")
+    if cached is not None:
+        return cached
     client = get_supabase()
     response = (
         client.table("anios_academicos")
@@ -32,7 +49,7 @@ def obtener_anio_activo() -> dict | None:
         .execute()
     )
     if response.data:
-        return response.data[0]
+        return _cache_set("anio_activo", response.data[0])
     response = (
         client.table("anios_academicos")
         .select("id,anio,fecha_inicio,fecha_fin,activo")
@@ -40,7 +57,7 @@ def obtener_anio_activo() -> dict | None:
         .limit(1)
         .execute()
     )
-    return response.data[0] if response.data else None
+    return _cache_set("anio_activo", response.data[0] if response.data else None)
 
 
 def generar_codigo(prefijo: str, tabla: str, campo: str) -> str:
@@ -89,9 +106,16 @@ def buscar_metodo_pago_por_codigo(codigo: str) -> dict | None:
     codigo_norm = (codigo or "").strip().upper()
     if not codigo_norm:
         return None
+    cache_key = f"metodo_pago:{codigo_norm}"
+    cached = _cache_get(cache_key)
+    if cached is not None:
+        return cached
     client = get_supabase()
     rows = client.table("metodos_pago").select("id,codigo,nombre,activo").execute().data or []
-    return next((r for r in rows if (r.get("codigo") or "").upper() == codigo_norm), None)
+    return _cache_set(
+        cache_key,
+        next((r for r in rows if (r.get("codigo") or "").upper() == codigo_norm), None),
+    )
 
 
 def obtener_cursos_docente(docente_id: str) -> list[dict]:
@@ -156,18 +180,22 @@ def obtener_estudiantes_ids_por_docente(
 
 def obtener_rol_id(codigo_canonico: str) -> str | None:
     """Busca rol por código canónico o alias (mayúsculas/minúsculas)."""
+    cache_key = f"rol_id:{codigo_canonico.upper()}"
+    cached = _cache_get(cache_key)
+    if cached is not None:
+        return cached
     client = get_supabase()
     aliases = ROLE_ALIASES.get(codigo_canonico.upper(), [codigo_canonico.upper()])
     for alias in aliases:
         resp = client.table("roles").select("id").eq("codigo", alias).limit(1).execute()
         if resp.data:
-            return resp.data[0]["id"]
+            return _cache_set(cache_key, resp.data[0]["id"])
     resp = client.table("roles").select("id,codigo").execute()
     alias_lower = {a.lower() for a in aliases}
     for row in resp.data or []:
         if (row.get("codigo") or "").lower() in alias_lower:
-            return row["id"]
-    return None
+            return _cache_set(cache_key, row["id"])
+    return _cache_set(cache_key, None)
 
 
 def obtener_matricula_activa(estudiante_id: str) -> dict | None:

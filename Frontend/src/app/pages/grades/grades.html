@@ -32,21 +32,25 @@
 
   @if (roleContext.isStudent() || roleContext.isParent()) {
     <div class="form-panel admin-card mb-4">
+      <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
       <div class="form-panel__body">
         <div class="row g-3 align-items-end">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <label class="form-label">Periodo académico</label>
-            <select class="form-select" [value]="studentPeriodoId() ?? ''" (change)="studentPeriodoId.set($any($event.target).value || null)">
+            <select class="form-select" [value]="draftStudentPeriodoId()" (change)="draftStudentPeriodoId.set($any($event.target).value)">
               <option value="">Todos</option>
               @for (p of periodos(); track p.id) { <option [value]="p.id">{{ p.nombre }}</option> }
             </select>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <label class="form-label">Curso</label>
-            <select class="form-select" [value]="studentCursoId() ?? ''" (change)="studentCursoId.set($any($event.target).value || null)">
+            <select class="form-select" [value]="draftStudentCursoId()" (change)="draftStudentCursoId.set($any($event.target).value)">
               <option value="">Todos</option>
               @for (c of studentCursos(); track c.id) { <option [value]="c.id">{{ c.name }}</option> }
             </select>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscar()">Buscar</button>
           </div>
           <div class="col-md-4">
             <div class="alert alert-info mb-0 py-2">
@@ -61,54 +65,58 @@
 
   @if (roleContext.isInstitutional()) {
     <div class="form-panel admin-card mb-4">
+      <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
       <div class="form-panel__body">
         <div class="row g-3 align-items-end">
           <div class="col-md-2">
             <label class="form-label">Año</label>
-            <select class="form-select" [value]="anioId()" (change)="anioId.set($any($event.target).value); loadCursos(); loadGrades()">
+            <select class="form-select" [value]="draftAnioId()" (change)="draftAnioId.set($any($event.target).value); loadPeriodos($any($event.target).value)">
               @for (a of anios(); track a.id) { <option [value]="a.id">{{ a.anio }}</option> }
             </select>
           </div>
           <div class="col-md-2">
             <label class="form-label">Nivel</label>
-            <select class="form-select" [value]="nivelId()" (change)="onNivelChange($any($event.target).value)">
+            <select class="form-select" [value]="draftNivelId()" (change)="onDraftNivelChange($any($event.target).value)">
               <option value="">Todos</option>
               @for (n of niveles(); track n.id) { <option [value]="n.id">{{ n.nombre }}</option> }
             </select>
           </div>
           <div class="col-md-2">
             <label class="form-label">Grado</label>
-            <select class="form-select" [value]="gradoId()" (change)="onGradoChange($any($event.target).value)">
+            <select class="form-select" [value]="draftGradoId()" (change)="onDraftGradoChange($any($event.target).value)">
               <option value="">Todos</option>
               @for (g of grados(); track g.id) { <option [value]="g.id">{{ g.nombre }}</option> }
             </select>
           </div>
           <div class="col-md-2">
             <label class="form-label">Sección</label>
-            <select class="form-select" [value]="seccionId()" (change)="seccionId.set($any($event.target).value); loadCursos(); loadGrades()">
+            <select class="form-select" [value]="draftSeccionId()" (change)="draftSeccionId.set($any($event.target).value)">
               <option value="">Todas</option>
               @for (s of secciones(); track s.id) { <option [value]="s.id">{{ s.nombre }}</option> }
             </select>
           </div>
           <div class="col-md-2">
             <label class="form-label">Curso</label>
-            <select class="form-select" [value]="cursoId()" (change)="cursoId.set($any($event.target).value); loadGrades()">
+            <select class="form-select" [value]="draftCursoId()" (change)="draftCursoId.set($any($event.target).value)">
               <option value="">Todos</option>
               @for (c of cursos(); track c.id) { <option [value]="c.id">{{ c.name }}</option> }
             </select>
           </div>
           <div class="col-md-2">
             <label class="form-label">Estudiante</label>
-            <select class="form-select" [value]="estudianteId()" (change)="estudianteId.set($any($event.target).value); loadGrades()">
+            <select class="form-select" [value]="draftEstudianteId()" (change)="draftEstudianteId.set($any($event.target).value)">
               <option value="">Todos</option>
               @for (e of estudiantes(); track e.id) { <option [value]="e.id">{{ e.fullName }}</option> }
             </select>
           </div>
-          <div class="col-md-12">
+          <div class="col-md-10">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="bajo-rendimiento" [checked]="soloBajoRendimiento()" (change)="soloBajoRendimiento.set($any($event.target).checked)" />
+              <input class="form-check-input" type="checkbox" id="bajo-rendimiento" [checked]="draftSoloBajoRendimiento()" (change)="draftSoloBajoRendimiento.set($any($event.target).checked)" />
               <label class="form-check-label" for="bajo-rendimiento">Solo bajo rendimiento (nota &lt; 11)</label>
             </div>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscar()">Buscar</button>
           </div>
         </div>
       </div>
@@ -116,65 +124,353 @@
   }
 
   @if (roleContext.isTeacher()) {
-    <div class="form-panel admin-card mb-4">
-      <div class="form-panel__header">
-        <h2 class="form-panel__title">{{ editMode() ? 'Editar calificación' : 'Registrar calificación' }}</h2>
+    <div class="form-panel admin-card mb-4 grades-form-panel" [class.grades-form-panel--edit]="editMode()">
+      <div class="form-panel__header grades-form-panel__header">
+        <div class="grades-form-panel__intro">
+          <span class="grades-form-panel__icon" aria-hidden="true">
+            <i class="bi" [ngClass]="editMode() ? 'bi-pencil-square' : 'bi-journal-plus'"></i>
+          </span>
+          <div>
+            <h2 class="form-panel__title mb-1">
+              {{ editMode() ? 'Editar calificación registrada' : 'Registrar calificación' }}
+            </h2>
+            <p class="form-panel__subtitle mb-0">
+              @if (editMode()) {
+                Modifique la nota, el peso o la observación. Los datos de curso y estudiante no cambian.
+              } @else {
+                Complete el contexto académico, asigne la nota y confirme el registro en la libreta del estudiante.
+              }
+            </p>
+          </div>
+        </div>
+        @if (editMode()) {
+          <span class="grades-form-panel__mode-badge">Modo edición</span>
+        }
       </div>
+
       <div class="form-panel__body">
-        @if (gradeSuccess()) { <div class="form-success-card mb-3">{{ gradeSuccess() }}</div> }
-        @if (gradeError()) { <div class="alert alert-danger mb-3">{{ gradeError() }}</div> }
-        <div class="row g-3 align-items-end">
-          @if (!editMode()) {
-            <div class="col-md-3">
-              <label class="form-label">Curso</label>
-              <select class="form-select" [value]="teacherCursoId()" (change)="onTeacherCursoChange($any($event.target).value)">
-                <option value="">Seleccionar</option>
-                @for (c of teacherCursos(); track c.id) { <option [value]="c.id">{{ c.name }}</option> }
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label">Estudiante</label>
-              <select class="form-select" [value]="teacherEstudianteId()" (change)="teacherEstudianteId.set($any($event.target).value)">
-                <option value="">Seleccionar</option>
-                @for (e of estudiantes(); track e.id) { <option [value]="e.id">{{ e.fullName }}</option> }
-              </select>
-            </div>
-            <div class="col-md-2">
-              <label class="form-label">Periodo</label>
-              <select class="form-select" [value]="periodoId()" (change)="periodoId.set($any($event.target).value)">
-                @for (p of periodos(); track p.id) { <option [value]="p.id">{{ p.nombre }}</option> }
-              </select>
-            </div>
-            <div class="col-md-2">
-              <label class="form-label">Tipo evaluación</label>
-              <select class="form-select" [value]="tipoEvalId()" (change)="tipoEvalId.set($any($event.target).value)">
-                @for (t of tiposEval(); track t.id) { <option [value]="t.id">{{ t.nombre }}</option> }
-              </select>
-            </div>
-          }
-          <div class="col-md-2">
-            <label class="form-label">Nota</label>
-            <input type="number" class="form-control" min="0" max="20" step="0.5" [value]="nota()" (input)="nota.set(+$any($event.target).value)" />
+        @if (gradeSuccess()) {
+          <div class="form-success-card mb-3" role="status">
+            <i class="bi bi-check-circle-fill me-2" aria-hidden="true"></i>{{ gradeSuccess() }}
           </div>
-          <div class="col-md-2">
-            <label class="form-label">Peso</label>
-            <input type="number" class="form-control" min="0.1" step="0.1" [value]="peso()" (input)="peso.set(+$any($event.target).value)" />
+        }
+        @if (gradeError()) {
+          <div class="alert alert-danger mb-3" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2" aria-hidden="true"></i>{{ gradeError() }}
           </div>
-          <div class="col-md-4">
-            <label class="form-label">Nombre evaluación</label>
-            <input class="form-control" [value]="nombreEval()" (input)="nombreEval.set($any($event.target).value)" placeholder="Ej. Examen bimestral" />
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Observación</label>
-            <input class="form-control" [value]="observacionNota()" (input)="observacionNota.set($any($event.target).value)" placeholder="Opcional" />
-          </div>
-          <div class="col-md-4 d-flex gap-2">
-            <button type="button" class="btn btn-horizonte-primary" (click)="guardarCalificacion()">
-              {{ editMode() ? 'Actualizar nota' : 'Guardar nota' }}
-            </button>
-            @if (editMode()) {
-              <button type="button" class="btn btn-outline-secondary" (click)="cancelarEdicionNota()">Cancelar</button>
+        }
+
+        @if (!editMode()) {
+          <p class="grades-form-steps-hint mb-3" role="status">
+            <i class="bi bi-signpost-2 horizonte-icon-inline" aria-hidden="true"></i>
+            {{ currentStepHint() }}
+          </p>
+
+          <ol class="grades-form-steps mb-4" aria-label="Progreso del registro">
+            <li
+              class="grades-form-step"
+              [class.grades-form-step--done]="isStepDone(1)"
+              [class.grades-form-step--active]="isStepActive(1)"
+            >
+              <span class="grades-form-step__num">{{ isStepDone(1) ? '✓' : '1' }}</span>
+              <span class="grades-form-step__label">Curso y estudiante</span>
+            </li>
+            <li
+              class="grades-form-step"
+              [class.grades-form-step--done]="isStepDone(2)"
+              [class.grades-form-step--active]="isStepActive(2)"
+              [class.grades-form-step--locked]="!step1Complete()"
+            >
+              <span class="grades-form-step__num">{{ isStepDone(2) ? '✓' : '2' }}</span>
+              <span class="grades-form-step__label">Periodo y evaluación</span>
+            </li>
+            <li
+              class="grades-form-step"
+              [class.grades-form-step--done]="isStepDone(3)"
+              [class.grades-form-step--active]="isStepActive(3)"
+              [class.grades-form-step--locked]="!step2Complete()"
+            >
+              <span class="grades-form-step__num">{{ isStepDone(3) ? '✓' : '3' }}</span>
+              <span class="grades-form-step__label">Nota y confirmación</span>
+            </li>
+          </ol>
+
+          <section class="grades-form-section" [class.grades-form-section--active]="isStepActive(1)">
+            <h3 class="grades-form-section__title">
+              <span class="grades-form-section__badge">1</span>
+              <i class="bi bi-mortarboard" aria-hidden="true"></i>
+              Curso y estudiante
+            </h3>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" for="grade-course">Curso asignado</label>
+                <select
+                  id="grade-course"
+                  class="form-select"
+                  [value]="teacherCursoId()"
+                  (change)="onTeacherCursoChange($any($event.target).value)"
+                >
+                  <option value="">Seleccione un curso</option>
+                  @for (c of teacherCursos(); track c.id) {
+                    <option [value]="c.id">{{ c.name }}</option>
+                  }
+                </select>
+                <p class="form-help-text mb-0">Asignatura, grado y sección de su carga docente.</p>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" for="grade-student">Estudiante</label>
+                <select
+                  id="grade-student"
+                  class="form-select"
+                  [disabled]="!teacherCursoId()"
+                  [value]="teacherEstudianteId()"
+                  (change)="teacherEstudianteId.set($any($event.target).value); step2Touched.set(false)"
+                >
+                  <option value="">
+                    {{ teacherCursoId() ? 'Seleccione un estudiante' : 'Primero elija un curso' }}
+                  </option>
+                  @for (e of estudiantes(); track e.id) {
+                    <option [value]="e.id">{{ e.fullName }}</option>
+                  }
+                </select>
+                @if (teacherCursoId()) {
+                  <p class="form-help-text mb-0">
+                    {{ estudiantesEnCurso() }} alumno{{ estudiantesEnCurso() === 1 ? '' : 's' }} matriculado{{ estudiantesEnCurso() === 1 ? '' : 's' }} en este curso.
+                  </p>
+                }
+              </div>
+            </div>
+          </section>
+
+          <section
+            class="grades-form-section"
+            [class.grades-form-section--active]="isStepActive(2)"
+            [class.grades-form-section--locked]="!step1Complete()"
+          >
+            <h3 class="grades-form-section__title">
+              <span class="grades-form-section__badge">2</span>
+              <i class="bi bi-calendar3" aria-hidden="true"></i>
+              Periodo y tipo de evaluación
+            </h3>
+            @if (!step1Complete()) {
+              <p class="grades-form-section__lock-msg mb-3">
+                <i class="bi bi-lock-fill me-1" aria-hidden="true"></i>
+                Complete el paso 1 para habilitar esta sección.
+              </p>
             }
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" for="grade-period">Periodo académico</label>
+                <select
+                  id="grade-period"
+                  class="form-select"
+                  [disabled]="!step1Complete()"
+                  [value]="periodoId()"
+                  (change)="onPeriodoChange($any($event.target).value)"
+                >
+                  @for (p of periodos(); track p.id) {
+                    <option [value]="p.id">{{ p.nombre }}</option>
+                  }
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" for="grade-type">Tipo de evaluación</label>
+                <select
+                  id="grade-type"
+                  class="form-select"
+                  [disabled]="!step1Complete()"
+                  [value]="tipoEvalId()"
+                  (change)="onTipoEvalChange($any($event.target).value)"
+                >
+                  @for (t of tiposEval(); track t.id) {
+                    <option [value]="t.id">{{ t.nombre }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+            @if (step1Complete() && !step2Complete()) {
+              <div class="mt-3">
+                <button type="button" class="btn btn-outline-primary" (click)="confirmStep2()">
+                  Confirmar periodo y continuar
+                  <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
+                </button>
+                <p class="form-help-text mb-0 mt-2">Revise periodo y tipo, luego pulse continuar para registrar la nota.</p>
+              </div>
+            }
+          </section>
+        }
+
+        <section
+          class="grades-form-section"
+          [class.grades-form-section--active]="!editMode() && isStepActive(3)"
+          [class.grades-form-section--locked]="!editMode() && !step2Complete()"
+        >
+          <h3 class="grades-form-section__title">
+            @if (!editMode()) {
+              <span class="grades-form-section__badge">3</span>
+            }
+            <i class="bi bi-clipboard-data" aria-hidden="true"></i>
+            Detalle de la evaluación
+          </h3>
+          @if (!editMode() && !step2Complete()) {
+            <p class="grades-form-section__lock-msg mb-3">
+              <i class="bi bi-lock-fill me-1" aria-hidden="true"></i>
+              Complete los pasos 1 y 2 para registrar la nota.
+            </p>
+          }
+          <div class="row g-3" [class.pe-none]="!editMode() && !step2Complete()" [class.opacity-50]="!editMode() && !step2Complete()">
+            <div class="col-lg-7">
+              <label class="form-label fw-semibold" for="grade-eval-name">Nombre de la evaluación</label>
+              <input
+                id="grade-eval-name"
+                class="form-control"
+                [disabled]="!editMode() && !step2Complete()"
+                [value]="nombreEval()"
+                (input)="nombreEval.set($any($event.target).value)"
+                [placeholder]="nombreEvalPlaceholder()"
+              />
+              <p class="form-help-text mb-0">Descripción visible en la libreta del estudiante.</p>
+            </div>
+            <div class="col-lg-5">
+              <label class="form-label fw-semibold" for="grade-weight">Peso en el promedio</label>
+              <div class="input-group">
+                <input
+                  id="grade-weight"
+                  type="number"
+                  class="form-control"
+                  min="0.1"
+                  max="10"
+                  step="0.1"
+                  [disabled]="!editMode() && !step2Complete()"
+                  [value]="peso()"
+                  (input)="peso.set(+$any($event.target).value)"
+                />
+                <span class="input-group-text">factor</span>
+              </div>
+              <p class="form-help-text mb-0">Valor 1 = peso estándar. Use decimales si la evaluación pesa menos.</p>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold" for="grade-score">Nota obtenida</label>
+              <div class="grades-score-panel">
+                <div class="grades-score-panel__controls">
+                  <input
+                    id="grade-score"
+                    type="number"
+                    class="form-control grades-score-panel__input"
+                    min="0"
+                    max="20"
+                    step="0.5"
+                    [disabled]="!editMode() && !step2Complete()"
+                    [value]="nota()"
+                    (input)="onNotaInput($any($event.target).value)"
+                  />
+                  <input
+                    type="range"
+                    class="form-range grades-score-panel__range"
+                    min="0"
+                    max="20"
+                    step="0.5"
+                    [disabled]="!editMode() && !step2Complete()"
+                    [value]="nota()"
+                    (input)="onNotaRangeInput($any($event.target).value)"
+                    aria-label="Ajustar nota con deslizador"
+                  />
+                </div>
+                <div class="grades-score-panel__meta">
+                  <div class="grades-score-meter" role="presentation">
+                    <div class="grades-score-meter__fill" [style.width.%]="gradeMeterPercent()"></div>
+                    <span class="grades-score-meter__mark grades-score-meter__mark--pass" title="Nota mínima aprobatoria (11)"></span>
+                  </div>
+                  <span class="grades-score-badge" [ngClass]="gradeStatus().className">
+                    {{ gradeStatus().label }}
+                  </span>
+                  <p class="grades-score-panel__hint mb-0">{{ gradeStatus().hint }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold" for="grade-notes">Observación docente</label>
+              <textarea
+                id="grade-notes"
+                class="form-control"
+                rows="2"
+                [disabled]="!editMode() && !step2Complete()"
+                [value]="observacionNota()"
+                (input)="observacionNota.set($any($event.target).value)"
+                placeholder="Comentario opcional para el estudiante o apoderado (logros, aspectos a mejorar…)"
+              ></textarea>
+            </div>
+          </div>
+        </section>
+
+        @if (showGradePreview()) {
+          <div class="grades-preview-card">
+            <h4 class="grades-preview-card__title">
+              <i class="bi bi-eye" aria-hidden="true"></i>
+              Vista previa del registro
+            </h4>
+            <div class="row g-2 small">
+              @if (!editMode()) {
+                <div class="col-sm-6"><strong>Estudiante:</strong> {{ selectedEstudianteName() }}</div>
+                <div class="col-sm-6"><strong>Curso:</strong> {{ selectedCursoName() }}</div>
+                <div class="col-sm-6"><strong>Periodo:</strong> {{ selectedPeriodoName() }}</div>
+                <div class="col-sm-6"><strong>Tipo:</strong> {{ selectedTipoName() }}</div>
+              }
+              <div class="col-sm-6">
+                <strong>Evaluación:</strong> {{ nombreEval().trim() || selectedTipoName() || 'Sin nombre' }}
+              </div>
+              <div class="col-sm-6">
+                <strong>Nota:</strong>
+                <span class="grades-preview-card__score" [ngClass]="gradeStatus().className">{{ nota() }}</span>
+                <span class="text-muted">/ 20 · peso {{ peso() }}</span>
+              </div>
+            </div>
+          </div>
+        }
+
+        <div class="grades-form-actions">
+          <button
+            type="button"
+            class="btn btn-horizonte-primary btn-lg grades-form-actions__primary"
+            [disabled]="!canSaveGrade()"
+            (click)="guardarCalificacion()"
+          >
+            <i class="bi" [ngClass]="editMode() ? 'bi-check2-circle' : 'bi-save'" aria-hidden="true"></i>
+            {{ editMode() ? 'Actualizar calificación' : 'Registrar calificación' }}
+          </button>
+          @if (editMode()) {
+            <button type="button" class="btn btn-outline-secondary btn-lg" (click)="cancelarEdicionNota()">
+              Cancelar edición
+            </button>
+          } @else {
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="limpiarFormularioRegistro()"
+              [disabled]="!teacherCursoId() && !teacherEstudianteId() && !nombreEval() && !observacionNota() && nota() === 0"
+            >
+              Limpiar formulario
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (roleContext.isTeacher()) {
+    <div class="form-panel admin-card mb-4">
+      <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
+      <div class="form-panel__body">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-4">
+            <label class="form-label">Curso</label>
+            <select class="form-select" [value]="draftTeacherFiltroCurso()" (change)="draftTeacherFiltroCurso.set($any($event.target).value)">
+              <option value="">Todos mis cursos</option>
+              @for (c of teacherCursos(); track c.id) { <option [value]="c.id">{{ c.name }}</option> }
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscar()">Buscar</button>
           </div>
         </div>
       </div>

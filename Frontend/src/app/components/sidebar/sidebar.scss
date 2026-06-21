@@ -101,7 +101,8 @@
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  padding: 0.58rem 0.85rem;
+  padding: 0.65rem 0.85rem;
+  min-height: 2.75rem;
   margin-bottom: 0.15rem;
   border-radius: 0.5rem;
   color: rgba(255, 255, 255, 0.82);
@@ -126,16 +127,6 @@
 
 @media (max-width: 991.98px) {
   .sidebar {
-    min-height: auto;
-  }
-
-  .sidebar__nav {
-    overflow-x: auto;
-    display: flex;
-    gap: 1rem;
-  }
-
-  .sidebar__group {
-    min-width: 12rem;
+    min-height: 100vh;
   }
 }

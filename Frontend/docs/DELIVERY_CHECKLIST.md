@@ -1,99 +1,68 @@
-# Checklist de entrega — HORIZONTE DIGITAL
+# Checklist de entrega - Portal Academico Horizonte
 
-Lista de verificación antes de entregar o presentar el proyecto.
+Lista de verificacion para presentar el proyecto como portal academico real integrado.
 
----
+## Integracion
 
-## Instalación y build
+- [ ] Frontend Angular levanta en `http://localhost:4200`.
+- [ ] Backend FastAPI levanta en `http://localhost:8000`.
+- [ ] `/api/health` responde `status: ok`.
+- [ ] Login consume `POST /api/auth/login`.
+- [ ] Las pantallas privadas consumen endpoints reales del backend.
+- [ ] No hay claves Supabase en Angular.
 
-- [ ] `npm install` ejecuta sin errores
-- [ ] `npm start` levanta la app en `http://localhost:4200`
-- [ ] `npm run build` compila sin errores
-- [ ] `npm run e2e:local` — **16/16 pruebas passing**
+## Seguridad
 
----
+- [ ] No existe boton ni formulario publico de registro.
+- [ ] Usuarios se crean solo por administracion interna.
+- [ ] Usuario sin perfil institucional no inicia sesion.
+- [ ] Usuario sin rol activo no inicia sesion.
+- [ ] Usuario inactivo no inicia sesion.
+- [ ] Endpoints privados validan `Authorization: Bearer`.
+- [ ] ADMIN/DIRECTOR acceden a gestion institucional.
+- [ ] TEACHER solo consulta informacion de sus cursos.
+- [ ] STUDENT solo consulta su informacion.
+- [ ] PARENT solo consulta hijos asociados.
+- [ ] 401 cierra sesion y vuelve a login.
+- [ ] 403 bloquea acceso no permitido.
 
-## Web pública
+## Base de datos
 
-- [ ] `/` — Home carga con navbar y footer
-- [ ] `/nosotros` — Página institucional
-- [ ] `/contacto` — Formulario con validaciones y envío simulado
-- [ ] `/login` — Acceso desde navbar «Intranet»
+- [ ] Supabase Auth contiene usuarios institucionales.
+- [ ] Cada usuario tiene registro en `perfiles`.
+- [ ] Cada usuario tiene registro activo en `usuarios_roles`.
+- [ ] STUDENT tiene entidad `estudiantes`.
+- [ ] TEACHER tiene entidad `docentes`.
+- [ ] PARENT tiene entidad `apoderados`.
+- [ ] Ejecutado `Backend/sql/17_funciones_listados.sql`.
+- [ ] Ejecutado `Backend/sql/18_funciones_dashboard.sql`.
+- [ ] Ejecutado `Backend/sql/19_indices_performance.sql`.
+- [ ] `DATABASE_URL` esta configurado para usar RPCs optimizadas.
 
----
+## Performance
 
-## Autenticación
+- [ ] Dashboard admin usa `fn_dashboard_admin`.
+- [ ] Dashboard docente usa `fn_dashboard_docente`.
+- [ ] Dashboard estudiante/padre usa `fn_dashboard_student`.
+- [ ] Listados pesados usan funciones SQL cuando `DATABASE_URL` esta disponible.
+- [ ] Catalogos frontend se cachean con `shareReplay(1)`.
+- [ ] El backend usa pool PostgreSQL configurable.
+- [ ] No se observan consultas por cada fila en dashboards principales.
 
-- [ ] Login ADMIN funciona (`admin@horizonte.edu.pe` / `Admin123`)
-- [ ] Credenciales incorrectas muestran error
-- [ ] `/admin/dashboard` sin sesión redirige a `/login`
-- [ ] Logout cierra sesión y vuelve a login
+## Despliegue
 
----
+- [ ] `environment.ts` apunta a `http://localhost:8000`.
+- [ ] `environment.prod.ts` apunta al backend Railway.
+- [ ] Railway tiene `SUPABASE_URL`, `SUPABASE_KEY`, `DATABASE_URL` y `CORS_ORIGINS`.
+- [ ] Railway usa `uvicorn src.main:app --host 0.0.0.0 --port $PORT`.
+- [ ] GitHub Pages usa `npm run build:gh-pages`.
+- [ ] `public/404.html` permite fallback SPA.
+- [ ] CORS permite localhost y GitHub Pages.
 
-## Roles (probar al menos 3)
+## Validacion final
 
-- [ ] **ADMIN** — Dashboard ejecutivo + sidebar institucional
-- [ ] **TEACHER** — Panel docente + formulario tareas/recursos
-- [ ] **STUDENT** — Portal estudiante sin formularios admin
-- [ ] **PARENT** — Portal familia + datos de Lucía Torres
-- [ ] **DIRECTOR** — Similar a ADMIN (opcional)
-
-Credenciales en [`SETUP.md`](SETUP.md) o [`README.md`](../README.md).
-
----
-
-## Formularios
-
-- [ ] Contacto: errores visibles al enviar vacío
-- [ ] Contacto: éxito con datos válidos
-- [ ] ADMIN: formulario estudiantes visible en `/admin/estudiantes`
-- [ ] TEACHER: no ve formulario estudiantes; sí tareas
-- [ ] Registro simulado muestra mensaje de éxito
-
----
-
-## Módulos clave (visual)
-
-- [ ] `/admin/dashboard` — Panel ejecutivo
-- [ ] `/admin/pagos` — Vista premium simulada
-- [ ] `/admin/horarios` — Horario (estudiante/apoderado)
-- [ ] `/admin/notas` — Notas contextuales
-
----
-
-## Documentación
-
-- [ ] [`README.md`](../README.md) actualizado
-- [ ] [`FINAL_REVIEW.md`](FINAL_REVIEW.md) revisado
-- [ ] [`PRESENTATION_GUIDE.md`](PRESENTATION_GUIDE.md) revisado
-- [ ] [`CHANGELOG.md`](CHANGELOG.md) con Fase 11
-- [ ] [`PROJECT_PHASES.md`](PROJECT_PHASES.md) — Fase 11 completada
-
----
-
-## Repositorio (si aplica)
-
-- [ ] Último commit incluye Fase 11
-- [ ] Push al repositorio remoto realizado
-- [ ] No hay archivos sensibles (.env, credenciales reales)
-
----
-
-## Advertencias conocidas (no bloqueantes)
-
-- Warning Sass `@import` deprecado — documentado
-- Bundle ~797 kB supera budget 500 kB — Bootstrap completo; aceptable para MVP
-
----
-
-## Firma de entrega
-
-| Campo | Valor |
-|-------|-------|
-| Proyecto | HORIZONTE DIGITAL |
-| Versión final | 1.0.0 |
-| Fase | 11 — Revisión final |
-| Build | OK |
-| Cypress | 16/16 |
-| Fecha | 2026-05-31 |
+- [ ] `npm run build` compila.
+- [ ] Backend compila con `py_compile`.
+- [ ] Intranet carga por rol.
+- [ ] No hay textos visibles que digan que el sistema no tiene backend real.
+- [ ] README de frontend y backend describen el sistema real.

@@ -20,43 +20,65 @@
 
   @if (!isParentView()) {
     <div class="form-panel admin-card mb-4">
-      <div class="form-panel__header"><h2 class="form-panel__title">Filtros</h2></div>
+      <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
       <div class="form-panel__body">
         <div class="row g-3 align-items-end">
           <div class="col-md-3">
             <label class="form-label">Buscar</label>
-            <input class="form-control" placeholder="Estudiante o apoderado" [value]="busqueda()" (input)="busqueda.set($any($event.target).value)" />
+            <input class="form-control" placeholder="Estudiante o apoderado" [value]="draftBusqueda()" (input)="draftBusqueda.set($any($event.target).value)" />
           </div>
           <div class="col-md-2">
             <label class="form-label">Nivel</label>
-            <select class="form-select" [value]="nivelId()" (change)="onNivelChange($any($event.target).value)">
+            <select class="form-select" [value]="draftNivelId()" (change)="onDraftNivelChange($any($event.target).value)">
               <option value="">Todos</option>
               @for (n of niveles(); track n.id) { <option [value]="n.id">{{ n.nombre }}</option> }
             </select>
           </div>
           <div class="col-md-2">
             <label class="form-label">Grado</label>
-            <select class="form-select" [value]="gradoId()" (change)="onGradoChange($any($event.target).value)">
+            <select class="form-select" [value]="draftGradoId()" (change)="onDraftGradoChange($any($event.target).value)">
               <option value="">Todos</option>
               @for (g of grados(); track g.id) { <option [value]="g.id">{{ g.nombre }}</option> }
             </select>
           </div>
           <div class="col-md-2">
             <label class="form-label">Sección</label>
-            <select class="form-select" [value]="seccionId()" (change)="seccionId.set($any($event.target).value); load()">
+            <select class="form-select" [value]="draftSeccionId()" (change)="draftSeccionId.set($any($event.target).value)">
               <option value="">Todas</option>
               @for (s of secciones(); track s.id) { <option [value]="s.id">{{ s.nombre }}</option> }
             </select>
           </div>
           <div class="col-md-2">
             <label class="form-label">Estado académico</label>
-            <select class="form-select" [value]="estadoFiltro()" (change)="estadoFiltro.set($any($event.target).value); load()">
+            <select class="form-select" [value]="draftEstadoFiltro()" (change)="draftEstadoFiltro.set($any($event.target).value)">
               <option value="">Todos</option>
               @for (e of estados(); track e.codigo) { <option [value]="e.codigo">{{ e.nombre }}</option> }
             </select>
           </div>
           <div class="col-md-1">
-            <button type="button" class="btn btn-horizonte-primary w-100" (click)="load()">Buscar</button>
+            <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscar()">Buscar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="form-panel admin-card mb-4">
+      <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
+      <div class="form-panel__body">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-4">
+            <label class="form-label">Buscar</label>
+            <input class="form-control" placeholder="Observación o estado" [value]="draftBusqueda()" (input)="draftBusqueda.set($any($event.target).value)" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Estado académico</label>
+            <select class="form-select" [value]="draftEstadoFiltro()" (change)="draftEstadoFiltro.set($any($event.target).value)">
+              <option value="">Todos</option>
+              @for (e of estados(); track e.codigo) { <option [value]="e.codigo">{{ e.nombre }}</option> }
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscar()">Buscar</button>
           </div>
         </div>
       </div>

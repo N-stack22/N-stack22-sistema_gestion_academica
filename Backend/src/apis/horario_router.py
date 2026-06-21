@@ -14,6 +14,8 @@ def listar_horarios(
     curso_id: str | None = Query(default=None),
     docente_id: str | None = Query(default=None),
     estudiante_id: str | None = Query(default=None),
+    busqueda: str | None = Query(default=None),
+    dia_semana: int | None = Query(default=None),
 ):
     return service.listar(
         anio_id=anio_id,
@@ -21,6 +23,8 @@ def listar_horarios(
         curso_id=curso_id,
         docente_id=docente_id,
         estudiante_id=estudiante_id,
+        busqueda=busqueda,
+        dia_semana=dia_semana,
     )
 
 

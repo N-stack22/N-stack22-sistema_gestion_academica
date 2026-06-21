@@ -30,7 +30,10 @@ export class Tasks implements OnInit {
   protected readonly successMessage = signal('');
   protected readonly errorMessage = signal('');
 
+  protected readonly draftFiltroCurso = signal('');
+  protected readonly draftFiltroBusqueda = signal('');
   protected readonly filtroCurso = signal('');
+  protected readonly filtroBusqueda = signal('');
   protected readonly cursos = signal<{ id: string; name: string }[]>([]);
 
   protected readonly selectedTaskId = signal('');
@@ -159,8 +162,18 @@ export class Tasks implements OnInit {
     { key: 'estado', label: 'Estado' },
   ];
 
-  protected readonly studentRows = computed<DataTableRow[]>(() =>
-    this.studentTabTasks().map((task) => ({
+  protected readonly studentRows = computed<DataTableRow[]>(() => {
+    const q = this.filtroBusqueda().trim().toLowerCase();
+    let tasks = this.studentTabTasks();
+    if (q) {
+      tasks = tasks.filter(
+        (t) =>
+          t.title.toLowerCase().includes(q) ||
+          t.course.toLowerCase().includes(q) ||
+          (t.teacher ?? '').toLowerCase().includes(q),
+      );
+    }
+    return tasks.map((task) => ({
       _id: task.id,
       tarea: task.title,
       curso: task.course,
@@ -169,12 +182,22 @@ export class Tasks implements OnInit {
       estado: task.deliveryStatus ?? (task.submitted ? 'Entregada' : task.overdue ? 'Vencida' : 'Pendiente'),
       nota: task.deliveryGrade || '—',
       _taskJson: JSON.stringify(task),
-    })),
-  );
+    }));
+  });
 
   protected readonly allRows = signal<DataTableRow[]>([]);
 
-  protected readonly rows = computed(() => this.allRows());
+  protected readonly rows = computed(() => {
+    const q = this.filtroBusqueda().trim().toLowerCase();
+    let data = this.allRows();
+    if (!q) return data;
+    return data.filter((r) => {
+      const tarea = String(r['tarea'] ?? '').toLowerCase();
+      const curso = String(r['curso'] ?? '').toLowerCase();
+      const docente = String(r['docente'] ?? '').toLowerCase();
+      return tarea.includes(q) || curso.includes(q) || docente.includes(q);
+    });
+  });
 
   constructor() {
     effect(() => {
@@ -206,6 +229,12 @@ export class Tasks implements OnInit {
           c.map((x) => ({ id: x.id, name: x.label ?? x.name })).sort((a, b) => a.name.localeCompare(b.name)),
         ),
     });
+  }
+
+  protected buscar(): void {
+    this.filtroCurso.set(this.draftFiltroCurso());
+    this.filtroBusqueda.set(this.draftFiltroBusqueda().trim());
+    this.loadTasks();
   }
 
   protected loadTasks(): void {

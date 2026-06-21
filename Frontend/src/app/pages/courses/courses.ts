@@ -18,6 +18,7 @@ export class Courses implements OnInit {
   protected readonly roleContext = inject(RoleContextService);
   private readonly teacherContext = inject(TeacherContextService);
 
+  protected readonly draftSearchTerm = signal('');
   protected readonly searchTerm = signal('');
 
   protected readonly asignaturaId = signal('');
@@ -153,6 +154,10 @@ export class Courses implements OnInit {
     } else {
       this.seccionesFiltro.set([]);
     }
+  }
+
+  protected buscarCursosDocente(): void {
+    this.searchTerm.set(this.draftSearchTerm().trim());
   }
 
   protected buscarCursos(): void {

@@ -133,19 +133,29 @@
     </div>
   }
 
-  <div class="form-panel admin-card mb-3">
+  <div class="form-panel admin-card mb-4">
+    <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
     <div class="form-panel__body">
-      @if (roleContext.isTeacher()) {
-        <label class="form-label">Filtrar por curso</label>
-        <select class="form-select mb-3" [value]="selectedCourseId()" (change)="onCourseFilterChange($any($event.target).value)">
-          <option value="">Todos mis cursos</option>
-          @for (c of teacherCursos(); track c.id) {
-            <option [value]="c.id">{{ c.name }}</option>
-          }
-        </select>
-      }
-      <label class="form-label" for="student-search">Buscar estudiante</label>
-      <input id="student-search" class="form-control" placeholder="Nombre o código" [value]="searchFilter()" (input)="searchFilter.set($any($event.target).value)" />
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label" for="student-search">Buscar</label>
+          <input id="student-search" class="form-control" placeholder="Nombre o código" [value]="draftSearchFilter()" (input)="draftSearchFilter.set($any($event.target).value)" />
+        </div>
+        @if (roleContext.isTeacher()) {
+          <div class="col-md-4">
+            <label class="form-label">Curso</label>
+            <select class="form-select" [value]="draftCourseId()" (change)="draftCourseId.set($any($event.target).value)">
+              <option value="">Todos mis cursos</option>
+              @for (c of teacherCursos(); track c.id) {
+                <option [value]="c.id">{{ c.name }}</option>
+              }
+            </select>
+          </div>
+        }
+        <div class="col-md-2">
+          <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscar()">Buscar</button>
+        </div>
+      </div>
     </div>
   </div>
 

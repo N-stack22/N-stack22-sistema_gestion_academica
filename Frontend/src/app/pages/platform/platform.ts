@@ -55,7 +55,7 @@ export class Platform {
     {
       title: 'Padres de familia',
       icon: 'bi-people-fill',
-      items: ['Seguimiento académico', 'Pensiones informativas', 'Pagos simulados', 'Comunicados'],
+      items: ['Seguimiento académico', 'Pensiones informativas', 'Pagos registrados', 'Comunicados'],
     },
     {
       title: 'Administración',
@@ -78,7 +78,7 @@ export class Platform {
     {
       step: '3',
       title: 'Las familias consultan seguimiento',
-      text: 'Padres acceden a notas, horarios, pensiones simuladas y comunicados oficiales.',
+      text: 'Padres acceden a notas, horarios, pensiones informativas y comunicados oficiales.',
     },
     {
       step: '4',
@@ -92,13 +92,13 @@ export class Platform {
     { icon: 'bi-graph-up-arrow', title: 'Seguimiento académico oportuno', text: 'Notas, asistencia y tareas visibles según el rol del usuario.' },
     { icon: 'bi-folder2-open', title: 'Información organizada', text: 'Módulos estructurados como un ERP escolar moderno.' },
     { icon: 'bi-heart-fill', title: 'Mejor experiencia para las familias', text: 'Portal apoderado con seguimiento del progreso estudiantil.' },
-    { icon: 'bi-bar-chart-fill', title: 'Gestión administrativa visual', text: 'Dashboard ejecutivo y reportes simulados para administración.' },
+    { icon: 'bi-bar-chart-fill', title: 'Gestión administrativa visual', text: 'Dashboard ejecutivo y reportes para administración.' },
   ];
 
   protected readonly securityPoints = [
     'Acceso privado por roles',
-    'Datos simulados en esta versión académica',
+    'Backend FastAPI y base de datos Supabase',
     'Sin pagos reales ni procesamiento financiero',
-    'Diseñada como frontend institucional',
+    'Usuarios internos creados por administración',
   ];
 }

@@ -144,10 +144,11 @@
     </div>
   }
 
-  @if (canManage()) {
+  @if (canManage() || canViewResource()) {
     <div class="form-panel admin-card mb-4">
       <div class="form-panel__header">
         <h2 class="form-panel__title">Filtros de búsqueda</h2>
+        <p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p>
       </div>
       <div class="form-panel__body">
         <div class="row g-3 align-items-end">

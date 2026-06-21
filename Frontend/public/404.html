@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title>Portal Academico Horizonte</title>
+    <script>
+      const repoBase = '/colegio-horizonte/';
+      const path = location.pathname.replace(repoBase, '/');
+      sessionStorage.setItem('horizonte:redirect', path + location.search + location.hash);
+      location.replace(repoBase);
+    </script>
+  </head>
+  <body>
+    Redirigiendo al Portal Academico Horizonte...
+  </body>
+</html>

@@ -7,8 +7,25 @@ class PagoService:
     def __init__(self, repository: PagoRepository | None = None):
         self._repository = repository or PagoRepository()
 
-    def listar(self, estudiante_id: str | None = None, solo_validos: bool = False):
-        return self._repository.listar(estudiante_id, solo_validos=solo_validos)
+    def listar(
+        self,
+        estudiante_id: str | None = None,
+        solo_validos: bool = False,
+        estado: str | None = None,
+        busqueda: str | None = None,
+        fecha_desde: str | None = None,
+        fecha_hasta: str | None = None,
+        metodo: str | None = None,
+    ):
+        return self._repository.listar(
+            estudiante_id,
+            solo_validos=solo_validos,
+            estado_codigo=estado,
+            busqueda=busqueda,
+            fecha_desde=fecha_desde,
+            fecha_hasta=fecha_hasta,
+            metodo=metodo,
+        )
 
     def obtener(self, pago_id: str):
         pago = self._repository.obtener(pago_id)

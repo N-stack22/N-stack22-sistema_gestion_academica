@@ -366,6 +366,71 @@ body {
   padding: 1.25rem 1.5rem 1.5rem;
 }
 
+.form-panel__hint {
+  font-size: 0.82rem;
+  color: var(--horizonte-gray);
+  margin-top: 0.35rem;
+  line-height: 1.45;
+}
+
+.admin-page {
+  max-width: 100%;
+}
+
+@media (max-width: 767.98px) {
+  .admin-page-title {
+    font-size: 1.15rem;
+  }
+
+  .admin-page-subtitle {
+    font-size: 0.88rem;
+  }
+
+  .form-panel__header {
+    padding: 1rem 1rem 0;
+  }
+
+  .form-panel__body {
+    padding: 1rem;
+  }
+
+  .form-panel__body .row.align-items-end > [class*='col-'] {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .form-panel__body .btn-horizonte-primary,
+  .form-panel__body .btn-outline-primary,
+  .form-panel__body .btn-outline-secondary {
+    width: 100%;
+    min-height: 2.75rem;
+  }
+
+  .form-panel .nav-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    border-bottom: 1px solid rgba(11, 31, 58, 0.1);
+    padding-bottom: 0.15rem;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-link {
+      white-space: nowrap;
+      font-size: 0.82rem;
+      padding: 0.55rem 0.85rem;
+    }
+  }
+
+  .admin-card.p-3,
+  .admin-card.p-4 {
+    padding: 1rem !important;
+  }
+}
+
 .form-help-text {
   font-size: 0.8rem;
   color: var(--horizonte-gray);
@@ -1556,6 +1621,20 @@ body.horizonte-dark-theme .form-select {
   background-color: #141d2b;
   border-color: rgba(255, 255, 255, 0.12);
   color: var(--horizonte-gray-dark);
+}
+
+body.horizonte-dark-theme .data-table-card {
+  background: #141d2b;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.horizonte-dark-theme .data-table__pagination {
+  background: #141d2b;
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+body.horizonte-dark-theme .form-panel__hint {
+  color: var(--horizonte-gray);
 }
 
 body.horizonte-dark-theme .erp-table {

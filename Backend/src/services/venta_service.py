@@ -7,8 +7,14 @@ class VentaService:
     def __init__(self):
         self.repo = VentaRepository()
 
-    def listar(self) -> list[dict]:
-        return self.repo.listar()
+    def listar(
+        self,
+        estado: str | None = None,
+        busqueda: str | None = None,
+        fecha_desde: str | None = None,
+        fecha_hasta: str | None = None,
+    ) -> list[dict]:
+        return self.repo.listar(estado, busqueda, fecha_desde, fecha_hasta)
 
     def obtener(self, venta_id: str) -> dict:
         venta = self.repo.obtener(venta_id)

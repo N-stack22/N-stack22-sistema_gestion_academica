@@ -36,6 +36,17 @@ export class Payments implements OnInit {
   protected readonly errorMessage = signal('');
   protected readonly loading = signal(false);
 
+  protected readonly draftFiltroBusqueda = signal('');
+  protected readonly draftFiltroEstado = signal('');
+  protected readonly draftFiltroDesde = signal('');
+  protected readonly draftFiltroHasta = signal('');
+  protected readonly draftFiltroMetodo = signal('');
+  protected readonly filtroBusqueda = signal('');
+  protected readonly filtroEstado = signal('');
+  protected readonly filtroDesde = signal('');
+  protected readonly filtroHasta = signal('');
+  protected readonly filtroMetodo = signal('');
+
   protected readonly isParentView = computed(() => this.roleContext.isParent());
 
   protected readonly pensionSeleccionada = computed(
@@ -103,7 +114,15 @@ export class Payments implements OnInit {
       return;
     }
     this.loading.set(true);
-    this.paymentService.listar(studentId).subscribe({
+    this.paymentService
+      .listar(studentId, false, {
+        busqueda: this.filtroBusqueda() || undefined,
+        estado: this.filtroEstado() || undefined,
+        fechaDesde: this.filtroDesde() || undefined,
+        fechaHasta: this.filtroHasta() || undefined,
+        metodo: this.filtroMetodo() || undefined,
+      })
+      .subscribe({
       next: (items) => {
         const mapped: DataTableRow[] = (items as Record<string, unknown>[]).map((p) => ({
           _id: String(p['id'] ?? ''),
@@ -135,6 +154,15 @@ export class Payments implements OnInit {
       },
       error: () => this.loading.set(false),
     });
+  }
+
+  protected buscarPagos(): void {
+    this.filtroBusqueda.set(this.draftFiltroBusqueda().trim());
+    this.filtroEstado.set(this.draftFiltroEstado());
+    this.filtroDesde.set(this.draftFiltroDesde());
+    this.filtroHasta.set(this.draftFiltroHasta());
+    this.filtroMetodo.set(this.draftFiltroMetodo().trim());
+    this.loadPagos();
   }
 
   protected onEstudianteChange(id: string): void {

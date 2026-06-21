@@ -36,3 +36,10 @@ def reset_supabase_client() -> None:
 
 def init_database() -> None:
     get_supabase()
+    from src.services.db_connection import has_database_url, ping_postgres
+
+    if has_database_url() and not ping_postgres():
+        raise ValueError(
+            "DATABASE_URL configurada pero la conexión PostgreSQL falló. "
+            "Verifique la cadena en Backend/.env y que psycopg esté instalado."
+        )

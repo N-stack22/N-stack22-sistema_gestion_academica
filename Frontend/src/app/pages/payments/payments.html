@@ -85,6 +85,41 @@
     </div>
   </section>
 
+  <div class="form-panel admin-card mb-4">
+    <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
+    <div class="form-panel__body">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+          <label class="form-label">Buscar</label>
+          <input class="form-control" placeholder="Código, estudiante o apoderado" [value]="draftFiltroBusqueda()" (input)="draftFiltroBusqueda.set($any($event.target).value)" />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Estado</label>
+          <select class="form-select" [value]="draftFiltroEstado()" (change)="draftFiltroEstado.set($any($event.target).value)">
+            <option value="">Todos</option>
+            <option value="PAGADO">Pagado</option>
+            <option value="ANULADO">Anulado</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Desde</label>
+          <input type="date" class="form-control" [value]="draftFiltroDesde()" (input)="draftFiltroDesde.set($any($event.target).value)" />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Hasta</label>
+          <input type="date" class="form-control" [value]="draftFiltroHasta()" (input)="draftFiltroHasta.set($any($event.target).value)" />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Método</label>
+          <input class="form-control" placeholder="Efectivo, Yape..." [value]="draftFiltroMetodo()" (input)="draftFiltroMetodo.set($any($event.target).value)" />
+        </div>
+        <div class="col-md-1">
+          <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscarPagos()">Buscar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <app-data-table
     title="Pagos válidos"
     subtitle="Registros activos. Use Anular en pagos erróneos."

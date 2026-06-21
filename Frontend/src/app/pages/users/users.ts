@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { DataTable } from '../../components/data-table/data-table';
 import { DataTableColumn, DataTableRow } from '../../components/data-table/data-table.model';
 import { AcademicUser, AcademicUserService } from '../../services/academic-user.service';
@@ -15,8 +15,20 @@ export class Users implements OnInit {
   private readonly academicUserService = inject(AcademicUserService);
   private readonly catalogService = inject(CatalogService);
 
+  protected readonly draftRoleFilter = signal('');
+  protected readonly draftSearchFilter = signal('');
   protected readonly roleFilter = signal('');
-  protected readonly rows = signal<DataTableRow[]>([]);
+  protected readonly searchFilter = signal('');
+  protected readonly allRows = signal<DataTableRow[]>([]);
+  protected readonly rows = computed(() => {
+    const q = this.searchFilter().trim().toLowerCase();
+    if (!q) return this.allRows();
+    return this.allRows().filter((r) => {
+      const nombre = String(r['nombre'] ?? '').toLowerCase();
+      const correo = String(r['correo'] ?? '').toLowerCase();
+      return nombre.includes(q) || correo.includes(q);
+    });
+  });
   protected readonly selectedUser = signal<AcademicUser | null>(null);
   protected readonly roles = signal<{ codigo: string; nombre: string }[]>([]);
   protected readonly showForm = signal(false);
@@ -45,7 +57,7 @@ export class Users implements OnInit {
     const rol = this.roleFilter() || undefined;
     this.academicUserService.listar(rol).subscribe({
       next: (users) => {
-        this.rows.set(
+        this.allRows.set(
           users.map((user) => ({
             _id: user.id,
             nombre: user.fullName,
@@ -58,8 +70,9 @@ export class Users implements OnInit {
     });
   }
 
-  protected onRoleFilterChange(value: string): void {
-    this.roleFilter.set(value);
+  protected buscar(): void {
+    this.roleFilter.set(this.draftRoleFilter());
+    this.searchFilter.set(this.draftSearchFilter().trim());
     this.loadUsers();
   }
 

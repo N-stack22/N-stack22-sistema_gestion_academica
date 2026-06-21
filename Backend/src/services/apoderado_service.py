@@ -7,8 +7,13 @@ class ApoderadoService:
     def __init__(self, repository: ApoderadoRepository | None = None):
         self._repository = repository or ApoderadoRepository()
 
-    def listar(self) -> list[dict]:
-        return self._repository.find_all()
+    def listar(
+        self,
+        busqueda: str | None = None,
+        parentesco: str | None = None,
+        estado: str | None = None,
+    ) -> list[dict]:
+        return self._repository.find_all(busqueda, parentesco, estado)
 
     def obtener(self, apoderado_id: str) -> dict:
         apoderado = self._repository.find_by_id(apoderado_id)

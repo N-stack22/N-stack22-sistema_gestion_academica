@@ -30,6 +30,15 @@ export class Sales implements OnInit {
   protected readonly successMessage = signal('');
   protected readonly errorMessage = signal('');
 
+  protected readonly draftFiltroBusqueda = signal('');
+  protected readonly draftFiltroEstado = signal('');
+  protected readonly draftFiltroDesde = signal('');
+  protected readonly draftFiltroHasta = signal('');
+  protected readonly filtroBusqueda = signal('');
+  protected readonly filtroEstado = signal('');
+  protected readonly filtroDesde = signal('');
+  protected readonly filtroHasta = signal('');
+
   protected readonly validasRows = computed(() =>
     this.allRows().filter((r) => r['_statusCode'] !== 'ANULADO'),
   );
@@ -58,7 +67,14 @@ export class Sales implements OnInit {
   }
 
   protected loadVentas(): void {
-    this.saleService.listar().subscribe({
+    this.saleService
+      .listar({
+        busqueda: this.filtroBusqueda() || undefined,
+        estado: this.filtroEstado() || undefined,
+        fechaDesde: this.filtroDesde() || undefined,
+        fechaHasta: this.filtroHasta() || undefined,
+      })
+      .subscribe({
       next: (items) => {
         this.allRows.set(
           items.map((v) => ({
@@ -91,6 +107,14 @@ export class Sales implements OnInit {
         );
       },
     });
+  }
+
+  protected buscarVentas(): void {
+    this.filtroBusqueda.set(this.draftFiltroBusqueda().trim());
+    this.filtroEstado.set(this.draftFiltroEstado());
+    this.filtroDesde.set(this.draftFiltroDesde());
+    this.filtroHasta.set(this.draftFiltroHasta());
+    this.loadVentas();
   }
 
   protected registrarVenta(): void {

@@ -1,19 +1,40 @@
-<div class="admin-shell">
-  <aside class="admin-shell__sidebar">
-    <app-sidebar />
+<div class="admin-shell" [class.admin-shell--sidebar-open]="sidebarOpen()">
+  @if (sidebarOpen()) {
+    <button
+      type="button"
+      class="admin-shell__overlay"
+      aria-label="Cerrar menú de navegación"
+      (click)="closeSidebar()"
+    ></button>
+  }
+
+  <aside class="admin-shell__sidebar" id="admin-sidebar">
+    <app-sidebar (navigate)="closeSidebar()" />
   </aside>
 
   <section class="admin-shell__main">
     <header class="admin-shell__topbar">
-      <div>
-        <p class="admin-shell__eyebrow mb-0">
-          <i class="bi bi-grid-1x2-fill horizonte-icon-inline" aria-hidden="true"></i>
-          Intranet académica ERP
-        </p>
-        <h1 class="admin-shell__title mb-0">HORIZONTE DIGITAL</h1>
+      <div class="admin-shell__topbar-start">
+        <button
+          type="button"
+          class="btn btn-outline-secondary btn-sm admin-shell__menu-toggle d-lg-none"
+          aria-controls="admin-sidebar"
+          [attr.aria-expanded]="sidebarOpen()"
+          (click)="toggleSidebar()"
+        >
+          <i class="bi bi-list" aria-hidden="true"></i>
+          <span class="visually-hidden">Abrir menú</span>
+        </button>
+        <div>
+          <p class="admin-shell__eyebrow mb-0">
+            <i class="bi bi-grid-1x2-fill horizonte-icon-inline" aria-hidden="true"></i>
+            Intranet académica ERP
+          </p>
+          <h1 class="admin-shell__title mb-0">HORIZONTE DIGITAL</h1>
+        </div>
       </div>
 
-      <div class="admin-shell__meta text-end">
+      <div class="admin-shell__meta">
         @if (auth.currentUser(); as user) {
           <p class="admin-shell__user mb-1">
             <i class="bi bi-person-circle horizonte-icon-inline" aria-hidden="true"></i>

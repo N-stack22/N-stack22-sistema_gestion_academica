@@ -8,10 +8,21 @@ export class PaymentService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${API_BASE_URL}/api/pagos`;
 
-  listar(estudianteId?: string, soloValidos = false): Observable<unknown[]> {
+  listar(estudianteId?: string, soloValidos = false, filters?: {
+    estado?: string;
+    busqueda?: string;
+    fechaDesde?: string;
+    fechaHasta?: string;
+    metodo?: string;
+  }): Observable<unknown[]> {
     const params = new URLSearchParams();
     if (estudianteId) params.set('estudiante_id', estudianteId);
     if (soloValidos) params.set('solo_validos', 'true');
+    if (filters?.estado) params.set('estado', filters.estado);
+    if (filters?.busqueda) params.set('busqueda', filters.busqueda);
+    if (filters?.fechaDesde) params.set('fecha_desde', filters.fechaDesde);
+    if (filters?.fechaHasta) params.set('fecha_hasta', filters.fechaHasta);
+    if (filters?.metodo) params.set('metodo', filters.metodo);
     const q = params.toString() ? `?${params}` : '';
     return this.http.get<unknown[]>(`${this.baseUrl}${q}`);
   }

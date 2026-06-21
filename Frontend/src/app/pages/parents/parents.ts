@@ -22,6 +22,13 @@ export class Parents implements OnInit {
   protected readonly rows = signal<DataTableRow[]>([]);
   protected readonly estudiantes = signal<{ id: string; fullName: string; code: string }[]>([]);
 
+  protected readonly draftSearchFilter = signal('');
+  protected readonly draftParentescoFilter = signal('');
+  protected readonly draftEstadoFilter = signal('');
+  protected readonly searchFilter = signal('');
+  protected readonly parentescoFilter = signal('');
+  protected readonly estadoFilter = signal('');
+
   protected readonly firstName = signal('');
   protected readonly lastName = signal('');
   protected readonly email = signal('');
@@ -59,7 +66,13 @@ export class Parents implements OnInit {
   }
 
   protected loadParents(): void {
-    this.parentService.listar().subscribe({
+    this.parentService
+      .listar({
+        busqueda: this.searchFilter() || undefined,
+        parentesco: this.parentescoFilter() || undefined,
+        estado: this.estadoFilter() || undefined,
+      })
+      .subscribe({
       next: (parents) =>
         this.rows.set(
           parents.map((p) => ({
@@ -74,6 +87,13 @@ export class Parents implements OnInit {
           })),
         ),
     });
+  }
+
+  protected buscar(): void {
+    this.searchFilter.set(this.draftSearchFilter().trim());
+    this.parentescoFilter.set(this.draftParentescoFilter());
+    this.estadoFilter.set(this.draftEstadoFilter());
+    this.loadParents();
   }
 
   protected onSubmit(event: Event): void {

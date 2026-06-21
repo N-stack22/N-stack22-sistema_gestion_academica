@@ -15,15 +15,50 @@ _SELECT_VENTA = (
 
 
 class VentaRepository:
-    def listar(self) -> list[dict]:
+    def listar(
+        self,
+        estado_codigo: str | None = None,
+        busqueda: str | None = None,
+        fecha_desde: str | None = None,
+        fecha_hasta: str | None = None,
+    ) -> list[dict]:
+        from src.repository.db_functions import DbFunctionError, call_list_function
+        from src.services.db_connection import has_database_url
+
+        if has_database_url():
+            try:
+                return call_list_function(
+                    "fn_listar_ventas",
+                    {
+                        "p_estado_codigo": estado_codigo,
+                        "p_busqueda": busqueda,
+                        "p_fecha_desde": fecha_desde,
+                        "p_fecha_hasta": fecha_hasta,
+                    },
+                )
+            except DbFunctionError:
+                pass
+
         client = get_supabase()
-        response = (
-            client.table("ventas")
-            .select(_SELECT_VENTA)
-            .order("fecha_venta", desc=True)
-            .execute()
-        )
-        return [self._map_row(r) for r in response.data or []]
+        query = client.table("ventas").select(_SELECT_VENTA)
+        if fecha_desde:
+            query = query.gte("fecha_venta", fecha_desde)
+        if fecha_hasta:
+            query = query.lte("fecha_venta", fecha_hasta)
+        response = query.order("fecha_venta", desc=True).execute()
+        rows = [self._map_row(r) for r in response.data or []]
+        if estado_codigo:
+            rows = [r for r in rows if r.get("statusCode") == estado_codigo.upper()]
+        if busqueda:
+            q = busqueda.lower()
+            rows = [
+                r
+                for r in rows
+                if q in (r.get("code") or "").lower()
+                or q in (r.get("clientName") or "").lower()
+                or q in (r.get("concept") or "").lower()
+            ]
+        return rows
 
     def obtener(self, venta_id: str) -> dict | None:
         client = get_supabase()

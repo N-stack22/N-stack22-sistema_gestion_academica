@@ -26,6 +26,8 @@ class HorarioRepository:
         curso_id: str | None = None,
         docente_id: str | None = None,
         estudiante_id: str | None = None,
+        busqueda: str | None = None,
+        dia_semana: int | None = None,
     ) -> list[dict]:
         if estudiante_id and not seccion_id:
             ctx = obtener_contexto_academico_estudiante(estudiante_id)
@@ -33,6 +35,26 @@ class HorarioRepository:
                 seccion_id = ctx.get("seccion_id")
                 if not anio_id:
                     anio_id = ctx.get("anio_academico_id")
+
+        from src.repository.db_functions import DbFunctionError, call_list_function
+        from src.services.db_connection import has_database_url
+
+        if has_database_url():
+            try:
+                return call_list_function(
+                    "fn_listar_horarios",
+                    {
+                        "p_anio_id": anio_id,
+                        "p_seccion_id": seccion_id,
+                        "p_curso_id": curso_id,
+                        "p_docente_id": docente_id,
+                        "p_busqueda": busqueda,
+                        "p_dia_semana": dia_semana,
+                    },
+                )
+            except DbFunctionError:
+                pass
+
         client = get_supabase()
         query = client.table("horarios").select(
             "id,dia_semana,hora_inicio,hora_fin,aula,curso_asignado_id,"
@@ -42,6 +64,8 @@ class HorarioRepository:
         )
         if curso_id:
             query = query.eq("curso_asignado_id", curso_id)
+        if dia_semana:
+            query = query.eq("dia_semana", dia_semana)
         response = query.execute()
         rows = []
         for r in response.data or []:
@@ -53,7 +77,20 @@ class HorarioRepository:
                 continue
             if docente_id and curso.get("docente_id") != docente_id:
                 continue
-            rows.append(self._map_row(r))
+            mapped = self._map_row(r)
+            if busqueda:
+                q = busqueda.lower()
+                texto = " ".join(
+                    [
+                        mapped.get("course", ""),
+                        mapped.get("teacher", ""),
+                        mapped.get("section", ""),
+                        mapped.get("classroom", ""),
+                    ]
+                ).lower()
+                if q not in texto:
+                    continue
+            rows.append(mapped)
         return sorted(rows, key=lambda x: (x.get("dayOrder", 0), x.get("startTime", "")))
 
     def obtener(self, horario_id: str) -> dict | None:

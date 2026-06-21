@@ -35,8 +35,19 @@ export class SaleService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${API_BASE_URL}/api/ventas`;
 
-  listar(): Observable<SaleItem[]> {
-    return this.http.get<SaleItem[]>(this.baseUrl);
+  listar(filters?: {
+    estado?: string;
+    busqueda?: string;
+    fechaDesde?: string;
+    fechaHasta?: string;
+  }): Observable<SaleItem[]> {
+    const params = new URLSearchParams();
+    if (filters?.estado) params.set('estado', filters.estado);
+    if (filters?.busqueda) params.set('busqueda', filters.busqueda);
+    if (filters?.fechaDesde) params.set('fecha_desde', filters.fechaDesde);
+    if (filters?.fechaHasta) params.set('fecha_hasta', filters.fechaHasta);
+    const q = params.toString() ? `?${params}` : '';
+    return this.http.get<SaleItem[]>(`${this.baseUrl}${q}`);
   }
 
   obtener(id: string): Observable<SaleItem> {
