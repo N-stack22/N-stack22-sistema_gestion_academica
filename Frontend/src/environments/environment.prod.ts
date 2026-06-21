@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://colegio-horizonte-backend.up.railway.app',
+  apiUrl: 'https://n-stack22-sistemagestionacademica-production.up.railway.app',
 };
