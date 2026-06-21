@@ -9,16 +9,29 @@ load_dotenv(Path(__file__).resolve().parents[2] / ".env", override=True)
 _client: Client | None = None
 
 
+def _first_env(*names: str) -> str:
+    for name in names:
+        value = (os.getenv(name) or "").strip()
+        if value:
+            return value
+    return ""
+
+
 def get_supabase() -> Client:
     global _client
 
-    url = os.getenv("SUPABASE_URL", "https://yrylzgosmrmvichwdrin.supabase.co")
-    key = (os.getenv("SUPABASE_KEY") or "").strip()
+    url = _first_env("SUPABASE_URL")
+    key = _first_env("SUPABASE_KEY", "SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_KEY")
 
+    if not url:
+        raise ValueError(
+            "SUPABASE_URL no configurada. En Railway agregue la URL del proyecto Supabase."
+        )
     if not key:
         raise ValueError(
-            "SUPABASE_KEY no configurada. Usa la service_role key de "
-            "Supabase -> Settings -> API en Backend/.env"
+            "SUPABASE_KEY no configurada. En Railway agregue SUPABASE_KEY "
+            "con la service_role key de Supabase -> Settings -> API. "
+            "Tambien se acepta SUPABASE_SERVICE_ROLE_KEY."
         )
 
     if _client is not None:
