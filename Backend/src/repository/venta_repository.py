@@ -144,6 +144,9 @@ class VentaRepository:
         for det in detalles:
             det["venta_id"] = venta_id
         client.table("detalle_ventas").insert(detalles).execute()
+        from src.repository.db_functions import clear_function_cache
+
+        clear_function_cache()
         result = self.obtener(venta_id)
         if not result:
             raise ValueError("No se pudo registrar la venta")
@@ -168,6 +171,9 @@ class VentaRepository:
             update_data["motivo_anulacion"] = motivo.strip()
 
         client.table("ventas").update(update_data).eq("id", venta_id).execute()
+        from src.repository.db_functions import clear_function_cache
+
+        clear_function_cache()
         result = self.obtener(venta_id)
         if not result:
             raise ValueError("Venta no encontrada")

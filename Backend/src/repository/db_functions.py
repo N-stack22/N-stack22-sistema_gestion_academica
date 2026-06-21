@@ -19,9 +19,9 @@ _CACHE: dict[str, tuple[float, Any]] = {}
 
 def _cache_ttl_seconds() -> int:
     try:
-        return int(os.getenv("DB_FUNCTION_CACHE_TTL_SECONDS", "15"))
+        return int(os.getenv("DB_FUNCTION_CACHE_TTL_SECONDS", "0"))
     except ValueError:
-        return 15
+        return 0
 
 
 def _cache_key(name: str, params: dict[str, Any]) -> str:

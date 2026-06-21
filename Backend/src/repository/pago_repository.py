@@ -136,6 +136,9 @@ class PagoRepository:
             raise ValueError("No se pudo registrar el pago")
 
         self._sync_pension_estado(client, data["pension_id"])
+        from src.repository.db_functions import clear_function_cache
+
+        clear_function_cache()
         return self.obtener(resp.data[0]["id"])
 
     def anular(self, pago_id: str, motivo: str | None = None) -> dict:
@@ -166,6 +169,9 @@ class PagoRepository:
         if pago.get("pensionId"):
             self._sync_pension_estado(client, pago["pensionId"])
 
+        from src.repository.db_functions import clear_function_cache
+
+        clear_function_cache()
         result = self.obtener(pago_id)
         if not result:
             raise ValueError("Pago no encontrado")
