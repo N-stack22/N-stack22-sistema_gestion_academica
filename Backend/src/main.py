@@ -1,6 +1,7 @@
 import os
 from contextlib import asynccontextmanager
 from pathlib import Path
+from urllib.parse import urlparse
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
@@ -49,12 +50,30 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(title="Horizonte API", version="0.2.0", lifespan=lifespan)
 
-default_cors = "http://localhost:4200"
-cors_origins = [
-    origin.strip()
-    for origin in os.getenv("CORS_ORIGINS", default_cors).split(",")
+
+def _normalize_origin(value: str) -> str:
+    origin = value.strip().rstrip("/")
+    if not origin:
+        return ""
+
+    parsed = urlparse(origin)
+    if parsed.scheme and parsed.netloc:
+        return f"{parsed.scheme}://{parsed.netloc}"
+
+    return origin
+
+
+default_cors_origins = {
+    "http://localhost:4200",
+    "http://127.0.0.1:4200",
+    "https://n-stack22.github.io",
+}
+configured_cors_origins = {
+    _normalize_origin(origin)
+    for origin in os.getenv("CORS_ORIGINS", "").split(",")
     if origin.strip()
-]
+}
+cors_origins = sorted(default_cors_origins | configured_cors_origins)
 
 app.add_middleware(
     CORSMiddleware,
