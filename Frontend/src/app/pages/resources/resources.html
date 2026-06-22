@@ -206,8 +206,11 @@
     [columns]="columns()"
     [rows]="disponiblesRows()"
     [showActions]="canManage() || canViewResource()"
+    [showViewButton]="canManage()"
+    viewLabel="Ver"
     [secondaryDetailLabel]="canManage() ? 'Editar' : ''"
     [detailLabel]="canManage() ? 'Archivar' : 'Ver recurso'"
+    (viewClick)="verRecurso($event)"
     (secondaryDetailClick)="editarRecurso($event)"
     (detailClick)="canManage() ? archivarRecurso($event) : verRecurso($event)"
   />
@@ -221,8 +224,11 @@
       [columns]="columns()"
       [rows]="archivadosRows()"
       [showActions]="true"
+      [showViewButton]="true"
+      viewLabel="Ver"
       secondaryDetailLabel="Editar"
       detailLabel="Desarchivar"
+      (viewClick)="verRecurso($event)"
       (secondaryDetailClick)="editarRecurso($event)"
       (detailClick)="desarchivarRecurso($event)"
     />

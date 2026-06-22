@@ -20,9 +20,11 @@ export class DataTable {
   readonly showPagination = input<boolean>(true);
   readonly pageSize = input<number>(10);
   readonly showViewButton = input<boolean>(false);
+  readonly viewLabel = input<string>('Ver');
   readonly detailLabel = input<string>('Detalle');
   readonly secondaryDetailLabel = input<string>('');
 
+  readonly viewClick = output<DataTableRow>();
   readonly detailClick = output<DataTableRow>();
   readonly secondaryDetailClick = output<DataTableRow>();
 
@@ -114,6 +116,10 @@ export class DataTable {
 
   protected onDetail(row: DataTableRow): void {
     this.detailClick.emit(row);
+  }
+
+  protected onView(row: DataTableRow): void {
+    this.viewClick.emit(row);
   }
 
   protected onSecondaryDetail(row: DataTableRow): void {

@@ -62,9 +62,9 @@
             @if (showActions()) {
               <div class="data-table-card__actions">
                 @if (showViewButton()) {
-                  <button type="button" class="btn btn-sm erp-action-btn w-100" disabled title="No disponible">
+                  <button type="button" class="btn btn-sm erp-action-btn w-100" (click)="onView(row)">
                     <i class="bi bi-eye" aria-hidden="true"></i>
-                    Ver
+                    {{ viewLabel() }}
                   </button>
                 }
                 @if (secondaryDetailLabel()) {
@@ -110,9 +110,9 @@
                 @if (showActions()) {
                   <td class="text-end text-nowrap">
                     @if (showViewButton()) {
-                      <button type="button" class="btn btn-sm erp-action-btn" disabled title="No disponible">
+                      <button type="button" class="btn btn-sm erp-action-btn me-1" (click)="onView(row)">
                         <i class="bi bi-eye" aria-hidden="true"></i>
-                        Ver
+                        {{ viewLabel() }}
                       </button>
                     }
                     @if (secondaryDetailLabel()) {
