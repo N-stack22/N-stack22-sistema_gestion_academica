@@ -2,32 +2,37 @@
   <header class="erp-hero mb-4">
     <div>
       <span class="badge admin-page__badge-module admin-badge mb-2">
-        {{ isParentView() ? 'Portal padre de familia' : 'Gestion institucional' }}
+        {{ pageLabel() }}
       </span>
       <h1 class="erp-hero__title h4 fw-bold mb-2">
         <i class="bi bi-credit-card horizonte-icon-inline" aria-hidden="true"></i>
-        {{ isParentView() ? 'Pagos del estudiante' : 'Gestion de pagos' }}
+        {{ pageTitle() }}
       </h1>
     </div>
   </header>
 
-  @if (roleContext.isInstitutional()) {
+  @if (isInstitutionalView()) {
     <div class="form-panel admin-card mb-4">
       <div class="form-panel__header">
         <h2 class="form-panel__title">Registrar pago de pension</h2>
       </div>
       <div class="form-panel__body">
-        @if (successMessage()) {
+        @if (successMessage().length > 0) {
           <div class="form-success-card mb-3">{{ successMessage() }}</div>
         }
-        @if (errorMessage()) {
+        @if (errorMessage().length > 0) {
           <div class="alert alert-danger mb-3">{{ errorMessage() }}</div>
         }
 
         <div class="row g-3 align-items-end">
           <div class="col-md-7">
-            <label class="form-label">Estudiante</label>
-            <select class="form-select" [value]="estudianteId()" (change)="onEstudianteChange($any($event.target).value)">
+            <label class="form-label" for="payment-student">Estudiante</label>
+            <select
+              id="payment-student"
+              class="form-select"
+              [value]="estudianteId()"
+              (change)="onEstudianteChange($any($event.target).value)"
+            >
               <option value="">Seleccionar estudiante</option>
               @for (e of estudiantes(); track e.id) {
                 <option [value]="e.id">{{ e.fullName }}</option>
@@ -35,8 +40,13 @@
             </select>
           </div>
           <div class="col-md-3">
-            <label class="form-label">Metodo</label>
-            <select class="form-select" [value]="metodoPago()" (change)="metodoPago.set($any($event.target).value)">
+            <label class="form-label" for="payment-method">Metodo</label>
+            <select
+              id="payment-method"
+              class="form-select"
+              [value]="metodoPago()"
+              (change)="metodoPago.set($any($event.target).value)"
+            >
               @for (m of metodos(); track m.codigo) {
                 <option [value]="m.codigo">{{ m.nombre }}</option>
               }
@@ -45,26 +55,26 @@
           <div class="col-md-2">
             <div class="border rounded p-3 text-center bg-light">
               <div class="text-muted small">Deudas</div>
-              <div class="fs-5 fw-bold">{{ pendingDebtRows().length }}</div>
+              <div class="fs-5 fw-bold">{{ pendingDebtCount() }}</div>
             </div>
           </div>
         </div>
-        @if (selectedStudent()) {
+        @if (selectedStudent(); as student) {
           <div class="d-flex flex-wrap gap-3 mt-3 text-muted small">
-            <span>Estudiante: <strong>{{ selectedStudent()?.fullName }}</strong></span>
+            <span>Estudiante: <strong>{{ student.fullName }}</strong></span>
             <span>Total pendiente: <strong>S/ {{ pendingDebtTotal().toFixed(2) }}</strong></span>
           </div>
         }
       </div>
     </div>
 
-    @if (estudianteId()) {
+    @if (estudianteId().length > 0) {
       @if (loadingDebts()) {
         <div class="admin-card p-4 mb-4">
           <h2 class="h6 fw-bold mb-1">Cargando deudas</h2>
           <p class="text-muted mb-0">Consultando pensiones pendientes del estudiante seleccionado.</p>
         </div>
-      } @else if (pendingDebtRows().length > 0) {
+      } @else if (hasPendingDebts()) {
         <app-data-table
           class="d-block mb-4"
           title="Deudas pendientes del estudiante"
@@ -76,7 +86,7 @@
           [showColumnFilters]="false"
           detailLabel="Registrar pago"
           (detailClick)="marcarPensionPagada($event)"
-        />
+        ></app-data-table>
       } @else {
         <div class="admin-card p-4 mb-4">
           <h2 class="h6 fw-bold mb-1">Sin deudas pendientes</h2>
@@ -96,7 +106,7 @@
             [description]="metric.description"
             [icon]="metric.icon"
             [variant]="metric.variant"
-          />
+          ></app-stat-card>
         </div>
       }
     </div>
@@ -108,10 +118,10 @@
     icon="bi-credit-card"
     [columns]="columns"
     [rows]="validosRows()"
-    [showActions]="roleContext.isInstitutional()"
+    [showActions]="isInstitutionalView()"
     detailLabel="Anular"
     (detailClick)="anularPago($event)"
-  />
+  ></app-data-table>
 
   <app-data-table
     class="d-block mt-4"
@@ -121,5 +131,5 @@
     [columns]="columns"
     [rows]="anuladosRows()"
     [showActions]="false"
-  />
+  ></app-data-table>
 </div>

@@ -52,6 +52,16 @@ export class Payments implements OnInit {
 
   public readonly isParentView = computed(() => this.roleContext.isParent());
 
+  public readonly isInstitutionalView = computed(() => this.roleContext.isInstitutional());
+
+  public readonly pageLabel = computed(() =>
+    this.isParentView() ? 'Portal padre de familia' : 'Gestion institucional',
+  );
+
+  public readonly pageTitle = computed(() =>
+    this.isParentView() ? 'Pagos del estudiante' : 'Gestion de pagos',
+  );
+
   public readonly selectedStudent = computed(
     () => this.estudiantes().find((student) => student.id === this.estudianteId()) ?? null,
   );
@@ -59,6 +69,10 @@ export class Payments implements OnInit {
   public readonly pendingDebtTotal = computed(
     () => this.pensiones().reduce((total, pension) => total + pension.amount, 0),
   );
+
+  public readonly pendingDebtCount = computed(() => this.pendingDebtRows().length);
+
+  public readonly hasPendingDebts = computed(() => this.pendingDebtCount() > 0);
 
   public readonly validosRows = computed(() =>
     this.allRows().filter((r) => r['_statusCode'] === 'PAGADO'),
