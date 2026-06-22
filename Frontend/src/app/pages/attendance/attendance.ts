@@ -73,6 +73,7 @@ export class Attendance implements OnInit {
   );
 
   protected readonly allRows = signal<DataTableRow[]>([]);
+  protected readonly selectedAttendance = signal<DataTableRow | null>(null);
 
   protected readonly rows = computed(() => {
     let data = this.allRows();
@@ -125,8 +126,13 @@ export class Attendance implements OnInit {
   }
 
   ngOnInit(): void {
-    this.draftFiltroFecha.set(this.fecha());
-    this.filtroFecha.set(this.fecha());
+    if (this.canEdit()) {
+      this.draftFiltroFecha.set(this.fecha());
+      this.filtroFecha.set(this.fecha());
+    } else {
+      this.draftFiltroFecha.set('');
+      this.filtroFecha.set('');
+    }
 
     this.roleContext.whenReady(() => {
       if (!this.roleContext.isTeacher() && !this.roleContext.requiresStudentScope()) {
@@ -190,13 +196,13 @@ export class Attendance implements OnInit {
     }
 
     this.attendanceService.listar(params).subscribe({
-      next: (records) =>
-        this.allRows.set(
-          records.map((r) => ({
+      next: (records) => {
+        const rows = records.map((r) => ({
             _id: r.id,
             fecha: r.date,
             estudiante: r.studentName,
             curso: r.course,
+            seccion: r.section || '-',
             estado: r.status,
             observacion: r.notes || '—',
             _estudianteId: r.studentId,
@@ -204,8 +210,13 @@ export class Attendance implements OnInit {
             _fecha: r.date,
             _estadoCodigo: r.statusCode,
             _observacion: r.notes ?? '',
-          })),
-        ),
+        }));
+        this.allRows.set(rows);
+        const selectedId = this.selectedAttendance()?.['_id'];
+        if (selectedId && !rows.some((row) => row['_id'] === selectedId)) {
+          this.selectedAttendance.set(null);
+        }
+      },
     });
   }
 
@@ -251,6 +262,10 @@ export class Attendance implements OnInit {
     if (this.roleContext.isTeacher() && row['_cursoId']) {
       this.loadEstudiantesDocente(String(row['_cursoId']));
     }
+  }
+
+  protected verDetalleAsistencia(row: DataTableRow): void {
+    this.selectedAttendance.set(row);
   }
 
   protected cancelarEdicion(): void {

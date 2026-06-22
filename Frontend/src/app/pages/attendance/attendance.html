@@ -115,6 +115,20 @@
     </div>
   }
 
+  @if (roleContext.isParent() && selectedAttendance(); as detalle) {
+    <div class="admin-card p-4 mb-4">
+      <h2 class="h6 fw-bold mb-3">Detalle de asistencia</h2>
+      <div class="row g-3">
+        <div class="col-md-3"><strong>Fecha:</strong> {{ detalle['fecha'] }}</div>
+        <div class="col-md-3"><strong>Curso:</strong> {{ detalle['curso'] }}</div>
+        <div class="col-md-3"><strong>Seccion:</strong> {{ detalle['seccion'] }}</div>
+        <div class="col-md-3"><strong>Estado:</strong> {{ detalle['estado'] }}</div>
+        <div class="col-md-12"><strong>Observacion:</strong> {{ detalle['observacion'] || '-' }}</div>
+      </div>
+    </div>
+  }
+
+  @if (canEdit()) {
   <div class="form-panel admin-card mb-4">
     <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
     <div class="form-panel__body">
@@ -152,6 +166,7 @@
       </div>
     </div>
   </div>
+  }
 
   <app-data-table
     [title]="roleContext.isInstitutional() ? 'Control de asistencia' : 'Registro de asistencia'"
@@ -159,8 +174,8 @@
     icon="bi-calendar-check"
     [columns]="columns()"
     [rows]="rows()"
-    [showActions]="canEdit()"
-    detailLabel="Editar"
-    (detailClick)="editarAsistencia($event)"
+    [showActions]="canEdit() || roleContext.isParent()"
+    [detailLabel]="canEdit() ? 'Editar' : 'Ver detalle'"
+    (detailClick)="canEdit() ? editarAsistencia($event) : verDetalleAsistencia($event)"
   />
 </div>
