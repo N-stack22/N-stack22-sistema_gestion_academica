@@ -111,6 +111,7 @@
           <div class="col-md-3"><strong>Grado/Seccion:</strong> {{ caso['grade'] }} {{ caso['section'] }}</div>
         }
         <div class="col-md-3"><strong>Estado:</strong> {{ caso['academicStatus'] }}</div>
+        <div class="col-md-3"><strong>Registrado por:</strong> {{ caso['registeredBy'] || 'Institucion educativa' }}</div>
         <div class="col-md-3"><strong>Ultima comunicacion:</strong> {{ caso['lastContact'] || '-' }}</div>
         <div class="col-md-12"><strong>Observacion:</strong> {{ caso['notes'] || '-' }}</div>
       </div>

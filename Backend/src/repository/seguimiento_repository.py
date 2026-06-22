@@ -31,6 +31,7 @@ class SeguimientoRepository:
                 "matriculas(secciones(id,nombre,grados(id,nombre,niveles_educativos(id,nombre)))),"
                 "apoderado_estudiante(parentesco,es_principal,apoderados(id,perfiles(nombres,apellidos)))),"
                 "apoderados(id,perfiles(nombres,apellidos)),"
+                "registrado_por:registrado_por_perfil_id(nombres,apellidos),"
                 "estados_seguimiento(codigo,nombre)"
             )
         )
@@ -118,6 +119,7 @@ class SeguimientoRepository:
     def _map_row(self, row: dict) -> dict:
         est = row.get("estudiantes") or {}
         ap = row.get("apoderados") or self._apoderado_desde_estudiante(est)
+        registrado_por = row.get("registrado_por") or {}
         estado = row.get("estados_seguimiento") or {}
         matriculas = est.get("matriculas") or []
         mat = matriculas[-1] if matriculas else {}
@@ -137,6 +139,7 @@ class SeguimientoRepository:
             "statusCode": estado.get("codigo", ""),
             "communicationStatus": "Al día" if row.get("ultima_comunicacion") else "Pendiente",
             "lastContact": str(row.get("ultima_comunicacion", "")),
+            "registeredBy": nombre_completo(registrado_por) if registrado_por else "",
             "notes": row.get("observacion", ""),
         }
 

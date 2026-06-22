@@ -85,6 +85,7 @@ export class DataTable {
 
   public readonly filterGroups = computed<DataTableFilterGroup[]>(() =>
     this.columns()
+      .filter((column) => column.filterable !== false)
       .map((column) => {
         const options = Array.from(
           new Set(this.rows().map((row) => this.filterDisplayValue(row, column.key))),

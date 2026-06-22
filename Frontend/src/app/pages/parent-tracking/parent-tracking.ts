@@ -79,7 +79,7 @@ export class ParentTracking implements OnInit {
           { key: 'fecha', label: 'Fecha' },
           { key: 'registradoPor', label: 'Registrado por' },
           { key: 'estadoAcademico', label: 'Estado' },
-          { key: 'observacion', label: 'Observacion' },
+          { key: 'observacion', label: 'Observacion', filterable: false },
         ]
       : [
           { key: 'estudiante', label: 'Estudiante' },
@@ -245,7 +245,7 @@ export class ParentTracking implements OnInit {
         _id: item['id'],
         _studentId: item['studentId'],
         fecha: item['lastContact'] || '-',
-        registradoPor: item['registeredBy'] || item['parentName'] || '-',
+        registradoPor: item['registeredBy'] || 'Institucion educativa',
         estadoAcademico: item['academicStatus'] || '-',
         observacion: item['notes'] || '-',
       };
