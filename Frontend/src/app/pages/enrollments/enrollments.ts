@@ -16,52 +16,52 @@ export class Enrollments implements OnInit {
   private readonly catalogService = inject(CatalogService);
   private readonly route = inject(ActivatedRoute);
 
-  protected readonly rows = signal<DataTableRow[]>([]);
-  protected readonly editId = signal('');
-  protected readonly estudianteId = signal('');
-  protected readonly anioId = signal('');
-  protected readonly nivelId = signal('');
-  protected readonly gradoId = signal('');
-  protected readonly seccionId = signal('');
-  protected readonly estadoMatricula = signal('ACTIVA');
-  protected readonly editSeccionOriginal = signal('');
-  protected readonly editAnioOriginal = signal('');
-  protected readonly filtroAnio = signal('');
-  protected readonly filtroNivel = signal('');
-  protected readonly filtroGrado = signal('');
-  protected readonly filtroSeccion = signal('');
-  protected readonly filtroEstado = signal('');
-  protected readonly draftFiltroAnio = signal('');
-  protected readonly draftFiltroNivel = signal('');
-  protected readonly draftFiltroGrado = signal('');
-  protected readonly draftFiltroSeccion = signal('');
-  protected readonly draftFiltroEstado = signal('');
-  protected readonly anios = signal<{ id: string; anio: number }[]>([]);
-  protected readonly niveles = signal<{ id: string; nombre: string }[]>([]);
-  protected readonly grados = signal<CatalogGrade[]>([]);
-  protected readonly gradosFiltro = signal<CatalogGrade[]>([]);
-  protected readonly secciones = signal<CatalogSection[]>([]);
-  protected readonly seccionesFiltro = signal<CatalogSection[]>([]);
-  protected readonly estudiantes = signal<{ id: string; fullName: string; code: string }[]>([]);
-  protected readonly estadosNueva = signal<{ codigo: string; nombre: string }[]>([]);
-  protected readonly estadosEdicion = signal<{ codigo: string; nombre: string }[]>([]);
-  protected readonly estadosFiltro = signal<{ codigo: string; nombre: string }[]>([]);
-  protected readonly matriculaVigente = signal<Enrollment | null>(null);
-  protected readonly successMessage = signal('');
-  protected readonly errorMessage = signal('');
+  public readonly rows = signal<DataTableRow[]>([]);
+  public readonly editId = signal('');
+  public readonly estudianteId = signal('');
+  public readonly anioId = signal('');
+  public readonly nivelId = signal('');
+  public readonly gradoId = signal('');
+  public readonly seccionId = signal('');
+  public readonly estadoMatricula = signal('ACTIVA');
+  public readonly editSeccionOriginal = signal('');
+  public readonly editAnioOriginal = signal('');
+  public readonly filtroAnio = signal('');
+  public readonly filtroNivel = signal('');
+  public readonly filtroGrado = signal('');
+  public readonly filtroSeccion = signal('');
+  public readonly filtroEstado = signal('');
+  public readonly draftFiltroAnio = signal('');
+  public readonly draftFiltroNivel = signal('');
+  public readonly draftFiltroGrado = signal('');
+  public readonly draftFiltroSeccion = signal('');
+  public readonly draftFiltroEstado = signal('');
+  public readonly anios = signal<{ id: string; anio: number }[]>([]);
+  public readonly niveles = signal<{ id: string; nombre: string }[]>([]);
+  public readonly grados = signal<CatalogGrade[]>([]);
+  public readonly gradosFiltro = signal<CatalogGrade[]>([]);
+  public readonly secciones = signal<CatalogSection[]>([]);
+  public readonly seccionesFiltro = signal<CatalogSection[]>([]);
+  public readonly estudiantes = signal<{ id: string; fullName: string; code: string }[]>([]);
+  public readonly estadosNueva = signal<{ codigo: string; nombre: string }[]>([]);
+  public readonly estadosEdicion = signal<{ codigo: string; nombre: string }[]>([]);
+  public readonly estadosFiltro = signal<{ codigo: string; nombre: string }[]>([]);
+  public readonly matriculaVigente = signal<Enrollment | null>(null);
+  public readonly successMessage = signal('');
+  public readonly errorMessage = signal('');
 
-  protected readonly editMode = computed(() => !!this.editId());
+  public readonly editMode = computed(() => !!this.editId());
 
-  protected readonly estudianteEdicionLabel = computed(() => {
+  public readonly estudianteEdicionLabel = computed(() => {
     const e = this.estudiantes().find((x) => x.id === this.estudianteId());
     return e ? `${e.code} — ${e.fullName}` : '';
   });
 
-  protected readonly seccionSeleccionada = computed(() =>
+  public readonly seccionSeleccionada = computed(() =>
     this.secciones().find((s) => s.id === this.seccionId()) ?? null,
   );
 
-  protected readonly seccionSinCupos = computed(() => {
+  public readonly seccionSinCupos = computed(() => {
     const sec = this.seccionSeleccionada();
     if (!sec) return false;
     const estado = this.estadoMatricula() || 'ACTIVA';
@@ -76,25 +76,25 @@ export class Enrollments implements OnInit {
     return (sec.cuposDisponibles ?? sec.capacidad ?? 0) <= 0;
   });
 
-  protected readonly matriculaVigenteBloquea = computed(() => {
+  public readonly matriculaVigenteBloquea = computed(() => {
     const vigente = this.matriculaVigente();
     if (!vigente) return false;
     if (this.editMode() && vigente.id === this.editId()) return false;
     return true;
   });
 
-  protected readonly noPuedeGuardar = computed(
+  public readonly noPuedeGuardar = computed(
     () => this.seccionSinCupos() || (!this.editMode() && this.matriculaVigenteBloquea()),
   );
 
-  protected readonly mensajeMatriculaVigente = computed(() => {
+  public readonly mensajeMatriculaVigente = computed(() => {
     const m = this.matriculaVigente();
     if (!m || !this.matriculaVigenteBloquea()) return '';
     const ubicacion = [m.level, m.grade, m.section].filter(Boolean).join(' ');
     return `Ya tiene matrícula vigente (${m.status}) en ${m.academicYear} — ${ubicacion}. Debe retirarla antes de matricularlo en otro nivel o sección.`;
   });
 
-  protected readonly columns: DataTableColumn[] = [
+  public readonly columns: DataTableColumn[] = [
     { key: 'codigo', label: 'Código' },
     { key: 'estudiante', label: 'Estudiante' },
     { key: 'nivel', label: 'Nivel' },
@@ -142,7 +142,7 @@ export class Enrollments implements OnInit {
     this.loadMatriculas();
   }
 
-  protected onEstudianteChange(estudianteId: string): void {
+  public onEstudianteChange(estudianteId: string): void {
     if (this.editMode()) return;
     this.estudianteId.set(estudianteId);
     this.matriculaVigente.set(null);
@@ -156,7 +156,7 @@ export class Enrollments implements OnInit {
     });
   }
 
-  protected onNivelChange(nivelId: string): void {
+  public onNivelChange(nivelId: string): void {
     this.nivelId.set(nivelId);
     this.gradoId.set('');
     this.seccionId.set('');
@@ -170,12 +170,12 @@ export class Enrollments implements OnInit {
     }
   }
 
-  protected onGradoChange(gradoId: string): void {
+  public onGradoChange(gradoId: string): void {
     this.gradoId.set(gradoId);
     this.loadSecciones();
   }
 
-  protected onAnioChange(anioId: string): void {
+  public onAnioChange(anioId: string): void {
     this.anioId.set(anioId);
     if (this.gradoId()) {
       this.loadSecciones();
@@ -185,7 +185,7 @@ export class Enrollments implements OnInit {
     }
   }
 
-  protected onFiltroNivelChange(nivelId: string): void {
+  public onFiltroNivelChange(nivelId: string): void {
     this.draftFiltroNivel.set(nivelId);
     this.draftFiltroGrado.set('');
     this.draftFiltroSeccion.set('');
@@ -199,7 +199,7 @@ export class Enrollments implements OnInit {
     }
   }
 
-  protected onFiltroGradoChange(gradoId: string): void {
+  public onFiltroGradoChange(gradoId: string): void {
     this.draftFiltroGrado.set(gradoId);
     this.draftFiltroSeccion.set('');
     if (this.draftFiltroAnio() && gradoId) {
@@ -211,12 +211,12 @@ export class Enrollments implements OnInit {
     }
   }
 
-  protected onFiltroAnioChange(anioId: string): void {
+  public onFiltroAnioChange(anioId: string): void {
     this.draftFiltroAnio.set(anioId);
     this.onFiltroGradoChange(this.draftFiltroGrado());
   }
 
-  protected buscarMatriculas(): void {
+  public buscarMatriculas(): void {
     this.filtroAnio.set(this.draftFiltroAnio());
     this.filtroNivel.set(this.draftFiltroNivel());
     this.filtroGrado.set(this.draftFiltroGrado());
@@ -225,7 +225,7 @@ export class Enrollments implements OnInit {
     this.loadMatriculas();
   }
 
-  protected loadSecciones(preserveSeccionId = false): void {
+  public loadSecciones(preserveSeccionId = false): void {
     const current = preserveSeccionId ? this.seccionId() : '';
     if (!preserveSeccionId) {
       this.seccionId.set('');
@@ -244,7 +244,7 @@ export class Enrollments implements OnInit {
     });
   }
 
-  protected loadMatriculas(): void {
+  public loadMatriculas(): void {
     const params: Record<string, string> = {};
     if (this.filtroAnio()) params['anio_id'] = this.filtroAnio();
     if (this.filtroNivel()) params['nivel_id'] = this.filtroNivel();
@@ -269,7 +269,7 @@ export class Enrollments implements OnInit {
     });
   }
 
-  protected guardarMatricula(): void {
+  public guardarMatricula(): void {
     if (!this.estudianteId() || !this.anioId() || !this.seccionId()) return;
     if (!this.editMode() && this.matriculaVigenteBloquea()) {
       this.errorMessage.set(this.mensajeMatriculaVigente());
@@ -318,7 +318,7 @@ export class Enrollments implements OnInit {
     });
   }
 
-  protected onDetail(row: DataTableRow): void {
+  public onDetail(row: DataTableRow): void {
     const id = row['_id'];
     if (!id) return;
     this.enrollmentService.obtener(id).subscribe({
@@ -326,7 +326,7 @@ export class Enrollments implements OnInit {
     });
   }
 
-  protected iniciarEdicion(m: Enrollment): void {
+  public iniciarEdicion(m: Enrollment): void {
     this.editId.set(m.id);
     this.errorMessage.set('');
     this.successMessage.set('');
@@ -350,7 +350,7 @@ export class Enrollments implements OnInit {
     }
   }
 
-  protected cancelEdit(): void {
+  public cancelEdit(): void {
     this.editId.set('');
     this.estudianteId.set('');
     this.anioId.set('');

@@ -16,52 +16,52 @@ import { StudentService } from '../../services/student.service';
   styleUrl: './payments.scss',
 })
 export class Payments implements OnInit {
-  protected readonly roleContext = inject(RoleContextService);
-  protected readonly parentContext = inject(ParentContextService);
+  public readonly roleContext = inject(RoleContextService);
+  public readonly parentContext = inject(ParentContextService);
   private readonly paymentService = inject(PaymentService);
   private readonly pensionService = inject(PensionService);
   private readonly studentService = inject(StudentService);
   private readonly catalogService = inject(CatalogService);
 
-  protected readonly allRows = signal<DataTableRow[]>([]);
-  protected readonly estudiantes = signal<{ id: string; fullName: string }[]>([]);
-  protected readonly pensiones = signal<{ id: string; label: string; amount: number }[]>([]);
-  protected readonly metodos = signal<{ codigo: string; nombre: string }[]>([]);
+  public readonly allRows = signal<DataTableRow[]>([]);
+  public readonly estudiantes = signal<{ id: string; fullName: string }[]>([]);
+  public readonly pensiones = signal<{ id: string; label: string; amount: number }[]>([]);
+  public readonly metodos = signal<{ codigo: string; nombre: string }[]>([]);
 
-  protected readonly estudianteId = signal('');
-  protected readonly pensionId = signal('');
-  protected readonly monto = signal(0);
-  protected readonly metodoPago = signal('EFECTIVO');
-  protected readonly successMessage = signal('');
-  protected readonly errorMessage = signal('');
-  protected readonly loading = signal(false);
+  public readonly estudianteId = signal('');
+  public readonly pensionId = signal('');
+  public readonly monto = signal(0);
+  public readonly metodoPago = signal('EFECTIVO');
+  public readonly successMessage = signal('');
+  public readonly errorMessage = signal('');
+  public readonly loading = signal(false);
 
-  protected readonly draftFiltroBusqueda = signal('');
-  protected readonly draftFiltroEstado = signal('');
-  protected readonly draftFiltroDesde = signal('');
-  protected readonly draftFiltroHasta = signal('');
-  protected readonly draftFiltroMetodo = signal('');
-  protected readonly filtroBusqueda = signal('');
-  protected readonly filtroEstado = signal('');
-  protected readonly filtroDesde = signal('');
-  protected readonly filtroHasta = signal('');
-  protected readonly filtroMetodo = signal('');
+  public readonly draftFiltroBusqueda = signal('');
+  public readonly draftFiltroEstado = signal('');
+  public readonly draftFiltroDesde = signal('');
+  public readonly draftFiltroHasta = signal('');
+  public readonly draftFiltroMetodo = signal('');
+  public readonly filtroBusqueda = signal('');
+  public readonly filtroEstado = signal('');
+  public readonly filtroDesde = signal('');
+  public readonly filtroHasta = signal('');
+  public readonly filtroMetodo = signal('');
 
-  protected readonly isParentView = computed(() => this.roleContext.isParent());
+  public readonly isParentView = computed(() => this.roleContext.isParent());
 
-  protected readonly pensionSeleccionada = computed(
+  public readonly pensionSeleccionada = computed(
     () => this.pensiones().find((p) => p.id === this.pensionId()) ?? null,
   );
 
-  protected readonly validosRows = computed(() =>
+  public readonly validosRows = computed(() =>
     this.allRows().filter((r) => r['_statusCode'] === 'PAGADO'),
   );
 
-  protected readonly anuladosRows = computed(() =>
+  public readonly anuladosRows = computed(() =>
     this.allRows().filter((r) => r['_statusCode'] === 'ANULADO'),
   );
 
-  protected readonly metrics = signal([
+  public readonly metrics = signal([
     {
       id: 1,
       title: 'Pagos válidos',
@@ -72,7 +72,7 @@ export class Payments implements OnInit {
     },
   ]);
 
-  protected readonly columns: DataTableColumn[] = [
+  public readonly columns: DataTableColumn[] = [
     { key: 'codigo', label: 'Cód. operación' },
     { key: 'estudiante', label: 'Estudiante' },
     { key: 'responsable', label: 'Apoderado' },
@@ -105,7 +105,7 @@ export class Payments implements OnInit {
     }
   }
 
-  protected loadPagos(): void {
+  public loadPagos(): void {
     const studentId = this.roleContext.isParent()
       ? this.parentContext.selectedStudentId() ?? undefined
       : this.estudianteId() || undefined;
@@ -156,7 +156,7 @@ export class Payments implements OnInit {
     });
   }
 
-  protected buscarPagos(): void {
+  public buscarPagos(): void {
     this.filtroBusqueda.set(this.draftFiltroBusqueda().trim());
     this.filtroEstado.set(this.draftFiltroEstado());
     this.filtroDesde.set(this.draftFiltroDesde());
@@ -165,7 +165,7 @@ export class Payments implements OnInit {
     this.loadPagos();
   }
 
-  protected onEstudianteChange(id: string): void {
+  public onEstudianteChange(id: string): void {
     this.estudianteId.set(id);
     this.pensionId.set('');
     this.monto.set(0);
@@ -173,7 +173,7 @@ export class Payments implements OnInit {
     this.loadPagos();
   }
 
-  protected cargarPensionesPendientes(estudianteId: string): void {
+  public cargarPensionesPendientes(estudianteId: string): void {
     if (!estudianteId) {
       this.pensiones.set([]);
       return;
@@ -190,13 +190,13 @@ export class Payments implements OnInit {
     });
   }
 
-  protected onPensionChange(id: string): void {
+  public onPensionChange(id: string): void {
     this.pensionId.set(id);
     const pen = this.pensiones().find((p) => p.id === id);
     if (pen) this.monto.set(pen.amount);
   }
 
-  protected registrarPago(): void {
+  public registrarPago(): void {
     this.successMessage.set('');
     this.errorMessage.set('');
     if (!this.pensionId() || !this.monto()) {
@@ -224,7 +224,7 @@ export class Payments implements OnInit {
       });
   }
 
-  protected anularPago(row: DataTableRow): void {
+  public anularPago(row: DataTableRow): void {
     const id = row['_id'];
     if (!id || row['_canVoid'] !== '1') return;
     this.paymentService.anular(String(id)).subscribe({

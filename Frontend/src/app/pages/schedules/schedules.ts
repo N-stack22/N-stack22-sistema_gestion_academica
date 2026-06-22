@@ -20,46 +20,46 @@ export class Schedules implements OnInit {
   private readonly scheduleService = inject(ScheduleService);
   private readonly catalogService = inject(CatalogService);
   private readonly courseService = inject(CourseService);
-  protected readonly roleContext = inject(RoleContextService);
+  public readonly roleContext = inject(RoleContextService);
   private readonly parentContext = inject(ParentContextService);
 
-  protected readonly anioId = signal('');
-  protected readonly nivelId = signal('');
-  protected readonly gradoId = signal('');
-  protected readonly seccionId = signal('');
-  protected readonly cursoId = signal('');
-  protected readonly diaSemana = signal(1);
-  protected readonly horaInicio = signal('08:00');
-  protected readonly horaFin = signal('09:30');
-  protected readonly aula = signal('');
-  protected readonly editId = signal('');
-  protected readonly successMessage = signal('');
-  protected readonly errorMessage = signal('');
+  public readonly anioId = signal('');
+  public readonly nivelId = signal('');
+  public readonly gradoId = signal('');
+  public readonly seccionId = signal('');
+  public readonly cursoId = signal('');
+  public readonly diaSemana = signal(1);
+  public readonly horaInicio = signal('08:00');
+  public readonly horaFin = signal('09:30');
+  public readonly aula = signal('');
+  public readonly editId = signal('');
+  public readonly successMessage = signal('');
+  public readonly errorMessage = signal('');
 
-  protected readonly anios = signal<{ id: string; anio: number }[]>([]);
-  protected readonly niveles = signal<{ id: string; nombre: string }[]>([]);
-  protected readonly grados = signal<CatalogGrade[]>([]);
-  protected readonly secciones = signal<CatalogSection[]>([]);
-  protected readonly cursos = signal<Course[]>([]);
-  protected readonly rows = signal<DataTableRow[]>([]);
-  protected readonly horarioSemanal = signal<Schedule[]>([]);
+  public readonly anios = signal<{ id: string; anio: number }[]>([]);
+  public readonly niveles = signal<{ id: string; nombre: string }[]>([]);
+  public readonly grados = signal<CatalogGrade[]>([]);
+  public readonly secciones = signal<CatalogSection[]>([]);
+  public readonly cursos = signal<Course[]>([]);
+  public readonly rows = signal<DataTableRow[]>([]);
+  public readonly horarioSemanal = signal<Schedule[]>([]);
 
-  protected readonly draftFiltroBusqueda = signal('');
-  protected readonly draftFiltroDia = signal('');
-  protected readonly filtroBusqueda = signal('');
-  protected readonly filtroDia = signal('');
+  public readonly draftFiltroBusqueda = signal('');
+  public readonly draftFiltroDia = signal('');
+  public readonly filtroBusqueda = signal('');
+  public readonly filtroDia = signal('');
 
-  protected readonly editMode = computed(() => !!this.editId());
+  public readonly editMode = computed(() => !!this.editId());
 
-  protected readonly seccionSeleccionada = computed(
+  public readonly seccionSeleccionada = computed(
     () => this.secciones().find((s) => s.id === this.seccionId()) ?? null,
   );
 
-  protected readonly cursoSeleccionado = computed(
+  public readonly cursoSeleccionado = computed(
     () => this.cursos().find((c) => c.id === this.cursoId()) ?? null,
   );
 
-  protected readonly diasSemana = [
+  public readonly diasSemana = [
     { order: 1, nombre: 'Lunes' },
     { order: 2, nombre: 'Martes' },
     { order: 3, nombre: 'Miércoles' },
@@ -69,7 +69,7 @@ export class Schedules implements OnInit {
     { order: 7, nombre: 'Domingo' },
   ];
 
-  protected readonly horarioPorDia = computed(() => {
+  public readonly horarioPorDia = computed(() => {
     const map = new Map<number, Schedule[]>();
     for (const d of this.diasSemana) map.set(d.order, []);
     for (const h of this.horarioSemanal()) {
@@ -82,12 +82,12 @@ export class Schedules implements OnInit {
     return map;
   });
 
-  protected readonly diasSemanaVisibles = computed(() => {
+  public readonly diasSemanaVisibles = computed(() => {
     const dia = Number(this.filtroDia());
     return dia ? this.diasSemana.filter((d) => d.order === dia) : this.diasSemana;
   });
 
-  protected readonly columns: DataTableColumn[] = [
+  public readonly columns: DataTableColumn[] = [
     { key: 'curso', label: 'Curso' },
     { key: 'docente', label: 'Docente' },
     { key: 'seccion', label: 'Sección' },
@@ -96,14 +96,14 @@ export class Schedules implements OnInit {
     { key: 'aula', label: 'Aula' },
   ];
 
-  protected readonly pageTitle = computed(() => {
+  public readonly pageTitle = computed(() => {
     if (this.roleContext.isStudent()) return 'Mi Horario de Clases';
     if (this.roleContext.isParent()) return 'Horario del Estudiante';
     if (this.roleContext.isTeacher()) return 'Mi Horario Docente';
     return 'Horario Institucional';
   });
 
-  protected readonly pageSubtitle = computed(() => {
+  public readonly pageSubtitle = computed(() => {
     if (this.roleContext.isStudent()) return 'Horario semanal desde la base de datos.';
     if (this.roleContext.isParent()) return 'Horario académico del estudiante asociado.';
     if (this.roleContext.isTeacher()) return 'Clases asignadas registradas en el sistema.';
@@ -133,7 +133,7 @@ export class Schedules implements OnInit {
     this.roleContext.whenReady(() => this.loadHorarios());
   }
 
-  protected onNivelChange(nivelId: string): void {
+  public onNivelChange(nivelId: string): void {
     this.nivelId.set(nivelId);
     this.gradoId.set('');
     this.seccionId.set('');
@@ -150,7 +150,7 @@ export class Schedules implements OnInit {
     this.loadHorarios();
   }
 
-  protected onGradoChange(gradoId: string): void {
+  public onGradoChange(gradoId: string): void {
     this.gradoId.set(gradoId);
     this.seccionId.set('');
     this.cursoId.set('');
@@ -165,19 +165,19 @@ export class Schedules implements OnInit {
     this.loadHorarios();
   }
 
-  protected onAnioChange(anioId: string): void {
+  public onAnioChange(anioId: string): void {
     this.anioId.set(anioId);
     this.onGradoChange(this.gradoId());
   }
 
-  protected onSeccionChange(seccionId: string): void {
+  public onSeccionChange(seccionId: string): void {
     this.seccionId.set(seccionId);
     this.cursoId.set('');
     this.loadCursos();
     this.loadHorarios();
   }
 
-  protected onCursoChange(cursoId: string): void {
+  public onCursoChange(cursoId: string): void {
     this.cursoId.set(cursoId);
     const curso = this.cursos().find((c) => c.id === cursoId);
     if (curso?.sectionRoom && !this.aula()) {
@@ -186,7 +186,7 @@ export class Schedules implements OnInit {
     this.loadHorarios();
   }
 
-  protected loadCursos(): void {
+  public loadCursos(): void {
     if (!this.seccionId()) {
       this.cursos.set([]);
       return;
@@ -198,7 +198,7 @@ export class Schedules implements OnInit {
     });
   }
 
-  protected loadHorarios(): void {
+  public loadHorarios(): void {
     if (this.roleContext.requiresStudentScope() && !this.roleContext.getStudentId()) {
       this.horarioSemanal.set([]);
       this.rows.set([]);
@@ -237,13 +237,13 @@ export class Schedules implements OnInit {
     });
   }
 
-  protected buscarHorarios(): void {
+  public buscarHorarios(): void {
     this.filtroBusqueda.set(this.draftFiltroBusqueda().trim());
     this.filtroDia.set(this.draftFiltroDia());
     this.loadHorarios();
   }
 
-  protected guardarHorario(): void {
+  public guardarHorario(): void {
     if (!this.cursoId()) return;
     const payload = {
       curso_asignado_id: this.cursoId(),
@@ -271,7 +271,7 @@ export class Schedules implements OnInit {
     });
   }
 
-  protected onEditar(row: DataTableRow): void {
+  public onEditar(row: DataTableRow): void {
     const id = row['_id'];
     if (!id) return;
     this.editId.set(String(id));
@@ -322,7 +322,7 @@ export class Schedules implements OnInit {
     });
   }
 
-  protected eliminarHorario(): void {
+  public eliminarHorario(): void {
     const id = this.editId();
     if (!id) return;
     this.scheduleService.eliminar(id).subscribe({
@@ -339,7 +339,7 @@ export class Schedules implements OnInit {
     });
   }
 
-  protected cancelarEdicion(): void {
+  public cancelarEdicion(): void {
     this.editId.set('');
     this.diaSemana.set(1);
     this.horaInicio.set('08:00');

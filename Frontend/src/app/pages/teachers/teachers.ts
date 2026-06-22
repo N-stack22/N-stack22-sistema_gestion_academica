@@ -22,24 +22,24 @@ export class Teachers implements OnInit {
   private readonly catalogService = inject(CatalogService);
   private readonly courseService = inject(CourseService);
   private readonly scheduleService = inject(ScheduleService);
-  protected readonly roleContext = inject(RoleContextService);
+  public readonly roleContext = inject(RoleContextService);
 
-  protected readonly firstName = signal('');
-  protected readonly lastName = signal('');
-  protected readonly specialty = signal('');
-  protected readonly cargo = signal('');
-  protected readonly email = signal('');
-  protected readonly submitted = signal(false);
-  protected readonly saving = signal(false);
-  protected readonly successMessage = signal('');
-  protected readonly errorMessage = signal('');
-  protected readonly selectedTeacher = signal<Teacher | null>(null);
-  protected readonly editMode = signal(false);
-  protected readonly assignedCourses = signal<TeacherCourse[]>([]);
-  protected readonly horarioDocente = signal<Schedule[]>([]);
-  protected readonly horarioDocenteDiaFiltro = signal('');
+  public readonly firstName = signal('');
+  public readonly lastName = signal('');
+  public readonly specialty = signal('');
+  public readonly cargo = signal('');
+  public readonly email = signal('');
+  public readonly submitted = signal(false);
+  public readonly saving = signal(false);
+  public readonly successMessage = signal('');
+  public readonly errorMessage = signal('');
+  public readonly selectedTeacher = signal<Teacher | null>(null);
+  public readonly editMode = signal(false);
+  public readonly assignedCourses = signal<TeacherCourse[]>([]);
+  public readonly horarioDocente = signal<Schedule[]>([]);
+  public readonly horarioDocenteDiaFiltro = signal('');
 
-  protected readonly diasSemana = [
+  public readonly diasSemana = [
     { order: 1, nombre: 'Lunes' },
     { order: 2, nombre: 'Martes' },
     { order: 3, nombre: 'Miércoles' },
@@ -49,7 +49,7 @@ export class Teachers implements OnInit {
     { order: 7, nombre: 'Domingo' },
   ];
 
-  protected readonly horarioPorDia = computed(() => {
+  public readonly horarioPorDia = computed(() => {
     const map = new Map<number, Schedule[]>();
     for (const d of this.diasSemana) {
       map.set(d.order, []);
@@ -66,30 +66,30 @@ export class Teachers implements OnInit {
     return map;
   });
 
-  protected readonly diasHorarioDocenteVisibles = computed(() => {
+  public readonly diasHorarioDocenteVisibles = computed(() => {
     const dia = Number(this.horarioDocenteDiaFiltro());
     return dia ? this.diasSemana.filter((d) => d.order === dia) : this.diasSemana;
   });
 
-  protected readonly draftSearchFilter = signal('');
-  protected readonly draftEstadoFilter = signal('');
-  protected readonly draftEspecialidadFilter = signal('');
-  protected readonly searchFilter = signal('');
-  protected readonly estadoFilter = signal('');
-  protected readonly especialidadFilter = signal('');
+  public readonly draftSearchFilter = signal('');
+  public readonly draftEstadoFilter = signal('');
+  public readonly draftEspecialidadFilter = signal('');
+  public readonly searchFilter = signal('');
+  public readonly estadoFilter = signal('');
+  public readonly especialidadFilter = signal('');
 
-  protected readonly asignaturaId = signal('');
-  protected readonly anioId = signal('');
-  protected readonly nivelId = signal('');
-  protected readonly gradoId = signal('');
-  protected readonly seccionId = signal('');
-  protected readonly asignaturas = signal<{ id: string; nombre: string }[]>([]);
-  protected readonly anios = signal<{ id: string; anio: number }[]>([]);
-  protected readonly niveles = signal<{ id: string; nombre: string }[]>([]);
-  protected readonly grados = signal<CatalogGrade[]>([]);
-  protected readonly secciones = signal<CatalogSection[]>([]);
+  public readonly asignaturaId = signal('');
+  public readonly anioId = signal('');
+  public readonly nivelId = signal('');
+  public readonly gradoId = signal('');
+  public readonly seccionId = signal('');
+  public readonly asignaturas = signal<{ id: string; nombre: string }[]>([]);
+  public readonly anios = signal<{ id: string; anio: number }[]>([]);
+  public readonly niveles = signal<{ id: string; nombre: string }[]>([]);
+  public readonly grados = signal<CatalogGrade[]>([]);
+  public readonly secciones = signal<CatalogSection[]>([]);
 
-  protected readonly columns: DataTableColumn[] = [
+  public readonly columns: DataTableColumn[] = [
     { key: 'codigo', label: 'Código' },
     { key: 'nombre', label: 'Nombre' },
     { key: 'especialidad', label: 'Especialidad' },
@@ -97,9 +97,9 @@ export class Teachers implements OnInit {
     { key: 'estado', label: 'Estado' },
   ];
 
-  protected readonly allRows = signal<DataTableRow[]>([]);
+  public readonly allRows = signal<DataTableRow[]>([]);
 
-  protected readonly rows = computed(() => {
+  public readonly rows = computed(() => {
     let data = this.allRows();
     const q = this.searchFilter().trim().toLowerCase();
     if (q) {
@@ -121,22 +121,22 @@ export class Teachers implements OnInit {
     return data;
   });
 
-  protected readonly isFormValid = computed(
+  public readonly isFormValid = computed(
     () => !this.firstNameError() && !this.lastNameError() && !this.emailError() && !this.specialtyError(),
   );
 
-  protected readonly firstNameError = computed(() =>
+  public readonly firstNameError = computed(() =>
     this.submitted() || this.firstName() ? isRequired(this.firstName(), 'Nombres obligatorios.') : '',
   );
-  protected readonly lastNameError = computed(() =>
+  public readonly lastNameError = computed(() =>
     this.submitted() || this.lastName() ? isRequired(this.lastName(), 'Apellidos obligatorios.') : '',
   );
-  protected readonly emailError = computed(() => {
+  public readonly emailError = computed(() => {
     if (!this.submitted() && !this.email()) return '';
     const required = isRequired(this.email(), 'Correo obligatorio.');
     return required || emailFormatError(this.email());
   });
-  protected readonly specialtyError = computed(() =>
+  public readonly specialtyError = computed(() =>
     this.submitted() || this.specialty() ? isRequired(this.specialty(), 'Especialidad obligatoria.') : '',
   );
 
@@ -157,13 +157,13 @@ export class Teachers implements OnInit {
     });
   }
 
-  protected buscar(): void {
+  public buscar(): void {
     this.searchFilter.set(this.draftSearchFilter().trim());
     this.estadoFilter.set(this.draftEstadoFilter());
     this.especialidadFilter.set(this.draftEspecialidadFilter().trim());
   }
 
-  protected loadTeachers(): void {
+  public loadTeachers(): void {
     this.teacherService.listar().subscribe({
       next: (teachers) =>
         this.allRows.set(
@@ -179,7 +179,7 @@ export class Teachers implements OnInit {
     });
   }
 
-  protected onNivelChange(nivelId: string): void {
+  public onNivelChange(nivelId: string): void {
     this.nivelId.set(nivelId);
     this.gradoId.set('');
     this.seccionId.set('');
@@ -191,7 +191,7 @@ export class Teachers implements OnInit {
     }
   }
 
-  protected onGradoChange(gradoId: string): void {
+  public onGradoChange(gradoId: string): void {
     this.gradoId.set(gradoId);
     this.seccionId.set('');
     if (this.anioId() && gradoId) {
@@ -201,7 +201,7 @@ export class Teachers implements OnInit {
     }
   }
 
-  protected onSubmit(event: Event): void {
+  public onSubmit(event: Event): void {
     event.preventDefault();
     this.submitted.set(true);
     this.successMessage.set('');
@@ -237,7 +237,7 @@ export class Teachers implements OnInit {
     });
   }
 
-  protected asignarCurso(): void {
+  public asignarCurso(): void {
     const teacher = this.selectedTeacher();
     if (!teacher || !this.asignaturaId() || !this.anioId() || !this.seccionId()) {
       this.errorMessage.set('Seleccione asignatura, año, nivel, grado y sección.');
@@ -264,7 +264,7 @@ export class Teachers implements OnInit {
       });
   }
 
-  protected desasignarCurso(cursoId: string): void {
+  public desasignarCurso(cursoId: string): void {
     const teacher = this.selectedTeacher();
     if (!teacher) return;
     this.courseService.eliminar(cursoId).subscribe({
@@ -278,7 +278,7 @@ export class Teachers implements OnInit {
     });
   }
 
-  protected toggleEstado(): void {
+  public toggleEstado(): void {
     const teacher = this.selectedTeacher();
     if (!teacher) return;
     this.teacherService.actualizar(teacher.id, { estado: !teacher.active }).subscribe({
@@ -291,7 +291,7 @@ export class Teachers implements OnInit {
     });
   }
 
-  protected onDetail(row: DataTableRow): void {
+  public onDetail(row: DataTableRow): void {
     const id = row['_id'];
     if (!id) return;
     this.refreshDetail(String(id));
@@ -300,7 +300,7 @@ export class Teachers implements OnInit {
     this.errorMessage.set('');
   }
 
-  protected cancelEdit(): void {
+  public cancelEdit(): void {
     this.resetForm();
   }
 
@@ -319,7 +319,7 @@ export class Teachers implements OnInit {
     });
   }
 
-  protected loadHorarioDocente(docenteId: string): void {
+  public loadHorarioDocente(docenteId: string): void {
     const params: Record<string, string> = { docente_id: docenteId };
     if (this.anioId()) params['anio_id'] = this.anioId();
     this.scheduleService.listar(params).subscribe({

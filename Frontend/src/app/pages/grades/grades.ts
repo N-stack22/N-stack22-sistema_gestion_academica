@@ -20,60 +20,60 @@ export class Grades implements OnInit {
   private readonly gradeService = inject(GradeService);
   private readonly catalogService = inject(CatalogService);
   private readonly courseService = inject(CourseService);
-  protected readonly roleContext = inject(RoleContextService);
+  public readonly roleContext = inject(RoleContextService);
   private readonly studentContext = inject(StudentContextService);
   private readonly parentContext = inject(ParentContextService);
   private readonly studentService = inject(StudentService);
 
-  protected readonly draftStudentPeriodoId = signal('');
-  protected readonly draftStudentCursoId = signal('');
-  protected readonly studentPeriodoId = signal<string | null>(null);
-  protected readonly studentCursoId = signal<string | null>(null);
+  public readonly draftStudentPeriodoId = signal('');
+  public readonly draftStudentCursoId = signal('');
+  public readonly studentPeriodoId = signal<string | null>(null);
+  public readonly studentCursoId = signal<string | null>(null);
 
-  protected readonly draftAnioId = signal('');
-  protected readonly draftNivelId = signal('');
-  protected readonly draftGradoId = signal('');
-  protected readonly draftSeccionId = signal('');
-  protected readonly draftCursoId = signal('');
-  protected readonly draftEstudianteId = signal('');
-  protected readonly draftSoloBajoRendimiento = signal(false);
+  public readonly draftAnioId = signal('');
+  public readonly draftNivelId = signal('');
+  public readonly draftGradoId = signal('');
+  public readonly draftSeccionId = signal('');
+  public readonly draftCursoId = signal('');
+  public readonly draftEstudianteId = signal('');
+  public readonly draftSoloBajoRendimiento = signal(false);
 
-  protected readonly anioId = signal('');
-  protected readonly nivelId = signal('');
-  protected readonly gradoId = signal('');
-  protected readonly seccionId = signal('');
-  protected readonly cursoId = signal('');
-  protected readonly estudianteId = signal('');
-  protected readonly soloBajoRendimiento = signal(false);
+  public readonly anioId = signal('');
+  public readonly nivelId = signal('');
+  public readonly gradoId = signal('');
+  public readonly seccionId = signal('');
+  public readonly cursoId = signal('');
+  public readonly estudianteId = signal('');
+  public readonly soloBajoRendimiento = signal(false);
 
-  protected readonly draftTeacherFiltroCurso = signal('');
-  protected readonly teacherFiltroCurso = signal('');
+  public readonly draftTeacherFiltroCurso = signal('');
+  public readonly teacherFiltroCurso = signal('');
 
-  protected readonly teacherCursoId = signal('');
-  protected readonly teacherEstudianteId = signal('');
-  protected readonly periodoId = signal('');
-  protected readonly tipoEvalId = signal('');
-  protected readonly nombreEval = signal('');
-  protected readonly nota = signal(0);
-  protected readonly peso = signal(1);
-  protected readonly observacionNota = signal('');
-  protected readonly gradeSuccess = signal('');
-  protected readonly gradeError = signal('');
+  public readonly teacherCursoId = signal('');
+  public readonly teacherEstudianteId = signal('');
+  public readonly periodoId = signal('');
+  public readonly tipoEvalId = signal('');
+  public readonly nombreEval = signal('');
+  public readonly nota = signal(0);
+  public readonly peso = signal(1);
+  public readonly observacionNota = signal('');
+  public readonly gradeSuccess = signal('');
+  public readonly gradeError = signal('');
 
-  protected readonly editGradeId = signal('');
-  protected readonly editMode = computed(() => !!this.editGradeId());
+  public readonly editGradeId = signal('');
+  public readonly editMode = computed(() => !!this.editGradeId());
 
-  protected readonly anios = signal<{ id: string; anio: number }[]>([]);
-  protected readonly niveles = signal<{ id: string; nombre: string }[]>([]);
-  protected readonly grados = signal<{ id: string; nombre: string }[]>([]);
-  protected readonly secciones = signal<{ id: string; nombre: string }[]>([]);
-  protected readonly cursos = signal<{ id: string; name: string }[]>([]);
-  protected readonly teacherCursos = signal<{ id: string; name: string }[]>([]);
-  protected readonly estudiantes = signal<{ id: string; fullName: string }[]>([]);
-  protected readonly periodos = signal<{ id: string; nombre: string }[]>([]);
-  protected readonly tiposEval = signal<{ id: string; nombre: string }[]>([]);
+  public readonly anios = signal<{ id: string; anio: number }[]>([]);
+  public readonly niveles = signal<{ id: string; nombre: string }[]>([]);
+  public readonly grados = signal<{ id: string; nombre: string }[]>([]);
+  public readonly secciones = signal<{ id: string; nombre: string }[]>([]);
+  public readonly cursos = signal<{ id: string; name: string }[]>([]);
+  public readonly teacherCursos = signal<{ id: string; name: string }[]>([]);
+  public readonly estudiantes = signal<{ id: string; fullName: string }[]>([]);
+  public readonly periodos = signal<{ id: string; nombre: string }[]>([]);
+  public readonly tiposEval = signal<{ id: string; nombre: string }[]>([]);
 
-  protected readonly columns = computed<DataTableColumn[]>(() => {
+  public readonly columns = computed<DataTableColumn[]>(() => {
     if (this.roleContext.isStudent() || this.roleContext.isParent()) {
       return [
         { key: 'curso', label: 'Curso' },
@@ -95,9 +95,9 @@ export class Grades implements OnInit {
     ];
   });
 
-  protected readonly allRows = signal<DataTableRow[]>([]);
+  public readonly allRows = signal<DataTableRow[]>([]);
 
-  protected readonly rows = computed(() => {
+  public readonly rows = computed(() => {
     let data = this.allRows();
     if (this.soloBajoRendimiento()) {
       data = data.filter((r) => {
@@ -116,7 +116,7 @@ export class Grades implements OnInit {
     return data;
   });
 
-  protected readonly generalAverage = computed(() => {
+  public readonly generalAverage = computed(() => {
     const rows = this.rows();
     let sumaNota = 0;
     let sumaPeso = 0;
@@ -131,7 +131,7 @@ export class Grades implements OnInit {
     return sumaPeso > 0 ? Math.round((sumaNota / sumaPeso) * 100) / 100 : null;
   });
 
-  protected readonly studentCursos = computed(() => {
+  public readonly studentCursos = computed(() => {
     const map = new Map<string, string>();
     for (const r of this.allRows()) {
       const id = String(r['_cursoId'] ?? '');
@@ -140,25 +140,25 @@ export class Grades implements OnInit {
     return [...map.entries()].map(([id, name]) => ({ id, name }));
   });
 
-  protected readonly selectedCursoName = computed(
+  public readonly selectedCursoName = computed(
     () => this.teacherCursos().find((c) => c.id === this.teacherCursoId())?.name ?? '',
   );
 
-  protected readonly selectedEstudianteName = computed(
+  public readonly selectedEstudianteName = computed(
     () => this.estudiantes().find((e) => e.id === this.teacherEstudianteId())?.fullName ?? '',
   );
 
-  protected readonly selectedPeriodoName = computed(
+  public readonly selectedPeriodoName = computed(
     () => this.periodos().find((p) => p.id === this.periodoId())?.nombre ?? '',
   );
 
-  protected readonly selectedTipoName = computed(
+  public readonly selectedTipoName = computed(
     () => this.tiposEval().find((t) => t.id === this.tipoEvalId())?.nombre ?? '',
   );
 
-  protected readonly estudiantesEnCurso = computed(() => this.estudiantes().length);
+  public readonly estudiantesEnCurso = computed(() => this.estudiantes().length);
 
-  protected readonly gradeStatus = computed(() => {
+  public readonly gradeStatus = computed(() => {
     const n = this.nota();
     if (n >= 14) {
       return { label: 'Destacado', className: 'grades-score-badge--excellent', hint: 'Rendimiento sobresaliente (≥ 14)' };
@@ -172,15 +172,15 @@ export class Grades implements OnInit {
     return { label: 'Pendiente', className: 'grades-score-badge--neutral', hint: 'Ingrese la nota obtenida (0 – 20)' };
   });
 
-  protected readonly gradeMeterPercent = computed(() => Math.min(100, Math.max(0, (this.nota() / 20) * 100)));
+  public readonly gradeMeterPercent = computed(() => Math.min(100, Math.max(0, (this.nota() / 20) * 100)));
 
-  protected readonly nombreEvalPlaceholder = computed(() => {
+  public readonly nombreEvalPlaceholder = computed(() => {
     const tipo = this.selectedTipoName();
     if (!tipo) return 'Ej. Examen bimestral, práctica calificada…';
     return `Ej. ${tipo} — unidad 1`;
   });
 
-  protected readonly canSaveGrade = computed(() => {
+  public readonly canSaveGrade = computed(() => {
     if (this.editMode()) {
       return this.nota() >= 0 && this.nota() <= 20 && this.peso() > 0;
     }
@@ -194,7 +194,7 @@ export class Grades implements OnInit {
     );
   });
 
-  protected readonly showGradePreview = computed(
+  public readonly showGradePreview = computed(
     () =>
       !this.editMode() &&
       !!this.teacherCursoId() &&
@@ -202,13 +202,13 @@ export class Grades implements OnInit {
       this.step2Complete(),
   );
 
-  protected readonly step2Touched = signal(false);
+  public readonly step2Touched = signal(false);
 
-  protected readonly step1Complete = computed(
+  public readonly step1Complete = computed(
     () => !!this.teacherCursoId() && !!this.teacherEstudianteId(),
   );
 
-  protected readonly step2Complete = computed(
+  public readonly step2Complete = computed(
     () =>
       this.step1Complete() &&
       this.step2Touched() &&
@@ -216,13 +216,13 @@ export class Grades implements OnInit {
       !!this.tipoEvalId(),
   );
 
-  protected readonly currentFormStep = computed(() => {
+  public readonly currentFormStep = computed(() => {
     if (!this.step1Complete()) return 1;
     if (!this.step2Complete()) return 2;
     return 3;
   });
 
-  protected readonly currentStepHint = computed(() => {
+  public readonly currentStepHint = computed(() => {
     switch (this.currentFormStep()) {
       case 1:
         return 'Paso 1 de 3 — Comience seleccionando el curso y el estudiante.';
@@ -233,7 +233,7 @@ export class Grades implements OnInit {
     }
   });
 
-  protected isStepDone(step: number): boolean {
+  public isStepDone(step: number): boolean {
     switch (step) {
       case 1:
         return this.step1Complete();
@@ -246,7 +246,7 @@ export class Grades implements OnInit {
     }
   }
 
-  protected isStepActive(step: number): boolean {
+  public isStepActive(step: number): boolean {
     return this.currentFormStep() === step;
   }
 
@@ -303,7 +303,7 @@ export class Grades implements OnInit {
     });
   }
 
-  protected onDraftNivelChange(nivelId: string): void {
+  public onDraftNivelChange(nivelId: string): void {
     this.draftNivelId.set(nivelId);
     this.draftGradoId.set('');
     this.draftSeccionId.set('');
@@ -317,7 +317,7 @@ export class Grades implements OnInit {
     }
   }
 
-  protected onDraftGradoChange(gradoId: string): void {
+  public onDraftGradoChange(gradoId: string): void {
     this.draftGradoId.set(gradoId);
     this.draftSeccionId.set('');
     if (this.draftAnioId() && gradoId) {
@@ -329,7 +329,7 @@ export class Grades implements OnInit {
     }
   }
 
-  protected buscar(): void {
+  public buscar(): void {
     if (this.roleContext.isStudent() || this.roleContext.isParent()) {
       this.studentPeriodoId.set(this.draftStudentPeriodoId() || null);
       this.studentCursoId.set(this.draftStudentCursoId() || null);
@@ -351,7 +351,7 @@ export class Grades implements OnInit {
     this.loadGrades();
   }
 
-  protected onNivelChange(nivelId: string): void {
+  public onNivelChange(nivelId: string): void {
     this.nivelId.set(nivelId);
     this.gradoId.set('');
     this.seccionId.set('');
@@ -363,7 +363,7 @@ export class Grades implements OnInit {
     this.loadGrades();
   }
 
-  protected onGradoChange(gradoId: string): void {
+  public onGradoChange(gradoId: string): void {
     this.gradoId.set(gradoId);
     this.catalogService.secciones(this.anioId(), gradoId || undefined).subscribe({
       next: (s) => this.secciones.set(s as { id: string; nombre: string }[]),
@@ -372,7 +372,7 @@ export class Grades implements OnInit {
     this.loadGrades();
   }
 
-  protected loadCursos(): void {
+  public loadCursos(): void {
     const params: Record<string, string> = {};
     if (this.anioId()) params['anio_id'] = this.anioId();
     if (this.seccionId()) params['seccion_id'] = this.seccionId();
@@ -381,7 +381,7 @@ export class Grades implements OnInit {
     });
   }
 
-  protected loadPeriodos(anioId: string): void {
+  public loadPeriodos(anioId: string): void {
     this.catalogService.periodos(anioId).subscribe({
       next: (p) => {
         const list = p as { id: string; nombre: string }[];
@@ -391,7 +391,7 @@ export class Grades implements OnInit {
     });
   }
 
-  protected loadGrades(): void {
+  public loadGrades(): void {
     if (this.roleContext.requiresStudentScope() && !this.roleContext.getStudentId()) {
       this.allRows.set([]);
       return;
@@ -433,36 +433,36 @@ export class Grades implements OnInit {
     });
   }
 
-  protected onPeriodoChange(periodoId: string): void {
+  public onPeriodoChange(periodoId: string): void {
     this.periodoId.set(periodoId);
     if (this.step1Complete()) {
       this.step2Touched.set(false);
     }
   }
 
-  protected onTipoEvalChange(tipoId: string): void {
+  public onTipoEvalChange(tipoId: string): void {
     this.tipoEvalId.set(tipoId);
     if (this.step1Complete()) {
       this.step2Touched.set(false);
     }
   }
 
-  protected confirmStep2(): void {
+  public confirmStep2(): void {
     if (this.step1Complete() && this.periodoId() && this.tipoEvalId()) {
       this.step2Touched.set(true);
     }
   }
 
-  protected onNotaInput(value: string): void {
+  public onNotaInput(value: string): void {
     const parsed = parseFloat(value);
     this.nota.set(Number.isFinite(parsed) ? parsed : 0);
   }
 
-  protected onNotaRangeInput(value: string): void {
+  public onNotaRangeInput(value: string): void {
     this.nota.set(parseFloat(value) || 0);
   }
 
-  protected onTeacherCursoChange(cursoId: string): void {
+  public onTeacherCursoChange(cursoId: string): void {
     this.teacherCursoId.set(cursoId);
     this.teacherEstudianteId.set('');
     this.step2Touched.set(false);
@@ -477,7 +477,7 @@ export class Grades implements OnInit {
     });
   }
 
-  protected guardarCalificacion(): void {
+  public guardarCalificacion(): void {
     const docenteId = this.roleContext.getTeacherId();
     if (this.editGradeId()) {
       if (!docenteId) return;
@@ -533,7 +533,7 @@ export class Grades implements OnInit {
       });
   }
 
-  protected editarNota(row: DataTableRow): void {
+  public editarNota(row: DataTableRow): void {
     if (!this.roleContext.isTeacher()) return;
     const id = row['_id'];
     if (!id) return;
@@ -546,7 +546,7 @@ export class Grades implements OnInit {
     this.gradeError.set('');
   }
 
-  protected cancelarEdicionNota(): void {
+  public cancelarEdicionNota(): void {
     const wasEdit = this.editMode();
     this.editGradeId.set('');
     this.nombreEval.set('');
@@ -560,7 +560,7 @@ export class Grades implements OnInit {
     }
   }
 
-  protected limpiarFormularioRegistro(): void {
+  public limpiarFormularioRegistro(): void {
     this.editGradeId.set('');
     this.teacherEstudianteId.set('');
     this.step2Touched.set(false);

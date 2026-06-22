@@ -14,35 +14,35 @@ import { Pension, PensionService } from '../../services/pension.service';
   styleUrl: './pensions.scss',
 })
 export class Pensions implements OnInit {
-  protected readonly roleContext = inject(RoleContextService);
-  protected readonly parentContext = inject(ParentContextService);
+  public readonly roleContext = inject(RoleContextService);
+  public readonly parentContext = inject(ParentContextService);
   private readonly pensionService = inject(PensionService);
   private readonly catalogService = inject(CatalogService);
 
-  protected readonly rows = signal<DataTableRow[]>([]);
-  protected readonly anio = signal(2026);
-  protected readonly mes = signal(3);
-  protected readonly monto = signal(450);
-  protected readonly draftNivelId = signal('');
-  protected readonly draftGradoId = signal('');
-  protected readonly draftSeccionId = signal('');
-  protected readonly draftEstadoFiltro = signal('');
-  protected readonly nivelId = signal('');
-  protected readonly gradoId = signal('');
-  protected readonly seccionId = signal('');
-  protected readonly estadoFiltro = signal('');
-  protected readonly successMessage = signal('');
-  protected readonly errorMessage = signal('');
-  protected readonly selected = signal<Pension | null>(null);
+  public readonly rows = signal<DataTableRow[]>([]);
+  public readonly anio = signal(2026);
+  public readonly mes = signal(3);
+  public readonly monto = signal(450);
+  public readonly draftNivelId = signal('');
+  public readonly draftGradoId = signal('');
+  public readonly draftSeccionId = signal('');
+  public readonly draftEstadoFiltro = signal('');
+  public readonly nivelId = signal('');
+  public readonly gradoId = signal('');
+  public readonly seccionId = signal('');
+  public readonly estadoFiltro = signal('');
+  public readonly successMessage = signal('');
+  public readonly errorMessage = signal('');
+  public readonly selected = signal<Pension | null>(null);
 
-  protected readonly niveles = signal<{ id: string; nombre: string }[]>([]);
-  protected readonly grados = signal<{ id: string; nombre: string }[]>([]);
-  protected readonly secciones = signal<{ id: string; nombre: string }[]>([]);
-  protected readonly anios = signal<{ id: string; anio: number }[]>([]);
+  public readonly niveles = signal<{ id: string; nombre: string }[]>([]);
+  public readonly grados = signal<{ id: string; nombre: string }[]>([]);
+  public readonly secciones = signal<{ id: string; nombre: string }[]>([]);
+  public readonly anios = signal<{ id: string; anio: number }[]>([]);
 
-  protected readonly isParentView = computed(() => this.roleContext.isParent());
+  public readonly isParentView = computed(() => this.roleContext.isParent());
 
-  protected readonly metrics = computed(() => {
+  public readonly metrics = computed(() => {
     const total = this.rows().length;
     const pendientes = this.rows().filter((r) => (r['estado'] ?? '').toLowerCase().includes('pend')).length;
     return [
@@ -51,7 +51,7 @@ export class Pensions implements OnInit {
     ];
   });
 
-  protected readonly columns: DataTableColumn[] = [
+  public readonly columns: DataTableColumn[] = [
     { key: 'codigo', label: 'Código' },
     { key: 'estudiante', label: 'Estudiante' },
     { key: 'nivel', label: 'Nivel' },
@@ -86,7 +86,7 @@ export class Pensions implements OnInit {
     this.roleContext.whenReady(() => this.loadPensiones());
   }
 
-  protected onDraftNivelChange(nivelId: string): void {
+  public onDraftNivelChange(nivelId: string): void {
     this.draftNivelId.set(nivelId);
     this.draftGradoId.set('');
     this.draftSeccionId.set('');
@@ -100,7 +100,7 @@ export class Pensions implements OnInit {
     }
   }
 
-  protected onDraftGradoChange(gradoId: string): void {
+  public onDraftGradoChange(gradoId: string): void {
     this.draftGradoId.set(gradoId);
     this.draftSeccionId.set('');
     const anioActivo = this.anios()[0]?.id;
@@ -113,7 +113,7 @@ export class Pensions implements OnInit {
     }
   }
 
-  protected buscar(): void {
+  public buscar(): void {
     this.nivelId.set(this.draftNivelId());
     this.gradoId.set(this.draftGradoId());
     this.seccionId.set(this.draftSeccionId());
@@ -121,7 +121,7 @@ export class Pensions implements OnInit {
     this.loadPensiones();
   }
 
-  protected onNivelChange(nivelId: string): void {
+  public onNivelChange(nivelId: string): void {
     this.nivelId.set(nivelId);
     this.gradoId.set('');
     this.seccionId.set('');
@@ -136,7 +136,7 @@ export class Pensions implements OnInit {
     this.loadPensiones();
   }
 
-  protected onGradoChange(gradoId: string): void {
+  public onGradoChange(gradoId: string): void {
     this.gradoId.set(gradoId);
     const anioActivo = this.anios()[0]?.id;
     if (anioActivo) {
@@ -147,7 +147,7 @@ export class Pensions implements OnInit {
     this.loadPensiones();
   }
 
-  protected loadPensiones(): void {
+  public loadPensiones(): void {
     if (this.roleContext.isParent() && !this.roleContext.getStudentId()) {
       this.rows.set([]);
       return;
@@ -181,7 +181,7 @@ export class Pensions implements OnInit {
     });
   }
 
-  protected generarPensiones(): void {
+  public generarPensiones(): void {
     this.pensionService
       .generar({ anio: this.anio(), mes: this.mes(), monto: this.monto(), seccion_id: this.seccionId() || undefined })
       .subscribe({
@@ -192,7 +192,7 @@ export class Pensions implements OnInit {
       });
   }
 
-  protected onDetail(row: DataTableRow): void {
+  public onDetail(row: DataTableRow): void {
     const id = row['_id'];
     if (!id) return;
     this.errorMessage.set('');
@@ -204,7 +204,7 @@ export class Pensions implements OnInit {
     });
   }
 
-  protected cerrarDetalle(): void {
+  public cerrarDetalle(): void {
     this.selected.set(null);
   }
 }

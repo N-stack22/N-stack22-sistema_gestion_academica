@@ -23,11 +23,11 @@ export class Login {
   private readonly route = inject(ActivatedRoute);
   private readonly roleContext = inject(RoleContextService);
 
-  protected readonly authError = signal('');
-  protected readonly loginModel = signal<LoginModel>({ email: '', password: '' });
-  protected readonly showPassword = signal(false);
+  public readonly authError = signal('');
+  public readonly loginModel = signal<LoginModel>({ email: '', password: '' });
+  public readonly showPassword = signal(false);
 
-  protected readonly loginForm = form(
+  public readonly loginForm = form(
     this.loginModel,
     (fields) => {
       required(fields.email, { message: 'El correo es obligatorio.' });
@@ -41,13 +41,13 @@ export class Login {
     },
   );
 
-  protected readonly intranetBenefits = [
+  public readonly intranetBenefits = [
     { icon: 'bi-person-badge', text: 'Acceso diferenciado por rol.' },
     { icon: 'bi-people', text: 'Seguimiento académico para familias.' },
     { icon: 'bi-grid-1x2', text: 'Gestión escolar conectada a Supabase.' },
   ];
 
-  protected togglePasswordVisibility(): void {
+  public togglePasswordVisibility(): void {
     this.showPassword.update((isVisible) => !isVisible);
   }
 

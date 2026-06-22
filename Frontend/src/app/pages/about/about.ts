@@ -10,14 +10,14 @@ import { PageHeader } from '../../components/page-header/page-header';
   styleUrl: './about.scss',
 })
 export class About {
-  protected readonly values = [
+  public readonly values = [
     { name: 'Responsabilidad', text: 'Cumplimos nuestros compromisos académicos y formativos con constancia.' },
     { name: 'Respeto', text: 'Valoramos la dignidad de cada persona en nuestra comunidad educativa.' },
     { name: 'Excelencia', text: 'Buscamos altos estándares de aprendizaje y mejora continua.' },
     { name: 'Innovación', text: 'Incorporamos metodologías y recursos que enriquecen la enseñanza.' },
   ];
 
-  protected readonly differentiators = [
+  public readonly differentiators = [
     {
       icon: 'bi-award-fill',
       title: 'Trayectoria sólida',

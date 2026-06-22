@@ -22,7 +22,7 @@ interface LevelCard {
   styleUrl: './levels.scss',
 })
 export class Levels {
-  protected readonly levels: LevelCard[] = [
+  public readonly levels: LevelCard[] = [
     {
       name: 'Inicial',
       icon: 'bi-palette-fill',

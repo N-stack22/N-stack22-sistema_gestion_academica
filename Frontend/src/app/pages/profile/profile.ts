@@ -16,17 +16,17 @@ import { Student } from '../../interfaces/student';
   styleUrl: './profile.scss',
 })
 export class Profile implements OnInit {
-  protected readonly auth = inject(AuthService);
-  protected readonly roleContext = inject(RoleContextService);
-  protected readonly teacherContext = inject(TeacherContextService);
-  protected readonly studentContext = inject(StudentContextService);
+  public readonly auth = inject(AuthService);
+  public readonly roleContext = inject(RoleContextService);
+  public readonly teacherContext = inject(TeacherContextService);
+  public readonly studentContext = inject(StudentContextService);
   private readonly teacherService = inject(TeacherService);
   private readonly studentService = inject(StudentService);
 
-  protected readonly teacher = signal<Teacher | null>(null);
-  protected readonly student = signal<Student | null>(null);
-  protected readonly loading = signal(false);
-  protected readonly familyProfile = computed(() => this.roleContext.getFamilyProfile());
+  public readonly teacher = signal<Teacher | null>(null);
+  public readonly student = signal<Student | null>(null);
+  public readonly loading = signal(false);
+  public readonly familyProfile = computed(() => this.roleContext.getFamilyProfile());
 
   ngOnInit(): void {
     if (this.roleContext.isParent()) {
@@ -68,7 +68,7 @@ export class Profile implements OnInit {
     }
   }
 
-  protected roleLabel(role: string): string {
+  public roleLabel(role: string): string {
     const labels: Record<string, string> = {
       ADMIN: 'Administrador',
       DIRECTOR: 'Director(a)',
@@ -79,7 +79,7 @@ export class Profile implements OnInit {
     return labels[role] ?? role;
   }
 
-  protected userInitials(fullName: string): string {
+  public userInitials(fullName: string): string {
     const parts = fullName.trim().split(/\s+/).filter(Boolean);
     if (!parts.length) return '?';
     if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();

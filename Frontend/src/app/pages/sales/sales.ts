@@ -17,37 +17,37 @@ export class Sales implements OnInit {
   private readonly catalogService = inject(CatalogService);
   private readonly studentService = inject(StudentService);
 
-  protected readonly metrics = signal<
+  public readonly metrics = signal<
     { id: number; title: string; value: number; description: string; icon: string; variant: 'primary' | 'info' | 'success' | 'warning' }[]
   >([]);
-  protected readonly allRows = signal<DataTableRow[]>([]);
-  protected readonly selected = signal<SaleItem | null>(null);
-  protected readonly productos = signal<{ id: string; nombre: string; precio: number }[]>([]);
-  protected readonly estudiantes = signal<{ id: string; fullName: string }[]>([]);
-  protected readonly estudianteId = signal('');
-  protected readonly productoId = signal('');
-  protected readonly metodoPago = signal('EFECTIVO');
-  protected readonly successMessage = signal('');
-  protected readonly errorMessage = signal('');
+  public readonly allRows = signal<DataTableRow[]>([]);
+  public readonly selected = signal<SaleItem | null>(null);
+  public readonly productos = signal<{ id: string; nombre: string; precio: number }[]>([]);
+  public readonly estudiantes = signal<{ id: string; fullName: string }[]>([]);
+  public readonly estudianteId = signal('');
+  public readonly productoId = signal('');
+  public readonly metodoPago = signal('EFECTIVO');
+  public readonly successMessage = signal('');
+  public readonly errorMessage = signal('');
 
-  protected readonly draftFiltroBusqueda = signal('');
-  protected readonly draftFiltroEstado = signal('');
-  protected readonly draftFiltroDesde = signal('');
-  protected readonly draftFiltroHasta = signal('');
-  protected readonly filtroBusqueda = signal('');
-  protected readonly filtroEstado = signal('');
-  protected readonly filtroDesde = signal('');
-  protected readonly filtroHasta = signal('');
+  public readonly draftFiltroBusqueda = signal('');
+  public readonly draftFiltroEstado = signal('');
+  public readonly draftFiltroDesde = signal('');
+  public readonly draftFiltroHasta = signal('');
+  public readonly filtroBusqueda = signal('');
+  public readonly filtroEstado = signal('');
+  public readonly filtroDesde = signal('');
+  public readonly filtroHasta = signal('');
 
-  protected readonly validasRows = computed(() =>
+  public readonly validasRows = computed(() =>
     this.allRows().filter((r) => r['_statusCode'] !== 'ANULADO'),
   );
 
-  protected readonly anuladasRows = computed(() =>
+  public readonly anuladasRows = computed(() =>
     this.allRows().filter((r) => r['_statusCode'] === 'ANULADO'),
   );
 
-  protected readonly columns: DataTableColumn[] = [
+  public readonly columns: DataTableColumn[] = [
     { key: 'codigo', label: 'Código' },
     { key: 'concepto', label: 'Concepto' },
     { key: 'cliente', label: 'Cliente' },
@@ -66,7 +66,7 @@ export class Sales implements OnInit {
     });
   }
 
-  protected loadVentas(): void {
+  public loadVentas(): void {
     this.saleService
       .listar({
         busqueda: this.filtroBusqueda() || undefined,
@@ -109,7 +109,7 @@ export class Sales implements OnInit {
     });
   }
 
-  protected buscarVentas(): void {
+  public buscarVentas(): void {
     this.filtroBusqueda.set(this.draftFiltroBusqueda().trim());
     this.filtroEstado.set(this.draftFiltroEstado());
     this.filtroDesde.set(this.draftFiltroDesde());
@@ -117,7 +117,7 @@ export class Sales implements OnInit {
     this.loadVentas();
   }
 
-  protected registrarVenta(): void {
+  public registrarVenta(): void {
     if (!this.productoId()) return;
     const prod = this.productos().find((p) => p.id === this.productoId());
     if (!prod) return;
@@ -142,7 +142,7 @@ export class Sales implements OnInit {
       });
   }
 
-  protected onDetail(row: DataTableRow): void {
+  public onDetail(row: DataTableRow): void {
     const id = row['_id'];
     if (!id) return;
     this.errorMessage.set('');
@@ -154,11 +154,11 @@ export class Sales implements OnInit {
     });
   }
 
-  protected cerrarDetalle(): void {
+  public cerrarDetalle(): void {
     this.selected.set(null);
   }
 
-  protected anularVenta(): void {
+  public anularVenta(): void {
     const venta = this.selected();
     if (!venta?.canVoid) {
       this.errorMessage.set('Esta venta no puede anularse.');

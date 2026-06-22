@@ -10,44 +10,44 @@ import { isPhoneNineDigits, isRequired, isValidEmail, minLength } from '../../ut
   styleUrl: './contact.scss',
 })
 export class Contact {
-  protected readonly fullName = signal('');
-  protected readonly email = signal('');
-  protected readonly phone = signal('');
-  protected readonly subject = signal('');
-  protected readonly message = signal('');
-  protected readonly submitted = signal(false);
-  protected readonly successMessage = signal('');
+  public readonly fullName = signal('');
+  public readonly email = signal('');
+  public readonly phone = signal('');
+  public readonly subject = signal('');
+  public readonly message = signal('');
+  public readonly submitted = signal(false);
+  public readonly successMessage = signal('');
 
-  protected readonly fullNameError = computed(() => {
+  public readonly fullNameError = computed(() => {
     if (!this.submitted() && !this.fullName()) return '';
     return isRequired(this.fullName(), 'El nombre es obligatorio.') || minLength(this.fullName(), 3, 'El nombre debe tener al menos 3 caracteres.');
   });
 
-  protected readonly emailError = computed(() => {
+  public readonly emailError = computed(() => {
     if (!this.submitted() && !this.email()) return '';
     const required = isRequired(this.email(), 'El correo es obligatorio.');
     if (required) return required;
     return isValidEmail(this.email()) ? '' : 'Ingresa un correo válido.';
   });
 
-  protected readonly phoneError = computed(() => {
+  public readonly phoneError = computed(() => {
     if (!this.submitted() && !this.phone()) return '';
     const required = isRequired(this.phone(), 'El teléfono es obligatorio.');
     if (required) return required;
     return isPhoneNineDigits(this.phone()) ? '' : 'El teléfono debe tener 9 dígitos.';
   });
 
-  protected readonly subjectError = computed(() => {
+  public readonly subjectError = computed(() => {
     if (!this.submitted() && !this.subject()) return '';
     return isRequired(this.subject(), 'El asunto es obligatorio.') || minLength(this.subject(), 4, 'El asunto debe tener al menos 4 caracteres.');
   });
 
-  protected readonly messageError = computed(() => {
+  public readonly messageError = computed(() => {
     if (!this.submitted() && !this.message()) return '';
     return isRequired(this.message(), 'El mensaje es obligatorio.') || minLength(this.message(), 10, 'El mensaje debe tener al menos 10 caracteres.');
   });
 
-  protected readonly isFormValid = computed(
+  public readonly isFormValid = computed(
     () =>
       !this.fullNameError() &&
       !this.emailError() &&
@@ -56,7 +56,7 @@ export class Contact {
       !this.messageError(),
   );
 
-  protected onSubmit(event: Event): void {
+  public onSubmit(event: Event): void {
     event.preventDefault();
     this.submitted.set(true);
     this.successMessage.set('');

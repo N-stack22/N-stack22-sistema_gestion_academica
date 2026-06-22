@@ -10,10 +10,10 @@ import { RoleContextService } from '../../services/role-context.service';
   styleUrl: './student-selector.scss',
 })
 export class StudentSelector {
-  protected readonly roleContext = inject(RoleContextService);
-  protected readonly parentContext = inject(ParentContextService);
+  public readonly roleContext = inject(RoleContextService);
+  public readonly parentContext = inject(ParentContextService);
 
-  protected onStudentChange(studentId: string): void {
+  public onStudentChange(studentId: string): void {
     if (!studentId) return;
     this.parentContext.selectStudent(studentId);
   }

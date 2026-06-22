@@ -9,14 +9,14 @@ import { ChatMessage } from '../../interfaces/chat-message';
   styleUrl: './public-chatbot.scss',
 })
 export class PublicChatbot {
-  protected readonly isOpen = signal(false);
-  protected readonly messages = signal<ChatMessage[]>([]);
-  protected readonly userInput = signal('');
-  protected readonly welcomeShown = signal(false);
+  public readonly isOpen = signal(false);
+  public readonly messages = signal<ChatMessage[]>([]);
+  public readonly userInput = signal('');
+  public readonly welcomeShown = signal(false);
 
   private nextId = 1;
 
-  protected readonly quickQuestions = [
+  public readonly quickQuestions = [
     { label: 'Admisión', dataCy: 'public-chatbot-quick-admission' },
     { label: 'Niveles', dataCy: 'public-chatbot-quick-levels' },
     { label: 'Horarios', dataCy: 'public-chatbot-quick-schedule' },
@@ -26,7 +26,7 @@ export class PublicChatbot {
     { label: 'Comunicados', dataCy: 'public-chatbot-quick-announcements' },
   ];
 
-  protected toggleChat(): void {
+  public toggleChat(): void {
     const opening = !this.isOpen();
     this.isOpen.set(opening);
 
@@ -38,11 +38,11 @@ export class PublicChatbot {
     }
   }
 
-  protected closeChat(): void {
+  public closeChat(): void {
     this.isOpen.set(false);
   }
 
-  protected sendMessage(): void {
+  public sendMessage(): void {
     const text = this.userInput().trim();
     if (!text) {
       return;
@@ -53,21 +53,21 @@ export class PublicChatbot {
     this.appendBotMessage(this.getBotResponse(text));
   }
 
-  protected askQuickQuestion(question: string): void {
+  public askQuickQuestion(question: string): void {
     this.appendUserMessage(question);
     this.appendBotMessage(this.getBotResponse(question));
   }
 
-  protected onInputChange(value: string): void {
+  public onInputChange(value: string): void {
     this.userInput.set(value);
   }
 
-  protected onSubmit(event: Event): void {
+  public onSubmit(event: Event): void {
     event.preventDefault();
     this.sendMessage();
   }
 
-  protected getBotResponse(message: string): string {
+  public getBotResponse(message: string): string {
     const text = this.normalize(message);
 
     if (this.matches(text, ['admision', 'matricula', 'inscripcion'])) {
@@ -101,7 +101,7 @@ export class PublicChatbot {
     return 'Puedo orientarte sobre admisión, niveles educativos, horarios, contacto, intranet, pensiones y comunicados. También puedes escribirnos desde la página de Contacto.';
   }
 
-  protected getCurrentTime(): string {
+  public getCurrentTime(): string {
     return new Date().toLocaleTimeString('es-PE', {
       hour: '2-digit',
       minute: '2-digit',

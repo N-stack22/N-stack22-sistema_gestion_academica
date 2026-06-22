@@ -39,9 +39,9 @@ export class DataTable {
   readonly detailClick = output<DataTableRow>();
   readonly secondaryDetailClick = output<DataTableRow>();
 
-  protected readonly searchTerm = signal('');
-  protected readonly columnFilters = signal<Record<string, string>>({});
-  protected readonly currentPage = signal(1);
+  public readonly searchTerm = signal('');
+  public readonly columnFilters = signal<Record<string, string>>({});
+  public readonly currentPage = signal(1);
 
   constructor() {
     effect(() => {
@@ -65,7 +65,7 @@ export class DataTable {
     });
   }
 
-  protected readonly filteredRows = computed(() => {
+  public readonly filteredRows = computed(() => {
     const term = this.normalize(this.searchTerm());
     const activeFilters = Object.entries(this.columnFilters()).filter(([, value]) => value);
 
@@ -83,7 +83,7 @@ export class DataTable {
     });
   });
 
-  protected readonly filterGroups = computed<DataTableFilterGroup[]>(() =>
+  public readonly filterGroups = computed<DataTableFilterGroup[]>(() =>
     this.columns()
       .map((column) => {
         const options = Array.from(
@@ -101,23 +101,23 @@ export class DataTable {
       .filter((group) => group.options.length > 1),
   );
 
-  protected readonly activeFilterCount = computed(
+  public readonly activeFilterCount = computed(
     () => Object.values(this.columnFilters()).filter((value) => value).length,
   );
 
-  protected readonly hasActiveFilters = computed(
+  public readonly hasActiveFilters = computed(
     () => Boolean(this.searchTerm().trim()) || this.activeFilterCount() > 0,
   );
 
-  protected readonly recordCount = computed(() => this.filteredRows().length);
+  public readonly recordCount = computed(() => this.filteredRows().length);
 
-  protected readonly totalPages = computed(() => {
+  public readonly totalPages = computed(() => {
     const total = this.filteredRows().length;
     const size = Math.max(1, this.pageSize());
     return Math.max(1, Math.ceil(total / size));
   });
 
-  protected readonly paginatedRows = computed(() => {
+  public readonly paginatedRows = computed(() => {
     const rows = this.filteredRows();
     if (!this.showPagination()) {
       return rows;
@@ -126,31 +126,31 @@ export class DataTable {
     return rows.slice(start, start + this.pageSize());
   });
 
-  protected readonly pageStart = computed(() => {
+  public readonly pageStart = computed(() => {
     if (this.filteredRows().length === 0) {
       return 0;
     }
     return (this.currentPage() - 1) * this.pageSize() + 1;
   });
 
-  protected readonly pageEnd = computed(() =>
+  public readonly pageEnd = computed(() =>
     Math.min(this.currentPage() * this.pageSize(), this.filteredRows().length),
   );
 
-  protected readonly canGoPrevious = computed(() => this.currentPage() > 1);
+  public readonly canGoPrevious = computed(() => this.currentPage() > 1);
 
-  protected readonly canGoNext = computed(() => this.currentPage() < this.totalPages());
+  public readonly canGoNext = computed(() => this.currentPage() < this.totalPages());
 
-  protected rowTrack(_row: DataTableRow, index: number): string {
+  public rowTrack(_row: DataTableRow, index: number): string {
     const id = _row['_id']?.trim();
     return id ? `${id}::${index}` : `row-${index}`;
   }
 
-  protected onSearchInput(value: string): void {
+  public onSearchInput(value: string): void {
     this.searchTerm.set(value);
   }
 
-  protected onColumnFilterInput(key: string, value: string): void {
+  public onColumnFilterInput(key: string, value: string): void {
     this.columnFilters.update((current) => ({
       ...current,
       [key]: value,
@@ -158,52 +158,52 @@ export class DataTable {
     this.currentPage.set(1);
   }
 
-  protected filterValue(key: string): string {
+  public filterValue(key: string): string {
     return this.columnFilters()[key] ?? '';
   }
 
-  protected clearFilters(): void {
+  public clearFilters(): void {
     this.searchTerm.set('');
     this.columnFilters.set({});
     this.currentPage.set(1);
   }
 
-  protected goToPage(page: number): void {
+  public goToPage(page: number): void {
     this.currentPage.set(Math.min(Math.max(1, page), this.totalPages()));
   }
 
-  protected previousPage(): void {
+  public previousPage(): void {
     this.goToPage(this.currentPage() - 1);
   }
 
-  protected nextPage(): void {
+  public nextPage(): void {
     this.goToPage(this.currentPage() + 1);
   }
 
-  protected onDetail(row: DataTableRow): void {
+  public onDetail(row: DataTableRow): void {
     this.detailClick.emit(row);
     this.scheduleActionScroll(this.detailLabel());
   }
 
-  protected onView(row: DataTableRow): void {
+  public onView(row: DataTableRow): void {
     this.viewClick.emit(row);
     this.scheduleActionScroll(this.viewLabel());
   }
 
-  protected onSecondaryDetail(row: DataTableRow): void {
+  public onSecondaryDetail(row: DataTableRow): void {
     this.secondaryDetailClick.emit(row);
     this.scheduleActionScroll(this.secondaryDetailLabel());
   }
 
-  protected cellValue(row: DataTableRow, key: string): string {
+  public cellValue(row: DataTableRow, key: string): string {
     return row[key] ?? '—';
   }
 
-  protected isStatusValue(value: string): boolean {
+  public isStatusValue(value: string): boolean {
     return this.statusBadgeClass(value) !== '';
   }
 
-  protected statusBadgeClass(value: string): string {
+  public statusBadgeClass(value: string): string {
     const normalized = this.normalize(value);
 
     if (normalized.includes('activo') || normalized.includes('pagado') || normalized.includes('presente') || normalized.includes('completada') || normalized.includes('disponible')) {

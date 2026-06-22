@@ -20,8 +20,8 @@ import { API_BASE_URL } from '../../config/api.config';
   styleUrl: './admin-layout.scss',
 })
 export class AdminLayout implements OnInit, OnDestroy {
-  protected readonly auth = inject(AuthService);
-  protected readonly roleContext = inject(RoleContextService);
+  public readonly auth = inject(AuthService);
+  public readonly roleContext = inject(RoleContextService);
   private readonly router = inject(Router);
   private readonly healthService = inject(HealthService);
   private readonly settingsService = inject(SettingsService);
@@ -30,9 +30,9 @@ export class AdminLayout implements OnInit, OnDestroy {
   private readonly studentContext = inject(StudentContextService);
   private readonly parentContext = inject(ParentContextService);
 
-  protected readonly backendOk = signal(true);
-  protected readonly backendWarning = signal('');
-  protected readonly sidebarOpen = signal(false);
+  public readonly backendOk = signal(true);
+  public readonly backendWarning = signal('');
+  public readonly sidebarOpen = signal(false);
 
   private navSub?: Subscription;
 
@@ -67,11 +67,11 @@ export class AdminLayout implements OnInit, OnDestroy {
     this.navSub?.unsubscribe();
   }
 
-  protected toggleSidebar(): void {
+  public toggleSidebar(): void {
     this.sidebarOpen.update((open) => !open);
   }
 
-  protected closeSidebar(): void {
+  public closeSidebar(): void {
     this.sidebarOpen.set(false);
   }
 
@@ -96,7 +96,7 @@ export class AdminLayout implements OnInit, OnDestroy {
     });
   }
 
-  protected roleLabel(role: string): string {
+  public roleLabel(role: string): string {
     const labels: Record<string, string> = {
       ADMIN: 'Administrador',
       DIRECTOR: 'Director(a)',

@@ -16,32 +16,32 @@ import { isRequired, emailFormatError, phoneNineDigits } from '../../utils/form-
 export class Parents implements OnInit {
   private readonly parentService = inject(ParentService);
   private readonly catalogService = inject(CatalogService);
-  protected readonly roleContext = inject(RoleContextService);
+  public readonly roleContext = inject(RoleContextService);
 
-  protected readonly familyProfile = computed(() => this.roleContext.getFamilyProfile());
-  protected readonly rows = signal<DataTableRow[]>([]);
-  protected readonly estudiantes = signal<{ id: string; fullName: string; code: string }[]>([]);
+  public readonly familyProfile = computed(() => this.roleContext.getFamilyProfile());
+  public readonly rows = signal<DataTableRow[]>([]);
+  public readonly estudiantes = signal<{ id: string; fullName: string; code: string }[]>([]);
 
-  protected readonly draftSearchFilter = signal('');
-  protected readonly draftParentescoFilter = signal('');
-  protected readonly draftEstadoFilter = signal('');
-  protected readonly searchFilter = signal('');
-  protected readonly parentescoFilter = signal('');
-  protected readonly estadoFilter = signal('');
+  public readonly draftSearchFilter = signal('');
+  public readonly draftParentescoFilter = signal('');
+  public readonly draftEstadoFilter = signal('');
+  public readonly searchFilter = signal('');
+  public readonly parentescoFilter = signal('');
+  public readonly estadoFilter = signal('');
 
-  protected readonly firstName = signal('');
-  protected readonly lastName = signal('');
-  protected readonly email = signal('');
-  protected readonly phone = signal('');
-  protected readonly parentesco = signal('Madre');
-  protected readonly estudianteId = signal('');
-  protected readonly esPrincipal = signal(true);
-  protected readonly submitted = signal(false);
-  protected readonly saving = signal(false);
-  protected readonly successMessage = signal('');
-  protected readonly errorMessage = signal('');
+  public readonly firstName = signal('');
+  public readonly lastName = signal('');
+  public readonly email = signal('');
+  public readonly phone = signal('');
+  public readonly parentesco = signal('Madre');
+  public readonly estudianteId = signal('');
+  public readonly esPrincipal = signal(true);
+  public readonly submitted = signal(false);
+  public readonly saving = signal(false);
+  public readonly successMessage = signal('');
+  public readonly errorMessage = signal('');
 
-  protected readonly columns: DataTableColumn[] = [
+  public readonly columns: DataTableColumn[] = [
     { key: 'nombre', label: 'Padre o apoderado' },
     { key: 'estudiante', label: 'Estudiante' },
     { key: 'parentesco', label: 'Parentesco' },
@@ -65,7 +65,7 @@ export class Parents implements OnInit {
     });
   }
 
-  protected loadParents(): void {
+  public loadParents(): void {
     this.parentService
       .listar({
         busqueda: this.searchFilter() || undefined,
@@ -89,14 +89,14 @@ export class Parents implements OnInit {
     });
   }
 
-  protected buscar(): void {
+  public buscar(): void {
     this.searchFilter.set(this.draftSearchFilter().trim());
     this.parentescoFilter.set(this.draftParentescoFilter());
     this.estadoFilter.set(this.draftEstadoFilter());
     this.loadParents();
   }
 
-  protected onSubmit(event: Event): void {
+  public onSubmit(event: Event): void {
     event.preventDefault();
     this.submitted.set(true);
     this.successMessage.set('');

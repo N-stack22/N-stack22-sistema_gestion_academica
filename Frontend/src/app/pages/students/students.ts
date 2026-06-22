@@ -28,33 +28,33 @@ export class Students implements OnInit {
   private readonly parentService = inject(ParentService);
   private readonly catalogService = inject(CatalogService);
   private readonly router = inject(Router);
-  protected readonly roleContext = inject(RoleContextService);
+  public readonly roleContext = inject(RoleContextService);
 
-  protected readonly firstName = signal('');
-  protected readonly lastName = signal('');
-  protected readonly email = signal('');
-  protected readonly dni = signal('');
-  protected readonly phone = signal('');
-  protected readonly birthDate = signal('');
-  protected readonly notes = signal('');
-  protected readonly submitted = signal(false);
-  protected readonly saving = signal(false);
-  protected readonly successMessage = signal('');
-  protected readonly errorMessage = signal('');
-  protected readonly loading = signal(false);
+  public readonly firstName = signal('');
+  public readonly lastName = signal('');
+  public readonly email = signal('');
+  public readonly dni = signal('');
+  public readonly phone = signal('');
+  public readonly birthDate = signal('');
+  public readonly notes = signal('');
+  public readonly submitted = signal(false);
+  public readonly saving = signal(false);
+  public readonly successMessage = signal('');
+  public readonly errorMessage = signal('');
+  public readonly loading = signal(false);
 
-  protected readonly selectedStudent = signal<Student | null>(null);
-  protected readonly editMode = signal(false);
+  public readonly selectedStudent = signal<Student | null>(null);
+  public readonly editMode = signal(false);
 
-  protected readonly apoderados = signal<{ id: string; fullName: string }[]>([]);
-  protected readonly apoderadoId = signal('');
-  protected readonly parentesco = signal('Padre');
-  protected readonly esPrincipal = signal(false);
-  protected readonly linkSuccess = signal('');
+  public readonly apoderados = signal<{ id: string; fullName: string }[]>([]);
+  public readonly apoderadoId = signal('');
+  public readonly parentesco = signal('Padre');
+  public readonly esPrincipal = signal(false);
+  public readonly linkSuccess = signal('');
 
-  protected readonly maxBirthDate = new Date().toISOString().slice(0, 10);
+  public readonly maxBirthDate = new Date().toISOString().slice(0, 10);
 
-  protected readonly columns: DataTableColumn[] = [
+  public readonly columns: DataTableColumn[] = [
     { key: 'codigo', label: 'Código' },
     { key: 'nombre', label: 'Nombre' },
     { key: 'nivel', label: 'Nivel' },
@@ -64,11 +64,11 @@ export class Students implements OnInit {
     { key: 'estado', label: 'Estado' },
   ];
 
-  protected readonly allRows = signal<DataTableRow[]>([]);
+  public readonly allRows = signal<DataTableRow[]>([]);
 
-  protected readonly rows = computed(() => this.allRows());
+  public readonly rows = computed(() => this.allRows());
 
-  protected readonly isFormValid = computed(
+  public readonly isFormValid = computed(
     () =>
       !this.firstNameError() &&
       !this.lastNameError() &&
@@ -78,26 +78,26 @@ export class Students implements OnInit {
       !this.birthDateError(),
   );
 
-  protected readonly firstNameError = computed(() =>
+  public readonly firstNameError = computed(() =>
     this.submitted() || this.firstName() ? isRequired(this.firstName(), 'Nombres obligatorios.') : '',
   );
-  protected readonly lastNameError = computed(() =>
+  public readonly lastNameError = computed(() =>
     this.submitted() || this.lastName() ? isRequired(this.lastName(), 'Apellidos obligatorios.') : '',
   );
-  protected readonly emailError = computed(() => {
+  public readonly emailError = computed(() => {
     if (!this.submitted() && !this.email()) return '';
     const required = isRequired(this.email(), 'Correo obligatorio.');
     return required || emailFormatError(this.email());
   });
-  protected readonly dniError = computed(() => {
+  public readonly dniError = computed(() => {
     if (!this.submitted() && !this.dni()) return '';
     return dniEightDigits(this.dni());
   });
-  protected readonly phoneError = computed(() => {
+  public readonly phoneError = computed(() => {
     if (!this.submitted() && !this.phone()) return '';
     return phoneNineDigits(this.phone());
   });
-  protected readonly birthDateError = computed(() => {
+  public readonly birthDateError = computed(() => {
     if (!this.submitted() && !this.birthDate()) return '';
     return birthDateNotFuture(this.birthDate());
   });
@@ -117,17 +117,17 @@ export class Students implements OnInit {
     }
   }
 
-  protected onDniInput(event: Event): void {
+  public onDniInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.dni.set(sanitizeDigits(value, 8));
   }
 
-  protected onPhoneInput(event: Event): void {
+  public onPhoneInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.phone.set(sanitizeDigits(value, 9));
   }
 
-  protected loadStudents(): void {
+  public loadStudents(): void {
     this.loading.set(true);
     const params: Record<string, string> = {};
     if (this.roleContext.isTeacher() && this.roleContext.getTeacherId()) {
@@ -157,7 +157,7 @@ export class Students implements OnInit {
       });
   }
 
-  protected onSubmit(event: Event): void {
+  public onSubmit(event: Event): void {
     event.preventDefault();
     this.submitted.set(true);
     this.successMessage.set('');
@@ -217,7 +217,7 @@ export class Students implements OnInit {
       });
   }
 
-  protected onDetail(row: DataTableRow): void {
+  public onDetail(row: DataTableRow): void {
     const id = row['_id'];
     if (!id) return;
     if (this.roleContext.isTeacher()) {
@@ -243,7 +243,7 @@ export class Students implements OnInit {
     });
   }
 
-  protected matricular(): void {
+  public matricular(): void {
     const student = this.selectedStudent();
     if (!student) return;
     void this.router.navigate(['/admin/matriculas'], {
@@ -251,7 +251,7 @@ export class Students implements OnInit {
     });
   }
 
-  protected asociarApoderado(): void {
+  public asociarApoderado(): void {
     const student = this.selectedStudent();
     if (!student || !this.apoderadoId()) return;
     this.parentService
@@ -271,7 +271,7 @@ export class Students implements OnInit {
       });
   }
 
-  protected cancelEdit(): void {
+  public cancelEdit(): void {
     this.resetForm();
   }
 

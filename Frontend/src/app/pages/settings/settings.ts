@@ -45,57 +45,57 @@ export class Settings implements OnInit {
   private readonly settingsService = inject(SettingsService);
   private readonly catalogService = inject(CatalogService);
   private readonly themeService = inject(ThemeService);
-  protected readonly auth = inject(AuthService);
+  public readonly auth = inject(AuthService);
 
-  protected readonly institucional = signal<Record<string, unknown> | null>(null);
-  protected readonly personal = signal<Record<string, unknown> | null>(null);
-  protected readonly activeSection = signal('personal');
-  protected readonly successMessage = signal('');
-  protected readonly errorMessage = signal('');
-  protected readonly anioActivoId = signal('');
-  protected readonly secciones = signal<CatalogSection[]>([]);
-  protected readonly niveles = signal<{ id: string; nombre: string }[]>([]);
-  protected readonly gradosNueva = signal<CatalogGrade[]>([]);
-  protected readonly nuevaSeccionNivel = signal('');
-  protected readonly nuevaSeccionGrado = signal('');
-  protected readonly nuevaSeccionNombre = signal('A');
-  protected readonly nuevaSeccionAula = signal('');
-  protected readonly nuevaSeccionCapacidad = signal(30);
-  protected readonly editDrafts = signal<Record<string, { aula: string; capacidad: number }>>({});
-  protected readonly sectionFilterNivel = signal('');
-  protected readonly sectionFilterGrado = signal('');
-  protected readonly sectionFilterBusqueda = signal('');
+  public readonly institucional = signal<Record<string, unknown> | null>(null);
+  public readonly personal = signal<Record<string, unknown> | null>(null);
+  public readonly activeSection = signal('personal');
+  public readonly successMessage = signal('');
+  public readonly errorMessage = signal('');
+  public readonly anioActivoId = signal('');
+  public readonly secciones = signal<CatalogSection[]>([]);
+  public readonly niveles = signal<{ id: string; nombre: string }[]>([]);
+  public readonly gradosNueva = signal<CatalogGrade[]>([]);
+  public readonly nuevaSeccionNivel = signal('');
+  public readonly nuevaSeccionGrado = signal('');
+  public readonly nuevaSeccionNombre = signal('A');
+  public readonly nuevaSeccionAula = signal('');
+  public readonly nuevaSeccionCapacidad = signal(30);
+  public readonly editDrafts = signal<Record<string, { aula: string; capacidad: number }>>({});
+  public readonly sectionFilterNivel = signal('');
+  public readonly sectionFilterGrado = signal('');
+  public readonly sectionFilterBusqueda = signal('');
 
-  protected readonly nuevoAnio = signal(new Date().getFullYear() + 1);
-  protected readonly nuevoAnioInicio = signal('');
-  protected readonly nuevoAnioFin = signal('');
-  protected readonly nuevoAnioActivo = signal(false);
+  public readonly nuevoAnio = signal(new Date().getFullYear() + 1);
+  public readonly nuevoAnioInicio = signal('');
+  public readonly nuevoAnioFin = signal('');
+  public readonly nuevoAnioActivo = signal(false);
 
-  protected readonly periodoAnioId = signal('');
-  protected readonly periodoNombre = signal('');
-  protected readonly periodoOrden = signal(1);
-  protected readonly periodoInicio = signal('');
-  protected readonly periodoFin = signal('');
+  public readonly periodoAnioId = signal('');
+  public readonly periodoNombre = signal('');
+  public readonly periodoOrden = signal(1);
+  public readonly periodoInicio = signal('');
+  public readonly periodoFin = signal('');
 
-  protected readonly metodoCodigo = signal('');
-  protected readonly metodoNombre = signal('');
+  public readonly metodoCodigo = signal('');
+  public readonly metodoNombre = signal('');
 
-  protected readonly canManageInstitutional = computed(() => {
+  public readonly canManageInstitutional = computed(() => {
     const role = this.auth.currentUser()?.role;
     return role === 'ADMIN' || role === 'DIRECTOR';
   });
 
-  protected readonly academicYears = computed(
+  public readonly academicYears = computed(
     () => (this.institucional()?.['academicYears'] as AcademicYear[]) ?? [],
   );
 
-  protected readonly periodsForSelectedYear = computed(() => {
+  public readonly periodsForSelectedYear = computed(() => {
     const anioId = this.periodoAnioId() || this.anioActivoId();
     const periods = (this.institucional()?.['periods'] as AcademicPeriod[]) ?? [];
     return periods.filter((p) => p.anio_academico_id === anioId);
   });
 
-  protected readonly paymentMethods = computed(() => {
+  public readonly paymentMethods = computed(() => {
     const methods = (this.institucional()?.['paymentMethods'] as PaymentMethod[]) ?? [];
     const seen = new Map<string, PaymentMethod>();
     for (const m of methods) {
@@ -109,17 +109,17 @@ export class Settings implements OnInit {
     return [...seen.values()].sort((a, b) => a.nombre.localeCompare(b.nombre));
   });
 
-  protected readonly sectionFilterLevels = computed(() =>
+  public readonly sectionFilterLevels = computed(() =>
     this.uniqueSorted(this.secciones().map((s) => s.nivel ?? 'Sin nivel')),
   );
 
-  protected readonly sectionFilterGrades = computed(() => {
+  public readonly sectionFilterGrades = computed(() => {
     const nivel = this.sectionFilterNivel();
     const sections = nivel ? this.secciones().filter((s) => (s.nivel ?? 'Sin nivel') === nivel) : this.secciones();
     return this.uniqueSorted(sections.map((s) => s.grado ?? 'Sin grado'));
   });
 
-  protected readonly filteredSecciones = computed(() => {
+  public readonly filteredSecciones = computed(() => {
     const nivel = this.sectionFilterNivel();
     const grado = this.sectionFilterGrado();
     const query = this.normalize(this.sectionFilterBusqueda());
@@ -135,7 +135,7 @@ export class Settings implements OnInit {
     });
   });
 
-  protected readonly cards: SettingsCard[] = [
+  public readonly cards: SettingsCard[] = [
     {
       key: 'personal',
       title: 'Configuración personal',
@@ -158,7 +158,7 @@ export class Settings implements OnInit {
     this.loadInstitucional();
   }
 
-  protected loadPersonal(): void {
+  public loadPersonal(): void {
     const user = this.auth.currentUser();
     if (!user) return;
     this.settingsService.personal(user.id).subscribe({
@@ -180,7 +180,7 @@ export class Settings implements OnInit {
     });
   }
 
-  protected loadInstitucional(): void {
+  public loadInstitucional(): void {
     this.settingsService.institucional().subscribe({
       next: (data) => {
         this.institucional.set(data);
@@ -208,13 +208,13 @@ export class Settings implements OnInit {
     this.loadInstitucional();
   }
 
-  protected selectSection(key: string): void {
+  public selectSection(key: string): void {
     this.activeSection.set(key);
     this.errorMessage.set('');
     this.successMessage.set('');
   }
 
-  protected roleLabel(role?: string): string {
+  public roleLabel(role?: string): string {
     const labels: Record<string, string> = {
       ADMIN: 'Administrador',
       DIRECTOR: 'Director(a)',
@@ -225,7 +225,7 @@ export class Settings implements OnInit {
     return labels[role ?? ''] ?? role ?? '—';
   }
 
-  protected toggleTema(checked: boolean): void {
+  public toggleTema(checked: boolean): void {
     const user = this.auth.currentUser();
     if (!user) return;
     this.themeService.apply(checked);
@@ -241,7 +241,7 @@ export class Settings implements OnInit {
     });
   }
 
-  protected activarAnio(anioId: string): void {
+  public activarAnio(anioId: string): void {
     this.settingsService.actualizarAnio(anioId, { activo: true }).subscribe({
       next: () => {
         this.successMessage.set('Año académico activo actualizado.');
@@ -251,7 +251,7 @@ export class Settings implements OnInit {
     });
   }
 
-  protected crearAnio(): void {
+  public crearAnio(): void {
     const anio = this.nuevoAnio();
     if (!this.nuevoAnioInicio() || !this.nuevoAnioFin()) {
       this.errorMessage.set('Indique fecha de inicio y fin del año académico.');
@@ -277,7 +277,7 @@ export class Settings implements OnInit {
       });
   }
 
-  protected crearPeriodo(): void {
+  public crearPeriodo(): void {
     const anioId = this.periodoAnioId();
     if (!anioId || !this.periodoNombre().trim() || !this.periodoInicio() || !this.periodoFin()) {
       this.errorMessage.set('Complete año, nombre y fechas del periodo.');
@@ -305,7 +305,7 @@ export class Settings implements OnInit {
       });
   }
 
-  protected agregarMetodoPago(): void {
+  public agregarMetodoPago(): void {
     if (!this.metodoCodigo().trim() || !this.metodoNombre().trim()) {
       this.errorMessage.set('Indique código y nombre del método de pago.');
       return;
@@ -324,7 +324,7 @@ export class Settings implements OnInit {
       });
   }
 
-  protected quitarMetodoPago(metodo: PaymentMethod): void {
+  public quitarMetodoPago(metodo: PaymentMethod): void {
     if (!metodo.activo) return;
     this.settingsService.actualizarMetodoPago(metodo.id, { activo: false }).subscribe({
       next: () => {
@@ -335,7 +335,7 @@ export class Settings implements OnInit {
     });
   }
 
-  protected reactivarMetodoPago(metodo: PaymentMethod): void {
+  public reactivarMetodoPago(metodo: PaymentMethod): void {
     this.settingsService.actualizarMetodoPago(metodo.id, { activo: true }).subscribe({
       next: () => {
         this.successMessage.set(`Método "${metodo.nombre}" reactivado.`);
@@ -345,7 +345,7 @@ export class Settings implements OnInit {
     });
   }
 
-  protected onNuevaSeccionNivel(nivelId: string): void {
+  public onNuevaSeccionNivel(nivelId: string): void {
     this.nuevaSeccionNivel.set(nivelId);
     this.nuevaSeccionGrado.set('');
     if (nivelId) {
@@ -357,18 +357,18 @@ export class Settings implements OnInit {
     }
   }
 
-  protected onSectionFilterNivel(nivel: string): void {
+  public onSectionFilterNivel(nivel: string): void {
     this.sectionFilterNivel.set(nivel);
     this.sectionFilterGrado.set('');
   }
 
-  protected clearSectionFilters(): void {
+  public clearSectionFilters(): void {
     this.sectionFilterNivel.set('');
     this.sectionFilterGrado.set('');
     this.sectionFilterBusqueda.set('');
   }
 
-  protected crearSeccion(): void {
+  public crearSeccion(): void {
     if (!this.anioActivoId() || !this.nuevaSeccionGrado() || !this.nuevaSeccionNombre().trim()) {
       this.errorMessage.set('Seleccione grado y nombre de sección.');
       return;
@@ -391,7 +391,7 @@ export class Settings implements OnInit {
       });
   }
 
-  protected updateDraft(seccionId: string, field: 'aula' | 'capacidad', value: string): void {
+  public updateDraft(seccionId: string, field: 'aula' | 'capacidad', value: string): void {
     const current = { ...this.editDrafts() };
     const draft = current[seccionId] ?? { aula: '', capacidad: 30 };
     if (field === 'capacidad') {
@@ -403,7 +403,7 @@ export class Settings implements OnInit {
     this.editDrafts.set(current);
   }
 
-  protected guardarSeccion(seccionId: string): void {
+  public guardarSeccion(seccionId: string): void {
     const draft = this.editDrafts()[seccionId];
     if (!draft) return;
     this.settingsService

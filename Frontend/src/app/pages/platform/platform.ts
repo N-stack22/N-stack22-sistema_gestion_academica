@@ -33,7 +33,7 @@ interface FloatingModule {
   styleUrl: './platform.scss',
 })
 export class Platform {
-  protected readonly floatingModules: FloatingModule[] = [
+  public readonly floatingModules: FloatingModule[] = [
     { icon: 'bi-journal-check', label: 'Notas', className: 'platform-float--notes' },
     { icon: 'bi-calendar-week', label: 'Horarios', className: 'platform-float--schedule' },
     { icon: 'bi-clipboard-check', label: 'Asistencia', className: 'platform-float--attendance' },
@@ -41,7 +41,7 @@ export class Platform {
     { icon: 'bi-megaphone', label: 'Comunicados', className: 'platform-float--announcements' },
   ];
 
-  protected readonly roles: RoleModule[] = [
+  public readonly roles: RoleModule[] = [
     {
       title: 'Estudiantes',
       icon: 'bi-mortarboard-fill',
@@ -64,7 +64,7 @@ export class Platform {
     },
   ];
 
-  protected readonly flowSteps: FlowStep[] = [
+  public readonly flowSteps: FlowStep[] = [
     {
       step: '1',
       title: 'El colegio centraliza información',
@@ -87,7 +87,7 @@ export class Platform {
     },
   ];
 
-  protected readonly benefits: BenefitItem[] = [
+  public readonly benefits: BenefitItem[] = [
     { icon: 'bi-chat-square-text-fill', title: 'Comunicación más clara', text: 'Comunicados y avisos accesibles para toda la comunidad.' },
     { icon: 'bi-graph-up-arrow', title: 'Seguimiento académico oportuno', text: 'Notas, asistencia y tareas visibles según el rol del usuario.' },
     { icon: 'bi-folder2-open', title: 'Información organizada', text: 'Módulos estructurados como un ERP escolar moderno.' },
@@ -95,7 +95,7 @@ export class Platform {
     { icon: 'bi-bar-chart-fill', title: 'Gestión administrativa visual', text: 'Dashboard ejecutivo y reportes para administración.' },
   ];
 
-  protected readonly securityPoints = [
+  public readonly securityPoints = [
     'Acceso privado por roles',
     'Backend FastAPI y base de datos Supabase',
     'Sin pagos reales ni procesamiento financiero',

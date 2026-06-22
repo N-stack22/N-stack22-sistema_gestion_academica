@@ -18,42 +18,42 @@ export class Resources implements OnInit {
   private readonly resourceService = inject(ResourceService);
   private readonly catalogService = inject(CatalogService);
   private readonly courseService = inject(CourseService);
-  protected readonly roleContext = inject(RoleContextService);
+  public readonly roleContext = inject(RoleContextService);
   private readonly studentContext = inject(StudentContextService);
 
-  protected readonly editId = signal('');
-  protected readonly title = signal('');
-  protected readonly description = signal('');
-  protected readonly courseId = signal('');
-  protected readonly typeCode = signal('PDF');
-  protected readonly resourceUrl = signal('');
-  protected readonly selectedFile = signal<File | null>(null);
-  protected readonly submitted = signal(false);
-  protected readonly saving = signal(false);
-  protected readonly successMessage = signal('');
-  protected readonly errorMessage = signal('');
+  public readonly editId = signal('');
+  public readonly title = signal('');
+  public readonly description = signal('');
+  public readonly courseId = signal('');
+  public readonly typeCode = signal('PDF');
+  public readonly resourceUrl = signal('');
+  public readonly selectedFile = signal<File | null>(null);
+  public readonly submitted = signal(false);
+  public readonly saving = signal(false);
+  public readonly successMessage = signal('');
+  public readonly errorMessage = signal('');
 
-  protected readonly draftBusqueda = signal('');
-  protected readonly draftCurso = signal('');
-  protected readonly draftTipo = signal('');
+  public readonly draftBusqueda = signal('');
+  public readonly draftCurso = signal('');
+  public readonly draftTipo = signal('');
 
-  protected readonly filtroBusqueda = signal('');
-  protected readonly filtroCurso = signal('');
-  protected readonly filtroTipo = signal('');
+  public readonly filtroBusqueda = signal('');
+  public readonly filtroCurso = signal('');
+  public readonly filtroTipo = signal('');
 
-  protected readonly cursos = signal<{ id: string; name: string }[]>([]);
-  protected readonly tipos = signal<{ codigo: string; nombre: string }[]>([]);
-  protected readonly allRows = signal<DataTableRow[]>([]);
+  public readonly cursos = signal<{ id: string; name: string }[]>([]);
+  public readonly tipos = signal<{ codigo: string; nombre: string }[]>([]);
+  public readonly allRows = signal<DataTableRow[]>([]);
 
-  protected readonly editMode = computed(() => !!this.editId());
+  public readonly editMode = computed(() => !!this.editId());
 
-  protected readonly titleError = computed(() =>
+  public readonly titleError = computed(() =>
     this.submitted() || this.title() ? isRequired(this.title(), 'El título es obligatorio.') : '',
   );
-  protected readonly courseError = computed(() =>
+  public readonly courseError = computed(() =>
     this.submitted() || this.courseId() ? isRequired(this.courseId(), 'El curso es obligatorio.') : '',
   );
-  protected readonly resourceLinkError = computed(() => {
+  public readonly resourceLinkError = computed(() => {
     if (!this.submitted() && !this.resourceUrl() && !this.selectedFile()) return '';
     if (this.editMode() && !this.resourceUrl() && !this.selectedFile()) return '';
     const url = this.resourceUrl().trim();
@@ -61,15 +61,15 @@ export class Resources implements OnInit {
     if (!url && !file) return 'Ingrese una URL o seleccione un archivo.';
     return '';
   });
-  protected readonly isFormValid = computed(
+  public readonly isFormValid = computed(
     () => !this.titleError() && !this.courseError() && !this.resourceLinkError(),
   );
 
-  protected readonly canManage = computed(
+  public readonly canManage = computed(
     () => this.roleContext.isInstitutional() || this.roleContext.isTeacher(),
   );
 
-  protected readonly adminColumns: DataTableColumn[] = [
+  public readonly adminColumns: DataTableColumn[] = [
     { key: 'recurso', label: 'Recurso' },
     { key: 'curso', label: 'Curso' },
     { key: 'tipo', label: 'Tipo' },
@@ -78,7 +78,7 @@ export class Resources implements OnInit {
     { key: 'estado', label: 'Estado' },
   ];
 
-  protected readonly personalColumns: DataTableColumn[] = [
+  public readonly personalColumns: DataTableColumn[] = [
     { key: 'recurso', label: 'Recurso' },
     { key: 'curso', label: 'Curso' },
     { key: 'tipo', label: 'Tipo' },
@@ -86,17 +86,17 @@ export class Resources implements OnInit {
     { key: 'estado', label: 'Estado' },
   ];
 
-  protected readonly canViewResource = computed(
+  public readonly canViewResource = computed(
     () => this.roleContext.isStudent() || this.roleContext.isParent(),
   );
 
-  protected readonly columns = computed(() =>
+  public readonly columns = computed(() =>
     this.roleContext.isStudent() || this.roleContext.isParent()
       ? this.personalColumns
       : this.adminColumns,
   );
 
-  protected readonly filteredRows = computed(() => {
+  public readonly filteredRows = computed(() => {
     let rows = this.allRows();
     const q = this.filtroBusqueda().trim().toLowerCase();
     if (q) {
@@ -112,11 +112,11 @@ export class Resources implements OnInit {
     return rows;
   });
 
-  protected readonly disponiblesRows = computed(() =>
+  public readonly disponiblesRows = computed(() =>
     this.filteredRows().filter((row) => row['_active'] === '1'),
   );
 
-  protected readonly archivadosRows = computed(() =>
+  public readonly archivadosRows = computed(() =>
     this.filteredRows().filter((row) => row['_active'] === '0'),
   );
 
@@ -127,7 +127,7 @@ export class Resources implements OnInit {
     this.roleContext.whenReady(() => this.loadCursos());
   }
 
-  protected loadCursos(): void {
+  public loadCursos(): void {
     if (this.roleContext.isStudent() || this.roleContext.isParent()) {
       this.studentContext.ensureLoaded();
       this.cursos.set(
@@ -151,14 +151,14 @@ export class Resources implements OnInit {
     });
   }
 
-  protected buscar(): void {
+  public buscar(): void {
     this.filtroBusqueda.set(this.draftBusqueda().trim());
     this.filtroCurso.set(this.draftCurso());
     this.filtroTipo.set(this.draftTipo());
     this.loadRecursos();
   }
 
-  protected loadRecursos(): void {
+  public loadRecursos(): void {
     if (this.roleContext.requiresStudentScope() && !this.roleContext.getStudentId()) {
       this.allRows.set([]);
       return;
@@ -204,7 +204,7 @@ export class Resources implements OnInit {
     });
   }
 
-  protected onSubmit(event: Event): void {
+  public onSubmit(event: Event): void {
     event.preventDefault();
     this.submitted.set(true);
     this.successMessage.set('');
@@ -273,7 +273,7 @@ export class Resources implements OnInit {
     });
   }
 
-  protected editarRecurso(row: DataTableRow): void {
+  public editarRecurso(row: DataTableRow): void {
     const id = row['_id'];
     if (!id) return;
     this.editId.set(String(id));
@@ -290,7 +290,7 @@ export class Resources implements OnInit {
     this.errorMessage.set('');
   }
 
-  protected cancelEdit(): void {
+  public cancelEdit(): void {
     this.editId.set('');
     this.title.set('');
     this.description.set('');
@@ -301,12 +301,12 @@ export class Resources implements OnInit {
     this.submitted.set(false);
   }
 
-  protected onFileSelected(event: Event): void {
+  public onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.selectedFile.set(input.files?.[0] ?? null);
   }
 
-  protected verRecurso(row: DataTableRow): void {
+  public verRecurso(row: DataTableRow): void {
     const url = String(row['_fileUrl'] ?? '').trim();
     const name = String(row['_fileName'] ?? row['recurso'] ?? 'recurso');
     if (!url) {
@@ -321,7 +321,7 @@ export class Resources implements OnInit {
     window.open(url, '_blank', 'noopener');
   }
 
-  protected archivarRecurso(row: DataTableRow): void {
+  public archivarRecurso(row: DataTableRow): void {
     const id = row['_id'];
     if (!id || row['_canArchive'] !== '1') {
       this.errorMessage.set('Este recurso no puede archivarse.');
@@ -346,7 +346,7 @@ export class Resources implements OnInit {
     });
   }
 
-  protected desarchivarRecurso(row: DataTableRow): void {
+  public desarchivarRecurso(row: DataTableRow): void {
     const id = row['_id'];
     if (!id || row['_canRestore'] !== '1') {
       this.errorMessage.set('Este recurso no puede desarchivarse.');

@@ -14,34 +14,34 @@ export class Reports implements OnInit {
   private readonly reportService = inject(ReportService);
   private readonly catalogService = inject(CatalogService);
 
-  protected readonly selectedTipo = signal('estudiantes');
-  protected readonly draftAnioId = signal('');
-  protected readonly draftNivelId = signal('');
-  protected readonly draftGradoId = signal('');
-  protected readonly draftSeccionId = signal('');
-  protected readonly rows = signal<DataTableRow[]>([]);
-  protected readonly columns = signal<DataTableColumn[]>([]);
-  protected readonly total = signal(0);
-  protected readonly rawRows = signal<Record<string, unknown>[]>([]);
-  protected readonly reporteGenerado = signal('');
-  protected readonly loading = signal(false);
-  protected readonly errorMessage = signal('');
+  public readonly selectedTipo = signal('estudiantes');
+  public readonly draftAnioId = signal('');
+  public readonly draftNivelId = signal('');
+  public readonly draftGradoId = signal('');
+  public readonly draftSeccionId = signal('');
+  public readonly rows = signal<DataTableRow[]>([]);
+  public readonly columns = signal<DataTableColumn[]>([]);
+  public readonly total = signal(0);
+  public readonly rawRows = signal<Record<string, unknown>[]>([]);
+  public readonly reporteGenerado = signal('');
+  public readonly loading = signal(false);
+  public readonly errorMessage = signal('');
 
-  protected readonly anios = signal<{ id: string; anio: number }[]>([]);
-  protected readonly niveles = signal<{ id: string; nombre: string }[]>([]);
-  protected readonly grados = signal<CatalogGrade[]>([]);
-  protected readonly secciones = signal<CatalogSection[]>([]);
+  public readonly anios = signal<{ id: string; anio: number }[]>([]);
+  public readonly niveles = signal<{ id: string; nombre: string }[]>([]);
+  public readonly grados = signal<CatalogGrade[]>([]);
+  public readonly secciones = signal<CatalogSection[]>([]);
 
-  protected readonly requiereSalon = computed(() => this.selectedTipo() === 'estudiantes');
+  public readonly requiereSalon = computed(() => this.selectedTipo() === 'estudiantes');
 
-  protected readonly tipos = [
+  public readonly tipos = [
     { id: 'estudiantes', label: 'Estudiantes por salón' },
     { id: 'docentes', label: 'Docentes y cursos' },
     { id: 'comunicados', label: 'Comunicados' },
     { id: 'eventos', label: 'Eventos' },
   ];
 
-  protected readonly reporteTitulo = computed(
+  public readonly reporteTitulo = computed(
     () => this.tipos.find((t) => t.id === this.reporteGenerado())?.label ?? '',
   );
 
@@ -54,12 +54,12 @@ export class Reports implements OnInit {
     });
   }
 
-  protected onTipoChange(value: string): void {
+  public onTipoChange(value: string): void {
     this.selectedTipo.set(value);
     this.limpiarResultados();
   }
 
-  protected onNivelChange(nivelId: string): void {
+  public onNivelChange(nivelId: string): void {
     this.draftNivelId.set(nivelId);
     this.draftGradoId.set('');
     this.draftSeccionId.set('');
@@ -73,7 +73,7 @@ export class Reports implements OnInit {
     }
   }
 
-  protected onGradoChange(gradoId: string): void {
+  public onGradoChange(gradoId: string): void {
     this.draftGradoId.set(gradoId);
     this.draftSeccionId.set('');
     if (this.draftAnioId() && gradoId) {
@@ -85,12 +85,12 @@ export class Reports implements OnInit {
     }
   }
 
-  protected onAnioChange(anioId: string): void {
+  public onAnioChange(anioId: string): void {
     this.draftAnioId.set(anioId);
     this.onGradoChange(this.draftGradoId());
   }
 
-  protected generar(): void {
+  public generar(): void {
     const tipo = this.selectedTipo();
     this.limpiarResultados();
     this.loading.set(true);
@@ -140,7 +140,7 @@ export class Reports implements OnInit {
     });
   }
 
-  protected exportarCsv(): void {
+  public exportarCsv(): void {
     const data = this.rawRows();
     if (!data.length) return;
     const keys = Object.keys(data[0]).filter((k) => k !== 'id');
@@ -158,7 +158,7 @@ export class Reports implements OnInit {
     URL.revokeObjectURL(url);
   }
 
-  protected imprimir(): void {
+  public imprimir(): void {
     window.print();
   }
 

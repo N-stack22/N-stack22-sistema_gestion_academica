@@ -12,7 +12,7 @@ import { NewsArticle, NewsService } from '../../services/news.service';
 })
 export class News implements OnInit {
   private readonly newsService = inject(NewsService);
-  protected readonly articles = signal<NewsArticle[]>([]);
+  public readonly articles = signal<NewsArticle[]>([]);
 
   ngOnInit(): void {
     this.newsService.listar().subscribe({

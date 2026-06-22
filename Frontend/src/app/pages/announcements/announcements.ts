@@ -11,7 +11,7 @@ import { AnnouncementItem, AnnouncementService } from '../../services/announceme
 })
 export class Announcements implements OnInit {
   private readonly announcementService = inject(AnnouncementService);
-  protected readonly items = signal<AnnouncementItem[]>([]);
+  public readonly items = signal<AnnouncementItem[]>([]);
 
   ngOnInit(): void {
     this.announcementService.listar().subscribe({

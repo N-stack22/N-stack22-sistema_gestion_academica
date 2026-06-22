@@ -19,94 +19,94 @@ type StudentTaskTab = 'pendientes' | 'entregadas' | 'calificadas' | 'vencidas';
 export class Tasks implements OnInit {
   private readonly taskService = inject(TaskService);
   private readonly courseService = inject(CourseService);
-  protected readonly roleContext = inject(RoleContextService);
+  public readonly roleContext = inject(RoleContextService);
   private readonly parentContext = inject(ParentContextService);
 
-  protected readonly title = signal('');
-  protected readonly descripcion = signal('');
-  protected readonly cursoId = signal('');
-  protected readonly dueDate = signal('');
-  protected readonly submitted = signal(false);
-  protected readonly successMessage = signal('');
-  protected readonly errorMessage = signal('');
+  public readonly title = signal('');
+  public readonly descripcion = signal('');
+  public readonly cursoId = signal('');
+  public readonly dueDate = signal('');
+  public readonly submitted = signal(false);
+  public readonly successMessage = signal('');
+  public readonly errorMessage = signal('');
 
-  protected readonly draftFiltroCurso = signal('');
-  protected readonly draftFiltroBusqueda = signal('');
-  protected readonly filtroCurso = signal('');
-  protected readonly filtroBusqueda = signal('');
-  protected readonly cursos = signal<{ id: string; name: string }[]>([]);
+  public readonly draftFiltroCurso = signal('');
+  public readonly draftFiltroBusqueda = signal('');
+  public readonly filtroCurso = signal('');
+  public readonly filtroBusqueda = signal('');
+  public readonly cursos = signal<{ id: string; name: string }[]>([]);
 
-  protected readonly selectedTaskId = signal('');
-  protected readonly selectedTaskTitle = signal('');
-  protected readonly entregas = signal<TaskSubmission[]>([]);
-  protected readonly entregasLoading = signal(false);
-  protected readonly entregaError = signal('');
-  protected readonly entregaSuccess = signal('');
-  protected readonly gradingEntregaId = signal('');
-  protected readonly gradingNota = signal(0);
-  protected readonly gradingFeedback = signal('');
+  public readonly selectedTaskId = signal('');
+  public readonly selectedTaskTitle = signal('');
+  public readonly entregas = signal<TaskSubmission[]>([]);
+  public readonly entregasLoading = signal(false);
+  public readonly entregaError = signal('');
+  public readonly entregaSuccess = signal('');
+  public readonly gradingEntregaId = signal('');
+  public readonly gradingNota = signal(0);
+  public readonly gradingFeedback = signal('');
 
-  protected readonly gradingEntrega = computed(() => {
+  public readonly gradingEntrega = computed(() => {
     const id = this.gradingEntregaId();
     if (!id) return null;
     return this.entregas().find((e) => e.id === id) ?? null;
   });
 
-  protected readonly studentTab = signal<StudentTaskTab>('pendientes');
-  protected readonly tasks = signal<Task[]>([]);
-  protected readonly selectedStudentTask = signal<Task | null>(null);
-  protected readonly deliveryComment = signal('');
-  protected readonly deliveryUrl = signal('');
-  protected readonly selectedFile = signal<File | null>(null);
-  protected readonly isUploading = signal(false);
-  protected readonly deliverySubmitted = signal(false);
-  protected readonly deliveryError = signal('');
-  protected readonly deliverySuccess = signal('');
+  public readonly studentTab = signal<StudentTaskTab>('pendientes');
+  public readonly tasks = signal<Task[]>([]);
+  public readonly selectedStudentTask = signal<Task | null>(null);
+  public readonly deliveryComment = signal('');
+  public readonly deliveryUrl = signal('');
+  public readonly selectedFile = signal<File | null>(null);
+  public readonly isUploading = signal(false);
+  public readonly deliverySubmitted = signal(false);
+  public readonly deliveryError = signal('');
+  public readonly deliverySuccess = signal('');
 
-  protected readonly tasksLoading = signal(false);
-  protected readonly tasksError = signal('');
+  public readonly tasksLoading = signal(false);
+  public readonly tasksError = signal('');
 
-  protected readonly titleError = computed(() => {
+  public readonly titleError = computed(() => {
     if (!this.submitted() && !this.title()) return '';
     return isRequired(this.title(), 'El título es obligatorio.') || minLength(this.title(), 4, 'Mínimo 4 caracteres.');
   });
 
-  protected readonly courseError = computed(() => {
+  public readonly courseError = computed(() => {
     if (!this.submitted() && !this.cursoId()) return '';
     return isRequired(this.cursoId(), 'Seleccione un curso.');
   });
 
-  protected readonly dueDateError = computed(() => {
+  public readonly dueDateError = computed(() => {
     if (!this.submitted() && !this.dueDate()) return '';
     return isRequired(this.dueDate(), 'La fecha de entrega es obligatoria.');
   });
 
-  protected readonly isFormValid = computed(
+  public readonly isFormValid = computed(
     () => !this.titleError() && !this.courseError() && !this.dueDateError(),
   );
 
-  protected readonly showEntregas = computed(() => !!this.selectedTaskId() && this.roleContext.isTeacher());
+  public readonly showEntregas = computed(() => !!this.selectedTaskId() && this.roleContext.isTeacher());
 
-  protected readonly canSubmitDelivery = computed(() => {
+  public readonly canSubmitDelivery = computed(() => {
     const task = this.selectedStudentTask();
     if (!task || task.deliveryStatusCode === 'CALIFICADA' || task.statusCode === 'CERRADA') return false;
     return !!(this.deliveryUrl().trim() || this.selectedFile());
   });
 
-  protected readonly pendingTasks = computed(() =>
+  public readonly pendingTasks = computed(() =>
     this.tasks().filter((t) => !t.submitted && !t.overdue),
   );
-  protected readonly deliveredTasks = computed(() =>
+  public readonly deliveredTasks = computed(() =>
     this.tasks().filter((t) => t.submitted && t.deliveryStatusCode !== 'CALIFICADA'),
   );
-  protected readonly gradedTasks = computed(() =>
+  public readonly gradedTasks = computed(() =>
     this.tasks().filter((t) => t.deliveryStatusCode === 'CALIFICADA'),
   );
-  protected readonly overdueTasks = computed(() =>
+  public readonly overdueTasks = computed(() =>
     this.tasks().filter((t) => t.overdue && !t.submitted),
   );
 
-  protected readonly studentTabTasks = computed(() => {
+  public readonly studentTabTasks = computed(() => {
     switch (this.studentTab()) {
       case 'entregadas':
         return this.deliveredTasks();
@@ -119,7 +119,7 @@ export class Tasks implements OnInit {
     }
   });
 
-  protected readonly entregaColumns: DataTableColumn[] = [
+  public readonly entregaColumns: DataTableColumn[] = [
     { key: 'estudiante', label: 'Estudiante' },
     { key: 'codigo', label: 'Código' },
     { key: 'estado', label: 'Estado' },
@@ -128,7 +128,7 @@ export class Tasks implements OnInit {
     { key: 'nota', label: 'Nota' },
   ];
 
-  protected readonly studentColumns: DataTableColumn[] = [
+  public readonly studentColumns: DataTableColumn[] = [
     { key: 'tarea', label: 'Tarea' },
     { key: 'curso', label: 'Curso' },
     { key: 'docente', label: 'Docente' },
@@ -137,7 +137,7 @@ export class Tasks implements OnInit {
     { key: 'nota', label: 'Nota' },
   ];
 
-  protected readonly entregaRows = computed<DataTableRow[]>(() =>
+  public readonly entregaRows = computed<DataTableRow[]>(() =>
     this.entregas().map((e) => ({
       _id: e.id,
       _submitted: e.submitted ? '1' : '0',
@@ -153,7 +153,7 @@ export class Tasks implements OnInit {
     })),
   );
 
-  protected readonly columns: DataTableColumn[] = [
+  public readonly columns: DataTableColumn[] = [
     { key: 'tarea', label: 'Tarea' },
     { key: 'curso', label: 'Curso' },
     { key: 'seccion', label: 'Sección' },
@@ -162,7 +162,7 @@ export class Tasks implements OnInit {
     { key: 'estado', label: 'Estado' },
   ];
 
-  protected readonly studentRows = computed<DataTableRow[]>(() => {
+  public readonly studentRows = computed<DataTableRow[]>(() => {
     const q = this.filtroBusqueda().trim().toLowerCase();
     let tasks = this.studentTabTasks();
     if (q) {
@@ -185,9 +185,9 @@ export class Tasks implements OnInit {
     }));
   });
 
-  protected readonly allRows = signal<DataTableRow[]>([]);
+  public readonly allRows = signal<DataTableRow[]>([]);
 
-  protected readonly rows = computed(() => {
+  public readonly rows = computed(() => {
     const q = this.filtroBusqueda().trim().toLowerCase();
     let data = this.allRows();
     if (!q) return data;
@@ -218,7 +218,7 @@ export class Tasks implements OnInit {
     });
   }
 
-  protected loadCursos(): void {
+  public loadCursos(): void {
     const params: Record<string, string> = {};
     if (this.roleContext.isTeacher() && this.roleContext.getTeacherId()) {
       params['docente_id'] = this.roleContext.getTeacherId()!;
@@ -231,13 +231,13 @@ export class Tasks implements OnInit {
     });
   }
 
-  protected buscar(): void {
+  public buscar(): void {
     this.filtroCurso.set(this.draftFiltroCurso());
     this.filtroBusqueda.set(this.draftFiltroBusqueda().trim());
     this.loadTasks();
   }
 
-  protected loadTasks(): void {
+  public loadTasks(): void {
     if (this.roleContext.requiresStudentScope() && !this.roleContext.getStudentId()) {
       this.tasks.set([]);
       this.allRows.set([]);
@@ -286,12 +286,12 @@ export class Tasks implements OnInit {
     });
   }
 
-  protected setStudentTab(tab: StudentTaskTab): void {
+  public setStudentTab(tab: StudentTaskTab): void {
     this.studentTab.set(tab);
     this.cerrarDetalleTarea();
   }
 
-  protected verDetalleTarea(row: DataTableRow): void {
+  public verDetalleTarea(row: DataTableRow): void {
     const raw = row['_taskJson'];
     if (raw) {
       try {
@@ -310,7 +310,7 @@ export class Tasks implements OnInit {
     this.deliverySubmitted.set(false);
   }
 
-  protected cerrarDetalleTarea(): void {
+  public cerrarDetalleTarea(): void {
     this.selectedStudentTask.set(null);
     this.deliveryComment.set('');
     this.deliveryUrl.set('');
@@ -319,12 +319,12 @@ export class Tasks implements OnInit {
     this.deliverySuccess.set('');
   }
 
-  protected onFileSelected(event: Event): void {
+  public onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.selectedFile.set(input.files?.[0] ?? null);
   }
 
-  protected enviarEntrega(): void {
+  public enviarEntrega(): void {
     const task = this.selectedStudentTask();
     const estudianteId = this.roleContext.getStudentId();
     if (!task || !estudianteId) return;
@@ -368,7 +368,7 @@ export class Tasks implements OnInit {
       });
   }
 
-  protected verEntregas(row: DataTableRow): void {
+  public verEntregas(row: DataTableRow): void {
     const id = row['_id'];
     if (!id || !this.roleContext.isTeacher()) return;
     this.selectedTaskId.set(String(id));
@@ -379,14 +379,14 @@ export class Tasks implements OnInit {
     this.loadEntregas(String(id));
   }
 
-  protected cerrarEntregas(): void {
+  public cerrarEntregas(): void {
     this.selectedTaskId.set('');
     this.selectedTaskTitle.set('');
     this.entregas.set([]);
     this.gradingEntregaId.set('');
   }
 
-  protected loadEntregas(tareaId: string): void {
+  public loadEntregas(tareaId: string): void {
     const docenteId = this.roleContext.getTeacherId();
     if (!docenteId) return;
     this.entregasLoading.set(true);
@@ -402,7 +402,7 @@ export class Tasks implements OnInit {
     });
   }
 
-  protected iniciarCalificacion(row: DataTableRow): void {
+  public iniciarCalificacion(row: DataTableRow): void {
     if (row['_submitted'] !== '1' || !row['_id']) {
       this.entregaError.set('Este estudiante aún no ha entregado la tarea.');
       return;
@@ -413,7 +413,7 @@ export class Tasks implements OnInit {
     this.entregaError.set('');
   }
 
-  protected formatEntregaAdjunto(url: string | undefined): string {
+  public formatEntregaAdjunto(url: string | undefined): string {
     const value = (url ?? '').trim();
     if (!value) return '—';
     if (value.startsWith('simulado://')) {
@@ -422,7 +422,7 @@ export class Tasks implements OnInit {
     return value.length > 48 ? `${value.slice(0, 45)}...` : value;
   }
 
-  protected abrirAdjuntoEntrega(url: string | undefined): void {
+  public abrirAdjuntoEntrega(url: string | undefined): void {
     const value = (url ?? '').trim();
     if (!value) {
       this.entregaError.set('Esta entrega no tiene adjunto registrado.');
@@ -435,11 +435,11 @@ export class Tasks implements OnInit {
     window.open(value, '_blank', 'noopener');
   }
 
-  protected verAdjuntoEntrega(row: DataTableRow): void {
+  public verAdjuntoEntrega(row: DataTableRow): void {
     this.abrirAdjuntoEntrega(String(row['_fileUrl'] ?? ''));
   }
 
-  protected guardarCalificacionEntrega(): void {
+  public guardarCalificacionEntrega(): void {
     const entregaId = this.gradingEntregaId();
     const docenteId = this.roleContext.getTeacherId();
     if (!entregaId || !docenteId) return;
@@ -461,7 +461,7 @@ export class Tasks implements OnInit {
       });
   }
 
-  protected onSubmit(event: Event): void {
+  public onSubmit(event: Event): void {
     event.preventDefault();
     this.submitted.set(true);
     this.successMessage.set('');

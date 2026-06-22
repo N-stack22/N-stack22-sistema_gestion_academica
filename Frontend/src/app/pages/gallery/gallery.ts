@@ -18,7 +18,7 @@ interface GalleryItem {
   styleUrl: './gallery.scss',
 })
 export class Gallery {
-  protected readonly items: GalleryItem[] = [
+  public readonly items: GalleryItem[] = [
     {
       title: 'Olimpiada de matemática',
       category: 'Actividades académicas',

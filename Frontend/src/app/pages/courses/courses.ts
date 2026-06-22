@@ -15,38 +15,38 @@ import { TeacherContextService } from '../../services/teacher-context.service';
 export class Courses implements OnInit {
   private readonly courseService = inject(CourseService);
   private readonly catalogService = inject(CatalogService);
-  protected readonly roleContext = inject(RoleContextService);
+  public readonly roleContext = inject(RoleContextService);
   private readonly teacherContext = inject(TeacherContextService);
 
-  protected readonly draftSearchTerm = signal('');
-  protected readonly searchTerm = signal('');
+  public readonly draftSearchTerm = signal('');
+  public readonly searchTerm = signal('');
 
-  protected readonly asignaturaId = signal('');
-  protected readonly nuevaAsignatura = signal('');
-  protected readonly anioId = signal('');
-  protected readonly nivelId = signal('');
-  protected readonly gradoId = signal('');
-  protected readonly seccionId = signal('');
-  protected readonly docenteId = signal('');
-  protected readonly filtroAnio = signal('');
-  protected readonly filtroNivel = signal('');
-  protected readonly filtroGrado = signal('');
-  protected readonly filtroSeccion = signal('');
-  protected readonly draftFiltroAnio = signal('');
-  protected readonly draftFiltroNivel = signal('');
-  protected readonly draftFiltroGrado = signal('');
-  protected readonly draftFiltroSeccion = signal('');
-  protected readonly asignaturas = signal<{ id: string; nombre: string }[]>([]);
-  protected readonly anios = signal<{ id: string; anio: number }[]>([]);
-  protected readonly niveles = signal<{ id: string; nombre: string }[]>([]);
-  protected readonly grados = signal<CatalogGrade[]>([]);
-  protected readonly gradosFiltro = signal<CatalogGrade[]>([]);
-  protected readonly secciones = signal<CatalogSection[]>([]);
-  protected readonly seccionesFiltro = signal<CatalogSection[]>([]);
-  protected readonly docentes = signal<{ id: string; fullName: string }[]>([]);
-  protected readonly successMessage = signal('');
+  public readonly asignaturaId = signal('');
+  public readonly nuevaAsignatura = signal('');
+  public readonly anioId = signal('');
+  public readonly nivelId = signal('');
+  public readonly gradoId = signal('');
+  public readonly seccionId = signal('');
+  public readonly docenteId = signal('');
+  public readonly filtroAnio = signal('');
+  public readonly filtroNivel = signal('');
+  public readonly filtroGrado = signal('');
+  public readonly filtroSeccion = signal('');
+  public readonly draftFiltroAnio = signal('');
+  public readonly draftFiltroNivel = signal('');
+  public readonly draftFiltroGrado = signal('');
+  public readonly draftFiltroSeccion = signal('');
+  public readonly asignaturas = signal<{ id: string; nombre: string }[]>([]);
+  public readonly anios = signal<{ id: string; anio: number }[]>([]);
+  public readonly niveles = signal<{ id: string; nombre: string }[]>([]);
+  public readonly grados = signal<CatalogGrade[]>([]);
+  public readonly gradosFiltro = signal<CatalogGrade[]>([]);
+  public readonly secciones = signal<CatalogSection[]>([]);
+  public readonly seccionesFiltro = signal<CatalogSection[]>([]);
+  public readonly docentes = signal<{ id: string; fullName: string }[]>([]);
+  public readonly successMessage = signal('');
 
-  protected readonly columns: DataTableColumn[] = [
+  public readonly columns: DataTableColumn[] = [
     { key: 'curso', label: 'Asignatura' },
     { key: 'nivel', label: 'Nivel' },
     { key: 'grado', label: 'Grado' },
@@ -55,9 +55,9 @@ export class Courses implements OnInit {
     { key: 'anio', label: 'Año' },
   ];
 
-  protected readonly rows = signal<DataTableRow[]>([]);
+  public readonly rows = signal<DataTableRow[]>([]);
 
-  protected readonly filteredRows = computed(() => {
+  public readonly filteredRows = computed(() => {
     const q = this.searchTerm().trim().toLowerCase();
     const data = this.rows();
     if (!q) return data;
@@ -68,7 +68,7 @@ export class Courses implements OnInit {
     );
   });
 
-  protected readonly pageTitle = computed(() =>
+  public readonly pageTitle = computed(() =>
     this.roleContext.isTeacher() ? 'Mis cursos' : 'Cursos asignados',
   );
 
@@ -97,7 +97,7 @@ export class Courses implements OnInit {
     });
   }
 
-  protected onNivelChange(nivelId: string): void {
+  public onNivelChange(nivelId: string): void {
     this.nivelId.set(nivelId);
     this.gradoId.set('');
     this.seccionId.set('');
@@ -111,7 +111,7 @@ export class Courses implements OnInit {
     }
   }
 
-  protected onGradoChange(gradoId: string): void {
+  public onGradoChange(gradoId: string): void {
     this.gradoId.set(gradoId);
     this.seccionId.set('');
     if (this.anioId() && gradoId) {
@@ -123,12 +123,12 @@ export class Courses implements OnInit {
     }
   }
 
-  protected onAnioChange(anioId: string): void {
+  public onAnioChange(anioId: string): void {
     this.anioId.set(anioId);
     this.onGradoChange(this.gradoId());
   }
 
-  protected onFiltroNivelChange(nivelId: string): void {
+  public onFiltroNivelChange(nivelId: string): void {
     this.draftFiltroNivel.set(nivelId);
     this.draftFiltroGrado.set('');
     this.draftFiltroSeccion.set('');
@@ -142,7 +142,7 @@ export class Courses implements OnInit {
     }
   }
 
-  protected onFiltroGradoChange(gradoId: string): void {
+  public onFiltroGradoChange(gradoId: string): void {
     this.draftFiltroGrado.set(gradoId);
     this.draftFiltroSeccion.set('');
     if (this.draftFiltroAnio() && gradoId) {
@@ -154,11 +154,11 @@ export class Courses implements OnInit {
     }
   }
 
-  protected buscarCursosDocente(): void {
+  public buscarCursosDocente(): void {
     this.searchTerm.set(this.draftSearchTerm().trim());
   }
 
-  protected buscarCursos(): void {
+  public buscarCursos(): void {
     this.filtroAnio.set(this.draftFiltroAnio());
     this.filtroNivel.set(this.draftFiltroNivel());
     this.filtroGrado.set(this.draftFiltroGrado());
@@ -166,7 +166,7 @@ export class Courses implements OnInit {
     this.loadCursos();
   }
 
-  protected loadCursos(): void {
+  public loadCursos(): void {
     const params: Record<string, string> = {};
     if (this.filtroAnio()) params['anio_id'] = this.filtroAnio();
     if (this.filtroSeccion()) params['seccion_id'] = this.filtroSeccion();
@@ -189,7 +189,7 @@ export class Courses implements OnInit {
     });
   }
 
-  protected registrarAsignatura(): void {
+  public registrarAsignatura(): void {
     if (!this.nuevaAsignatura().trim()) return;
     this.courseService.crearAsignatura({ nombre: this.nuevaAsignatura().trim() }).subscribe({
       next: () => {
@@ -203,7 +203,7 @@ export class Courses implements OnInit {
     });
   }
 
-  protected registrarCurso(): void {
+  public registrarCurso(): void {
     if (!this.asignaturaId() || !this.anioId() || !this.seccionId() || !this.docenteId()) return;
     this.courseService
       .crear({

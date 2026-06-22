@@ -9,14 +9,14 @@ import { RouterLink } from '@angular/router';
   styleUrl: './home.scss',
 })
 export class Home {
-  protected readonly heroMockFeatures = [
+  public readonly heroMockFeatures = [
     { value: '3', label: 'niveles educativos', highlight: false },
     { value: '5', label: 'perfiles conectados', highlight: false },
     { value: '24/7', label: 'acceso informativo', highlight: false },
     { value: '360°', label: 'gestión escolar', highlight: true },
   ];
 
-  protected readonly heroFloatCards = [
+  public readonly heroFloatCards = [
     {
       icon: 'bi-megaphone-fill',
       title: 'Admisión 2026',
@@ -37,14 +37,14 @@ export class Home {
     },
   ];
 
-  protected readonly metrics = [
+  public readonly metrics = [
     { icon: 'bi-award-fill', value: '25+', label: 'años de experiencia', accent: 'yellow' },
     { icon: 'bi-people-fill', value: '850', label: 'estudiantes', accent: 'blue' },
     { icon: 'bi-person-workspace', value: '65', label: 'docentes', accent: 'red' },
     { icon: 'bi-layers-fill', value: '3', label: 'niveles educativos', accent: 'blue' },
   ];
 
-  protected readonly schoolPhotos = [
+  public readonly schoolPhotos = [
     {
       label: 'Estudiantes aprendiendo',
       caption: 'Ambiente académico moderno',
@@ -77,7 +77,7 @@ export class Home {
     },
   ];
 
-  protected readonly pillars = [
+  public readonly pillars = [
     {
       icon: 'bi-people-fill',
       title: 'Formación integral',
@@ -108,7 +108,7 @@ export class Home {
     },
   ];
 
-  protected readonly erpRoles = [
+  public readonly erpRoles = [
     {
       icon: 'bi-person-badge-fill',
       title: 'Estudiantes',
@@ -131,7 +131,7 @@ export class Home {
     },
   ];
 
-  protected readonly levels = [
+  public readonly levels = [
     {
       name: 'Inicial',
       icon: 'bi-palette-fill',
@@ -161,7 +161,7 @@ export class Home {
     },
   ];
 
-  protected readonly featuredNews = [
+  public readonly featuredNews = [
     {
       category: 'Institucional',
       date: '10 Mar 2026',

@@ -19,66 +19,66 @@ export class InternalAnnouncements implements OnInit {
   private readonly eventService = inject(EventService);
   private readonly catalogService = inject(CatalogService);
   private readonly auth = inject(AuthService);
-  protected readonly roleContext = inject(RoleContextService);
+  public readonly roleContext = inject(RoleContextService);
   private readonly parentContext = inject(ParentContextService);
 
-  protected readonly isInstitutional = computed(() => this.roleContext.isInstitutional());
+  public readonly isInstitutional = computed(() => this.roleContext.isInstitutional());
 
-  protected readonly activeTab = signal<'comunicados' | 'eventos'>('comunicados');
+  public readonly activeTab = signal<'comunicados' | 'eventos'>('comunicados');
 
-  protected readonly editComunicadoId = signal('');
-  protected readonly titulo = signal('');
-  protected readonly contenido = signal('');
-  protected readonly rolDestino = signal('');
-  protected readonly publicado = signal(true);
+  public readonly editComunicadoId = signal('');
+  public readonly titulo = signal('');
+  public readonly contenido = signal('');
+  public readonly rolDestino = signal('');
+  public readonly publicado = signal(true);
 
-  protected readonly editEventoId = signal('');
-  protected readonly eventoTitulo = signal('');
-  protected readonly eventoDescripcion = signal('');
-  protected readonly eventoInicio = signal('');
-  protected readonly eventoFin = signal('');
-  protected readonly eventoLugar = signal('');
-  protected readonly eventoRolDestino = signal('');
+  public readonly editEventoId = signal('');
+  public readonly eventoTitulo = signal('');
+  public readonly eventoDescripcion = signal('');
+  public readonly eventoInicio = signal('');
+  public readonly eventoFin = signal('');
+  public readonly eventoLugar = signal('');
+  public readonly eventoRolDestino = signal('');
 
-  protected readonly successMessage = signal('');
-  protected readonly errorMessage = signal('');
-  protected readonly roles = signal<{ codigo: string; nombre: string }[]>([]);
+  public readonly successMessage = signal('');
+  public readonly errorMessage = signal('');
+  public readonly roles = signal<{ codigo: string; nombre: string }[]>([]);
 
-  protected readonly editModeComunicado = computed(() => !!this.editComunicadoId());
-  protected readonly editModeEvento = computed(() => !!this.editEventoId());
+  public readonly editModeComunicado = computed(() => !!this.editComunicadoId());
+  public readonly editModeEvento = computed(() => !!this.editEventoId());
 
-  protected readonly comunicadoColumns: DataTableColumn[] = [
+  public readonly comunicadoColumns: DataTableColumn[] = [
     { key: 'titulo', label: 'Título' },
     { key: 'destinatario', label: 'Destinatario' },
     { key: 'fecha', label: 'Fecha' },
     { key: 'estado', label: 'Estado' },
   ];
 
-  protected readonly eventoColumns: DataTableColumn[] = [
+  public readonly eventoColumns: DataTableColumn[] = [
     { key: 'titulo', label: 'Evento' },
     { key: 'inicio', label: 'Inicio' },
     { key: 'lugar', label: 'Lugar' },
     { key: 'destinatario', label: 'Destinatario' },
   ];
 
-  protected readonly comunicadoRows = signal<DataTableRow[]>([]);
-  protected readonly eventoRows = signal<DataTableRow[]>([]);
+  public readonly comunicadoRows = signal<DataTableRow[]>([]);
+  public readonly eventoRows = signal<DataTableRow[]>([]);
 
-  protected readonly draftFiltroComBusqueda = signal('');
-  protected readonly draftFiltroComDestinatario = signal('');
-  protected readonly draftFiltroComEstado = signal('');
-  protected readonly filtroComBusqueda = signal('');
-  protected readonly filtroComDestinatario = signal('');
-  protected readonly filtroComEstado = signal('');
+  public readonly draftFiltroComBusqueda = signal('');
+  public readonly draftFiltroComDestinatario = signal('');
+  public readonly draftFiltroComEstado = signal('');
+  public readonly filtroComBusqueda = signal('');
+  public readonly filtroComDestinatario = signal('');
+  public readonly filtroComEstado = signal('');
 
-  protected readonly draftFiltroEvtBusqueda = signal('');
-  protected readonly draftFiltroEvtDestinatario = signal('');
-  protected readonly draftFiltroEvtPeriodo = signal('');
-  protected readonly filtroEvtBusqueda = signal('');
-  protected readonly filtroEvtDestinatario = signal('');
-  protected readonly filtroEvtPeriodo = signal('');
+  public readonly draftFiltroEvtBusqueda = signal('');
+  public readonly draftFiltroEvtDestinatario = signal('');
+  public readonly draftFiltroEvtPeriodo = signal('');
+  public readonly filtroEvtBusqueda = signal('');
+  public readonly filtroEvtDestinatario = signal('');
+  public readonly filtroEvtPeriodo = signal('');
 
-  protected readonly selectedComunicado = signal<{
+  public readonly selectedComunicado = signal<{
     title: string;
     content: string;
     audience: string;
@@ -86,19 +86,19 @@ export class InternalAnnouncements implements OnInit {
     status: string;
     fileUrl?: string;
   } | null>(null);
-  protected readonly detailLoading = signal(false);
+  public readonly detailLoading = signal(false);
 
-  protected readonly proximosEventos = computed(() => {
+  public readonly proximosEventos = computed(() => {
     const hoy = new Date().toISOString().slice(0, 10);
     return this.eventoRowsFiltrados().filter((e) => String(e['inicio'] ?? '').slice(0, 10) >= hoy);
   });
 
-  protected readonly eventosPasados = computed(() => {
+  public readonly eventosPasados = computed(() => {
     const hoy = new Date().toISOString().slice(0, 10);
     return this.eventoRowsFiltrados().filter((e) => String(e['inicio'] ?? '').slice(0, 10) < hoy);
   });
 
-  protected readonly comunicadoRowsFiltrados = computed(() => {
+  public readonly comunicadoRowsFiltrados = computed(() => {
     let rows = this.comunicadoRows();
     const q = this.filtroComBusqueda().toLowerCase();
     if (q) {
@@ -117,7 +117,7 @@ export class InternalAnnouncements implements OnInit {
     return rows;
   });
 
-  protected readonly eventoRowsFiltrados = computed(() => {
+  public readonly eventoRowsFiltrados = computed(() => {
     let rows = this.eventoRows();
     const q = this.filtroEvtBusqueda().toLowerCase();
     if (q) {
@@ -159,25 +159,25 @@ export class InternalAnnouncements implements OnInit {
     this.loadEventos();
   }
 
-  protected setTab(tab: 'comunicados' | 'eventos'): void {
+  public setTab(tab: 'comunicados' | 'eventos'): void {
     this.activeTab.set(tab);
     this.successMessage.set('');
     this.errorMessage.set('');
   }
 
-  protected buscarComunicados(): void {
+  public buscarComunicados(): void {
     this.filtroComBusqueda.set(this.draftFiltroComBusqueda().trim());
     this.filtroComDestinatario.set(this.draftFiltroComDestinatario());
     this.filtroComEstado.set(this.draftFiltroComEstado());
   }
 
-  protected buscarEventos(): void {
+  public buscarEventos(): void {
     this.filtroEvtBusqueda.set(this.draftFiltroEvtBusqueda().trim());
     this.filtroEvtDestinatario.set(this.draftFiltroEvtDestinatario());
     this.filtroEvtPeriodo.set(this.draftFiltroEvtPeriodo());
   }
 
-  protected loadAnnouncements(): void {
+  public loadAnnouncements(): void {
     if (this.roleContext.requiresStudentScope() && !this.roleContext.getStudentId()) {
       this.comunicadoRows.set([]);
       return;
@@ -206,7 +206,7 @@ export class InternalAnnouncements implements OnInit {
     });
   }
 
-  protected loadEventos(): void {
+  public loadEventos(): void {
     this.eventService.listar().subscribe({
       next: (items) =>
         this.eventoRows.set(
@@ -222,7 +222,7 @@ export class InternalAnnouncements implements OnInit {
     });
   }
 
-  protected guardarComunicado(): void {
+  public guardarComunicado(): void {
     if (!this.titulo().trim() || !this.contenido().trim()) return;
 
     this.errorMessage.set('');
@@ -267,7 +267,7 @@ export class InternalAnnouncements implements OnInit {
     });
   }
 
-  protected editarComunicado(row: DataTableRow): void {
+  public editarComunicado(row: DataTableRow): void {
     const id = row['_id'];
     if (!id) return;
     if (!this.isInstitutional()) {
@@ -287,7 +287,7 @@ export class InternalAnnouncements implements OnInit {
     });
   }
 
-  protected verDetalleComunicado(row: DataTableRow): void {
+  public verDetalleComunicado(row: DataTableRow): void {
     const id = row['_id'];
     if (!id) return;
     this.detailLoading.set(true);
@@ -311,11 +311,11 @@ export class InternalAnnouncements implements OnInit {
     });
   }
 
-  protected cerrarDetalle(): void {
+  public cerrarDetalle(): void {
     this.selectedComunicado.set(null);
   }
 
-  protected eliminarComunicado(row: DataTableRow): void {
+  public eliminarComunicado(row: DataTableRow): void {
     const id = row['_id'];
     if (!id) return;
     if (!window.confirm('¿Eliminar este comunicado? Esta acción no se puede deshacer.')) return;
@@ -331,7 +331,7 @@ export class InternalAnnouncements implements OnInit {
     });
   }
 
-  protected cancelarEdicionComunicado(): void {
+  public cancelarEdicionComunicado(): void {
     this.editComunicadoId.set('');
     this.titulo.set('');
     this.contenido.set('');
@@ -339,7 +339,7 @@ export class InternalAnnouncements implements OnInit {
     this.publicado.set(true);
   }
 
-  protected guardarEvento(): void {
+  public guardarEvento(): void {
     if (!this.eventoTitulo().trim() || !this.eventoInicio()) {
       this.errorMessage.set('Título y fecha de inicio son obligatorios.');
       return;
@@ -388,7 +388,7 @@ export class InternalAnnouncements implements OnInit {
     });
   }
 
-  protected editarEvento(row: DataTableRow): void {
+  public editarEvento(row: DataTableRow): void {
     const id = row['_id'];
     if (!id) return;
     this.errorMessage.set('');
@@ -406,7 +406,7 @@ export class InternalAnnouncements implements OnInit {
     });
   }
 
-  protected eliminarEvento(row: DataTableRow): void {
+  public eliminarEvento(row: DataTableRow): void {
     const id = row['_id'];
     if (!id) return;
     if (!window.confirm('¿Eliminar este evento? Esta acción no se puede deshacer.')) return;
@@ -422,7 +422,7 @@ export class InternalAnnouncements implements OnInit {
     });
   }
 
-  protected cancelarEdicionEvento(): void {
+  public cancelarEdicionEvento(): void {
     this.editEventoId.set('');
     this.eventoTitulo.set('');
     this.eventoDescripcion.set('');

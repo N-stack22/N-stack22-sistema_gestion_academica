@@ -18,20 +18,20 @@ import { ParentContextService } from '../../services/parent-context.service';
   styleUrl: './dashboard.scss',
 })
 export class Dashboard implements OnInit {
-  protected readonly auth = inject(AuthService);
+  public readonly auth = inject(AuthService);
   private readonly dashboardService = inject(DashboardService);
-  protected readonly roleContext = inject(RoleContextService);
+  public readonly roleContext = inject(RoleContextService);
   private readonly teacherContext = inject(TeacherContextService);
   private readonly studentContext = inject(StudentContextService);
-  protected readonly parentContext = inject(ParentContextService);
+  public readonly parentContext = inject(ParentContextService);
 
   private readonly apiData = signal<DashboardApiResponse | null>(null);
   private readonly teacherData = signal<TeacherDashboardData | null>(null);
   private readonly studentData = signal<StudentDashboardData | null>(null);
   private readonly parentData = signal<StudentDashboardData | null>(null);
-  protected readonly loading = signal(false);
+  public readonly loading = signal(false);
 
-  protected readonly panel = computed(() => {
+  public readonly panel = computed(() => {
     const role = this.auth.currentUser()?.role ?? 'ADMIN';
     const studentName = this.roleContext.getActiveStudent()?.fullName;
     return this.dashboardService.getRolePanel(
@@ -43,14 +43,14 @@ export class Dashboard implements OnInit {
     );
   });
 
-  protected readonly noCourses = computed(
+  public readonly noCourses = computed(
     () =>
       this.auth.currentUser()?.role === 'TEACHER' &&
       !this.loading() &&
       (this.teacherData()?.summary?.totalCourses ?? 0) === 0,
   );
 
-  protected readonly noEnrollment = computed(
+  public readonly noEnrollment = computed(
     () => {
       const role = this.auth.currentUser()?.role;
       if (role === 'STUDENT') {
@@ -72,7 +72,7 @@ export class Dashboard implements OnInit {
     },
   );
 
-  protected readonly noLinkedStudents = computed(
+  public readonly noLinkedStudents = computed(
     () =>
       this.auth.currentUser()?.role === 'PARENT' &&
       !this.loading() &&
@@ -153,7 +153,7 @@ export class Dashboard implements OnInit {
     }
   }
 
-  protected alertClass(severity: DashboardAlertSeverity): string {
+  public alertClass(severity: DashboardAlertSeverity): string {
     const classes: Record<DashboardAlertSeverity, string> = {
       danger: 'erp-alert-card--danger',
       warning: 'erp-alert-card--warning',

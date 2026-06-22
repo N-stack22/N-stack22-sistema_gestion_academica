@@ -27,7 +27,7 @@ interface SidebarGroup {
 export class Sidebar {
   readonly navigate = output<void>();
 
-  protected readonly auth = inject(AuthService);
+  public readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly roleContext = inject(RoleContextService);
   private readonly studentContext = inject(StudentContextService);
@@ -172,7 +172,7 @@ export class Sidebar {
     },
   ];
 
-  protected readonly portalLabel = computed(() => {
+  public readonly portalLabel = computed(() => {
     const role = this.auth.currentUser()?.role;
     const labels: Partial<Record<Role, string>> = {
       ADMIN: 'Gestión institucional',
@@ -184,7 +184,7 @@ export class Sidebar {
     return role ? (labels[role] ?? 'Intranet académica') : 'Intranet académica';
   });
 
-  protected readonly groups = computed(() => {
+  public readonly groups = computed(() => {
     const role = this.auth.currentUser()?.role;
     if (!role) {
       return [];
@@ -205,7 +205,7 @@ export class Sidebar {
     }
   });
 
-  protected logout(): void {
+  public logout(): void {
     this.roleContext.reset();
     this.studentContext.reset();
     this.teacherContext.reset();
@@ -214,7 +214,7 @@ export class Sidebar {
     this.router.navigate(['/login']);
   }
 
-  protected roleLabel(role: string): string {
+  public roleLabel(role: string): string {
     const labels: Record<string, string> = {
       ADMIN: 'Administrador',
       DIRECTOR: 'Director(a)',
