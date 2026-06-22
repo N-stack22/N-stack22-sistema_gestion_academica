@@ -37,19 +37,36 @@
         <p class="form-panel__subtitle mb-0">Seleccione curso y fecha para marcar la asistencia de todos los estudiantes del salon.</p>
       </div>
       <div class="form-panel__body">
-        @if (successMessage()) { <div class="form-success-card mb-3">{{ successMessage() }}</div> }
-        @if (errorMessage()) { <div class="alert alert-danger mb-3">{{ errorMessage() }}</div> }
+        @if (successMessage().length > 0) {
+          <div class="form-success-card mb-3">{{ successMessage() }}</div>
+        }
+        @if (errorMessage().length > 0) {
+          <div class="alert alert-danger mb-3">{{ errorMessage() }}</div>
+        }
         <div class="row g-3 align-items-end">
           <div class="col-md-5">
             <label class="form-label">Curso</label>
-            <select class="form-select" [value]="cursoId()" (change)="onCursoChange($any($event.target).value)" [disabled]="saving()">
+            <select
+              class="form-select"
+              [value]="cursoId()"
+              (change)="onCursoChange($any($event.target).value)"
+              [disabled]="saving()"
+            >
               <option value="">Seleccionar</option>
-              @for (c of cursos(); track c.id) { <option [value]="c.id">{{ c.name }}</option> }
+              @for (c of cursos(); track c.id) {
+                <option [value]="c.id">{{ c.name }}</option>
+              }
             </select>
           </div>
           <div class="col-md-3">
             <label class="form-label">Fecha</label>
-            <input type="date" class="form-control" [value]="fecha()" (input)="onFechaChange($any($event.target).value)" [readonly]="saving()" />
+            <input
+              type="date"
+              class="form-control"
+              [value]="fecha()"
+              (input)="onFechaChange($any($event.target).value)"
+              [readonly]="saving()"
+            />
           </div>
           <div class="col-md-4">
             <label class="form-label">Salon</label>
@@ -57,13 +74,13 @@
           </div>
         </div>
 
-        @if (cursoId()) {
+        @if (cursoId().length > 0) {
           <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-4 mb-3">
             <div>
               <h3 class="h6 fw-bold mb-1">Lista de estudiantes</h3>
               <p class="text-muted small mb-0">{{ attendanceDrafts().length }} estudiante{{ attendanceDrafts().length === 1 ? '' : 's' }} para registrar.</p>
             </div>
-            @if (attendanceDrafts().length) {
+            @if (attendanceDrafts().length > 0) {
               <div class="d-flex flex-wrap gap-2">
                 <button type="button" class="btn btn-sm btn-outline-success" (click)="markAll('PRESENTE')" [disabled]="saving()">Todos presentes</button>
                 <button type="button" class="btn btn-sm btn-outline-warning" (click)="markAll('TARDE')" [disabled]="saving()">Todos tarde</button>
@@ -72,7 +89,7 @@
             }
           </div>
 
-          @if (attendanceDrafts().length) {
+          @if (attendanceDrafts().length > 0) {
             <div class="table-responsive">
               <table class="table erp-table mb-0">
                 <thead>
@@ -87,14 +104,25 @@
                     <tr>
                       <td class="fw-semibold">{{ item.fullName }}</td>
                       <td>
-                        <select class="form-select form-select-sm" [value]="item.statusCode" (change)="updateDraftStatus(item.studentId, $any($event.target).value)" [disabled]="saving()">
+                        <select
+                          class="form-select form-select-sm"
+                          [value]="item.statusCode"
+                          (change)="updateDraftStatus(item.studentId, $any($event.target).value)"
+                          [disabled]="saving()"
+                        >
                           @for (estado of estados; track estado.codigo) {
                             <option [value]="estado.codigo">{{ estado.nombre }}</option>
                           }
                         </select>
                       </td>
                       <td>
-                        <input class="form-control form-control-sm" [value]="item.observation" (input)="updateDraftObservation(item.studentId, $any($event.target).value)" placeholder="Opcional" [disabled]="saving()" />
+                        <input
+                          class="form-control form-control-sm"
+                          [value]="item.observation"
+                          (input)="updateDraftObservation(item.studentId, $any($event.target).value)"
+                          placeholder="Opcional"
+                          [disabled]="saving()"
+                        />
                       </td>
                     </tr>
                   }
@@ -109,14 +137,19 @@
         }
 
         <div class="d-flex flex-wrap gap-2 mt-4">
-          <button type="button" class="btn btn-horizonte-primary" (click)="guardarAsistencia()" [disabled]="saving() || !cursoId() || !attendanceDrafts().length">
+          <button
+            type="button"
+            class="btn btn-horizonte-primary"
+            (click)="guardarAsistencia()"
+            [disabled]="saving() || cursoId().length === 0 || attendanceDrafts().length === 0"
+          >
             @if (saving()) {
               Guardando...
             } @else {
               Guardar asistencia del salon
             }
           </button>
-          @if (cursoId()) {
+          @if (cursoId().length > 0) {
             <button type="button" class="btn btn-outline-secondary" (click)="loadAttendanceDrafts()" [disabled]="saving()">Recargar lista</button>
           }
         </div>
@@ -182,6 +215,6 @@
     [rows]="rows()"
     [showActions]="canEdit() || roleContext.isParent()"
     [detailLabel]="canEdit() ? 'Editar' : 'Ver detalle'"
-    (detailClick)="canEdit() ? editarAsistencia($event) : verDetalleAsistencia($event)"
+    (detailClick)="onTableDetail($event)"
   />
 </div>

@@ -291,6 +291,15 @@ export class Attendance implements OnInit {
     this.selectedAttendance.set(row);
   }
 
+  protected onTableDetail(row: DataTableRow): void {
+    if (this.canEdit()) {
+      this.editarAsistencia(row);
+      return;
+    }
+
+    this.verDetalleAsistencia(row);
+  }
+
   protected cancelarEdicion(): void {
     this.editId.set('');
     this.estudianteId.set('');
