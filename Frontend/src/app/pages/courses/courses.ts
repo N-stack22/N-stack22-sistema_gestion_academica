@@ -88,8 +88,6 @@ export class Courses implements OnInit {
         this.anios.set(list);
         if (list.length) {
           this.anioId.set(list[0].id);
-          this.filtroAnio.set(list[0].id);
-          this.draftFiltroAnio.set(list[0].id);
           this.loadCursos();
         }
       },

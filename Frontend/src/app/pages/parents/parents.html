@@ -92,38 +92,6 @@
       </div>
     </div>
 
-    <div class="form-panel admin-card mb-4">
-      <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
-      <div class="form-panel__body">
-        <div class="row g-3 align-items-end">
-          <div class="col-md-4">
-            <label class="form-label">Buscar</label>
-            <input class="form-control" placeholder="Nombre, correo o estudiante" [value]="draftSearchFilter()" (input)="draftSearchFilter.set($any($event.target).value)" />
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">Parentesco</label>
-            <select class="form-select" [value]="draftParentescoFilter()" (change)="draftParentescoFilter.set($any($event.target).value)">
-              <option value="">Todos</option>
-              <option value="Madre">Madre</option>
-              <option value="Padre">Padre</option>
-              <option value="Apoderado">Apoderado</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">Estado</label>
-            <select class="form-select" [value]="draftEstadoFilter()" (change)="draftEstadoFilter.set($any($event.target).value)">
-              <option value="">Todos</option>
-              <option value="activo">Activo</option>
-              <option value="inactivo">Inactivo</option>
-            </select>
-          </div>
-          <div class="col-md-2">
-            <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscar()">Buscar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <app-data-table title="Apoderados registrados" subtitle="Relación apoderado → estudiante" icon="bi-person-hearts" [columns]="columns" [rows]="rows()" />
   }
 </div>

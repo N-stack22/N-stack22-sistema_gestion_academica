@@ -126,13 +126,8 @@ export class Attendance implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.canEdit()) {
-      this.draftFiltroFecha.set(this.fecha());
-      this.filtroFecha.set(this.fecha());
-    } else {
-      this.draftFiltroFecha.set('');
-      this.filtroFecha.set('');
-    }
+    this.draftFiltroFecha.set('');
+    this.filtroFecha.set('');
 
     this.roleContext.whenReady(() => {
       if (!this.roleContext.isTeacher() && !this.roleContext.requiresStudentScope()) {

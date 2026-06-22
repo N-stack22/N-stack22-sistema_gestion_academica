@@ -145,60 +145,6 @@
     </div>
   }
 
-  @if (canManage() || canViewResource()) {
-    <div class="form-panel admin-card mb-4">
-      <div class="form-panel__header">
-        <h2 class="form-panel__title">Filtros de búsqueda</h2>
-        <p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p>
-      </div>
-      <div class="form-panel__body">
-        <div class="row g-3 align-items-end">
-          <div class="col-md-4">
-            <label class="form-label" for="resource-search">Buscar</label>
-            <input
-              id="resource-search"
-              class="form-control"
-              placeholder="Título, curso o tipo"
-              [value]="draftBusqueda()"
-              (input)="draftBusqueda.set($any($event.target).value)"
-            />
-          </div>
-          <div class="col-md-4">
-            <label class="form-label" for="resource-filter-course">Curso</label>
-            <select
-              id="resource-filter-course"
-              class="form-select"
-              [value]="draftCurso()"
-              (change)="draftCurso.set($any($event.target).value)"
-            >
-              <option value="">Todos los cursos</option>
-              @for (c of cursos(); track c.id) {
-                <option [value]="c.id">{{ c.name }}</option>
-              }
-            </select>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label" for="resource-filter-type">Tipo</label>
-            <select
-              id="resource-filter-type"
-              class="form-select"
-              [value]="draftTipo()"
-              (change)="draftTipo.set($any($event.target).value)"
-            >
-              <option value="">Todos</option>
-              @for (t of tipos(); track t.codigo) {
-                <option [value]="t.codigo">{{ t.nombre }}</option>
-              }
-            </select>
-          </div>
-          <div class="col-md-2">
-            <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscar()">Buscar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  }
-
   <app-data-table
     [title]="canManage() ? 'Recursos disponibles' : 'Materiales disponibles'"
     [subtitle]="canManage() ? 'Materiales activos. Edite o archive si hubo un error al subirlos.' : 'Recursos con tipo, curso y estado de disponibilidad.'"

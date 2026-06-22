@@ -71,68 +71,32 @@
     </div>
   }
 
-  @if (roleContext.isTeacher() || roleContext.isInstitutional()) {
-    <div class="form-panel admin-card mb-4">
-      <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
-      <div class="form-panel__body">
-        <div class="row g-3 align-items-end">
-          <div class="col-md-4">
-            <label class="form-label">Buscar</label>
-            <input class="form-control" placeholder="Título, curso o docente" [value]="draftFiltroBusqueda()" (input)="draftFiltroBusqueda.set($any($event.target).value)" />
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Curso</label>
-            <select class="form-select" [value]="draftFiltroCurso()" (change)="draftFiltroCurso.set($any($event.target).value)">
-              <option value="">{{ roleContext.isTeacher() ? 'Todos mis cursos' : 'Todos los cursos' }}</option>
-              @for (c of cursos(); track c.id) { <option [value]="c.id">{{ c.name }}</option> }
-            </select>
-          </div>
-          <div class="col-md-2">
-            <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscar()">Buscar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  }
-
   @if (roleContext.isStudent() || roleContext.isParent()) {
     @if (tasksError()) { <div class="alert alert-danger mb-3">{{ tasksError() }}</div> }
     @if (tasksLoading()) { <div class="admin-card p-4 text-center text-muted mb-4">Cargando tareas...</div> }
-    <div class="form-panel admin-card mb-4">
-      <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
-      <div class="form-panel__body">
-        <div class="row g-3 align-items-end mb-3">
-          <div class="col-md-6">
-            <label class="form-label">Buscar</label>
-            <input class="form-control" placeholder="Título o curso" [value]="draftFiltroBusqueda()" (input)="draftFiltroBusqueda.set($any($event.target).value)" />
-          </div>
-          <div class="col-md-2">
-            <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscar()">Buscar</button>
-          </div>
-        </div>
-        <ul class="nav nav-tabs mb-0">
-          <li class="nav-item">
-            <button type="button" class="nav-link" [class.active]="studentTab() === 'pendientes'" (click)="setStudentTab('pendientes')">
-              Pendientes ({{ pendingTasks().length }})
-            </button>
-          </li>
-          <li class="nav-item">
-            <button type="button" class="nav-link" [class.active]="studentTab() === 'entregadas'" (click)="setStudentTab('entregadas')">
-              Entregadas ({{ deliveredTasks().length }})
-            </button>
-          </li>
-          <li class="nav-item">
-            <button type="button" class="nav-link" [class.active]="studentTab() === 'calificadas'" (click)="setStudentTab('calificadas')">
-              Calificadas ({{ gradedTasks().length }})
-            </button>
-          </li>
-          <li class="nav-item">
-            <button type="button" class="nav-link" [class.active]="studentTab() === 'vencidas'" (click)="setStudentTab('vencidas')">
-              Vencidas ({{ overdueTasks().length }})
-            </button>
-          </li>
-        </ul>
-      </div>
+    <div class="admin-card mb-4 p-3">
+      <ul class="nav nav-tabs mb-0">
+        <li class="nav-item">
+          <button type="button" class="nav-link" [class.active]="studentTab() === 'pendientes'" (click)="setStudentTab('pendientes')">
+            Pendientes ({{ pendingTasks().length }})
+          </button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="nav-link" [class.active]="studentTab() === 'entregadas'" (click)="setStudentTab('entregadas')">
+            Entregadas ({{ deliveredTasks().length }})
+          </button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="nav-link" [class.active]="studentTab() === 'calificadas'" (click)="setStudentTab('calificadas')">
+            Calificadas ({{ gradedTasks().length }})
+          </button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="nav-link" [class.active]="studentTab() === 'vencidas'" (click)="setStudentTab('vencidas')">
+            Vencidas ({{ overdueTasks().length }})
+          </button>
+        </li>
+      </ul>
     </div>
 
     <app-data-table

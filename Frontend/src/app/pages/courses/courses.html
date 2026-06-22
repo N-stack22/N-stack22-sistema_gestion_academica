@@ -86,66 +86,6 @@
     </div>
   }
 
-  @if (roleContext.isTeacher()) {
-    <div class="form-panel admin-card mb-4">
-      <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
-      <div class="form-panel__body">
-        <div class="row g-3 align-items-end">
-          <div class="col-md-6">
-            <label class="form-label">Buscar</label>
-            <input
-              class="form-control"
-              placeholder="Asignatura, grado o sección"
-              [value]="draftSearchTerm()"
-              (input)="draftSearchTerm.set($any($event.target).value)"
-            />
-          </div>
-          <div class="col-md-2">
-            <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscarCursosDocente()">Buscar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  } @else {
-  <div class="form-panel admin-card mb-4">
-    <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
-    <div class="form-panel__body">
-      <div class="row g-3 align-items-end">
-        <div class="col-md-2">
-          <label class="form-label">Año</label>
-          <select class="form-select" [value]="draftFiltroAnio()" (change)="draftFiltroAnio.set($any($event.target).value); onFiltroGradoChange(draftFiltroGrado())">
-            @for (a of anios(); track a.id) { <option [value]="a.id">{{ a.anio }}</option> }
-          </select>
-        </div>
-        <div class="col-md-2">
-          <label class="form-label">Nivel</label>
-          <select class="form-select" [value]="draftFiltroNivel()" (change)="onFiltroNivelChange($any($event.target).value)">
-            <option value="">Todos</option>
-            @for (n of niveles(); track n.id) { <option [value]="n.id">{{ n.nombre }}</option> }
-          </select>
-        </div>
-        <div class="col-md-2">
-          <label class="form-label">Grado</label>
-          <select class="form-select" [value]="draftFiltroGrado()" (change)="onFiltroGradoChange($any($event.target).value)">
-            <option value="">Todos</option>
-            @for (g of gradosFiltro(); track g.id) { <option [value]="g.id">{{ g.nombre }}</option> }
-          </select>
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Sección</label>
-          <select class="form-select" [value]="draftFiltroSeccion()" (change)="draftFiltroSeccion.set($any($event.target).value)">
-            <option value="">Todas</option>
-            @for (s of seccionesFiltro(); track s.id) { <option [value]="s.id">{{ s.label || s.nombre }}</option> }
-          </select>
-        </div>
-        <div class="col-md-2">
-          <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscarCursos()">Buscar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  }
-
   <app-data-table
     [title]="roleContext.isTeacher() ? 'Mis cursos asignados' : 'Cursos académicos'"
     [subtitle]="roleContext.isTeacher() ? 'Solo cursos vinculados a tu perfil docente.' : 'Datos desde la base de datos.'"

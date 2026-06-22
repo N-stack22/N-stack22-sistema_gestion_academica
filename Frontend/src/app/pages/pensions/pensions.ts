@@ -153,7 +153,7 @@ export class Pensions implements OnInit {
       return;
     }
 
-    const params: Record<string, string | number> = { anio: this.anio(), mes: this.mes() };
+    const params: Record<string, string | number> = {};
     if (this.seccionId()) params['seccion_id'] = this.seccionId();
     if (this.nivelId()) params['nivel_id'] = this.nivelId();
     if (this.gradoId()) params['grado_id'] = this.gradoId();
