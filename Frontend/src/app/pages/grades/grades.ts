@@ -187,8 +187,7 @@ export class Grades implements OnInit {
     return (
       !!this.teacherCursoId() &&
       !!this.teacherEstudianteId() &&
-      !!this.periodoId() &&
-      !!this.tipoEvalId() &&
+      this.step2Complete() &&
       this.nota() >= 0 &&
       this.nota() <= 20 &&
       this.peso() > 0
@@ -200,8 +199,7 @@ export class Grades implements OnInit {
       !this.editMode() &&
       !!this.teacherCursoId() &&
       !!this.teacherEstudianteId() &&
-      !!this.periodoId() &&
-      !!this.tipoEvalId(),
+      this.step2Complete(),
   );
 
   protected readonly step2Touched = signal(false);
@@ -242,7 +240,7 @@ export class Grades implements OnInit {
       case 2:
         return this.step2Complete();
       case 3:
-        return this.canSaveGrade();
+        return false;
       default:
         return false;
     }
@@ -438,14 +436,14 @@ export class Grades implements OnInit {
   protected onPeriodoChange(periodoId: string): void {
     this.periodoId.set(periodoId);
     if (this.step1Complete()) {
-      this.step2Touched.set(true);
+      this.step2Touched.set(false);
     }
   }
 
   protected onTipoEvalChange(tipoId: string): void {
     this.tipoEvalId.set(tipoId);
     if (this.step1Complete()) {
-      this.step2Touched.set(true);
+      this.step2Touched.set(false);
     }
   }
 
@@ -524,6 +522,7 @@ export class Grades implements OnInit {
           this.gradeSuccess.set('Calificación guardada correctamente.');
           this.gradeError.set('');
           this.teacherEstudianteId.set('');
+          this.step2Touched.set(false);
           this.nombreEval.set('');
           this.nota.set(0);
           this.peso.set(1);
