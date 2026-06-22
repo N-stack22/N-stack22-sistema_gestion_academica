@@ -37,6 +37,7 @@ export class Teachers implements OnInit {
   protected readonly editMode = signal(false);
   protected readonly assignedCourses = signal<TeacherCourse[]>([]);
   protected readonly horarioDocente = signal<Schedule[]>([]);
+  protected readonly horarioDocenteDiaFiltro = signal('');
 
   protected readonly diasSemana = [
     { order: 1, nombre: 'Lunes' },
@@ -63,6 +64,11 @@ export class Teachers implements OnInit {
       lista.sort((a, b) => (a.startTime ?? '').localeCompare(b.startTime ?? ''));
     }
     return map;
+  });
+
+  protected readonly diasHorarioDocenteVisibles = computed(() => {
+    const dia = Number(this.horarioDocenteDiaFiltro());
+    return dia ? this.diasSemana.filter((d) => d.order === dia) : this.diasSemana;
   });
 
   protected readonly draftSearchFilter = signal('');

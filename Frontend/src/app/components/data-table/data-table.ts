@@ -3,6 +3,12 @@ import { Component, computed, effect, input, output, signal } from '@angular/cor
 import { EmptyState } from '../empty-state/empty-state';
 import { DataTableColumn, DataTableRow } from './data-table.model';
 
+interface DataTableFilterGroup {
+  key: string;
+  label: string;
+  options: string[];
+}
+
 @Component({
   selector: 'app-data-table',
   imports: [EmptyState, NgClass],
@@ -17,6 +23,7 @@ export class DataTable {
   readonly rows = input.required<DataTableRow[]>();
   readonly showActions = input<boolean>(true);
   readonly showSearch = input<boolean>(true);
+  readonly showColumnFilters = input<boolean>(true);
   readonly showPagination = input<boolean>(true);
   readonly pageSize = input<number>(10);
   readonly showViewButton = input<boolean>(false);
@@ -29,12 +36,15 @@ export class DataTable {
   readonly secondaryDetailClick = output<DataTableRow>();
 
   protected readonly searchTerm = signal('');
+  protected readonly columnFilters = signal<Record<string, string>>({});
   protected readonly currentPage = signal(1);
 
   constructor() {
     effect(() => {
       this.rows();
+      this.columns();
       this.searchTerm.set('');
+      this.columnFilters.set({});
       this.currentPage.set(1);
     });
 
@@ -53,13 +63,47 @@ export class DataTable {
 
   protected readonly filteredRows = computed(() => {
     const term = this.normalize(this.searchTerm());
-    if (!term) {
-      return this.rows();
-    }
-    return this.rows().filter((row) =>
-      Object.values(row).some((value) => this.normalize(String(value)).includes(term)),
-    );
+    const activeFilters = Object.entries(this.columnFilters()).filter(([, value]) => value);
+
+    return this.rows().filter((row) => {
+      const matchesSearch =
+        !term || Object.values(row).some((value) => this.normalize(String(value)).includes(term));
+
+      if (!matchesSearch) {
+        return false;
+      }
+
+      return activeFilters.every(
+        ([key, value]) => this.normalize(this.filterDisplayValue(row, key)) === this.normalize(value),
+      );
+    });
   });
+
+  protected readonly filterGroups = computed<DataTableFilterGroup[]>(() =>
+    this.columns()
+      .map((column) => {
+        const options = Array.from(
+          new Set(this.rows().map((row) => this.filterDisplayValue(row, column.key))),
+        )
+          .filter((value) => value)
+          .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+
+        return {
+          key: column.key,
+          label: column.label,
+          options,
+        };
+      })
+      .filter((group) => group.options.length > 1),
+  );
+
+  protected readonly activeFilterCount = computed(
+    () => Object.values(this.columnFilters()).filter((value) => value).length,
+  );
+
+  protected readonly hasActiveFilters = computed(
+    () => Boolean(this.searchTerm().trim()) || this.activeFilterCount() > 0,
+  );
 
   protected readonly recordCount = computed(() => this.filteredRows().length);
 
@@ -100,6 +144,24 @@ export class DataTable {
 
   protected onSearchInput(value: string): void {
     this.searchTerm.set(value);
+  }
+
+  protected onColumnFilterInput(key: string, value: string): void {
+    this.columnFilters.update((current) => ({
+      ...current,
+      [key]: value,
+    }));
+    this.currentPage.set(1);
+  }
+
+  protected filterValue(key: string): string {
+    return this.columnFilters()[key] ?? '';
+  }
+
+  protected clearFilters(): void {
+    this.searchTerm.set('');
+    this.columnFilters.set({});
+    this.currentPage.set(1);
   }
 
   protected goToPage(page: number): void {
@@ -161,5 +223,9 @@ export class DataTable {
       .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '');
+  }
+
+  private filterDisplayValue(row: DataTableRow, key: string): string {
+    return row[key]?.trim() || 'Sin dato';
   }
 }

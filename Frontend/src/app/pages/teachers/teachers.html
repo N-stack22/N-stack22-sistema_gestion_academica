@@ -50,9 +50,15 @@
 
             <h4 class="h6 fw-bold mt-4 d-flex flex-wrap justify-content-between align-items-center gap-2">
               <span>Horario semanal</span>
-              <select class="form-select form-select-sm" style="width: auto" [value]="anioId()" (change)="anioId.set($any($event.target).value); loadHorarioDocente(teacher.id)">
+              <span class="d-flex flex-wrap gap-2">
+                <select class="form-select form-select-sm" style="width: auto" [value]="horarioDocenteDiaFiltro()" (change)="horarioDocenteDiaFiltro.set($any($event.target).value)">
+                  <option value="">Todos los dias</option>
+                  @for (d of diasSemana; track d.order) { <option [value]="d.order">{{ d.nombre }}</option> }
+                </select>
+                <select class="form-select form-select-sm" style="width: auto" [value]="anioId()" (change)="anioId.set($any($event.target).value); loadHorarioDocente(teacher.id)">
                 @for (a of anios(); track a.id) { <option [value]="a.id">Año {{ a.anio }}</option> }
-              </select>
+                </select>
+              </span>
             </h4>
             <div class="table-responsive mb-3">
               <table class="table table-sm table-bordered mb-0">
@@ -63,7 +69,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (d of diasSemana; track d.order) {
+                  @for (d of diasHorarioDocenteVisibles(); track d.order) {
                     <tr>
                       <td class="fw-semibold">{{ d.nombre }}</td>
                       <td>

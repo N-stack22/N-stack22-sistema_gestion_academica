@@ -208,6 +208,39 @@
         <h3 class="h6 fw-bold">Secciones, aulas y capacidad</h3>
         <p class="text-muted small">Gestione la estructura académica del año activo: cada sección tiene aula física y cupo máximo.</p>
 
+        <div class="row g-2 align-items-end mb-3">
+          <div class="col-md-3">
+            <label class="form-label">Nivel</label>
+            <select class="form-select form-select-sm" [value]="sectionFilterNivel()" (change)="onSectionFilterNivel($any($event.target).value)">
+              <option value="">Todos</option>
+              @for (nivel of sectionFilterLevels(); track nivel) {
+                <option [value]="nivel">{{ nivel }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Grado</label>
+            <select class="form-select form-select-sm" [value]="sectionFilterGrado()" (change)="sectionFilterGrado.set($any($event.target).value)">
+              <option value="">Todos</option>
+              @for (grado of sectionFilterGrades(); track grado) {
+                <option [value]="grado">{{ grado }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Buscar</label>
+            <input
+              class="form-control form-control-sm"
+              placeholder="Seccion, aula o capacidad"
+              [value]="sectionFilterBusqueda()"
+              (input)="sectionFilterBusqueda.set($any($event.target).value)"
+            />
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary w-100" (click)="clearSectionFilters()">Limpiar</button>
+          </div>
+        </div>
+
         <div class="table-responsive mb-4">
           <table class="table table-sm align-middle">
             <thead>
@@ -221,7 +254,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (s of secciones(); track s.id) {
+              @for (s of filteredSecciones(); track s.id) {
                 <tr>
                   <td>{{ s.nivel }}</td>
                   <td>{{ s.grado }}</td>
@@ -245,6 +278,10 @@
                   <td>
                     <button type="button" class="btn btn-sm btn-outline-primary" (click)="guardarSeccion(s.id)">Guardar</button>
                   </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="6" class="text-center text-muted py-3">No hay secciones para los filtros seleccionados.</td>
                 </tr>
               }
             </tbody>

@@ -82,6 +82,11 @@ export class Schedules implements OnInit {
     return map;
   });
 
+  protected readonly diasSemanaVisibles = computed(() => {
+    const dia = Number(this.filtroDia());
+    return dia ? this.diasSemana.filter((d) => d.order === dia) : this.diasSemana;
+  });
+
   protected readonly columns: DataTableColumn[] = [
     { key: 'curso', label: 'Curso' },
     { key: 'docente', label: 'Docente' },

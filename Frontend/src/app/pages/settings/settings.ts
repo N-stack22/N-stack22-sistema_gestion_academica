@@ -62,6 +62,9 @@ export class Settings implements OnInit {
   protected readonly nuevaSeccionAula = signal('');
   protected readonly nuevaSeccionCapacidad = signal(30);
   protected readonly editDrafts = signal<Record<string, { aula: string; capacidad: number }>>({});
+  protected readonly sectionFilterNivel = signal('');
+  protected readonly sectionFilterGrado = signal('');
+  protected readonly sectionFilterBusqueda = signal('');
 
   protected readonly nuevoAnio = signal(new Date().getFullYear() + 1);
   protected readonly nuevoAnioInicio = signal('');
@@ -104,6 +107,32 @@ export class Settings implements OnInit {
       }
     }
     return [...seen.values()].sort((a, b) => a.nombre.localeCompare(b.nombre));
+  });
+
+  protected readonly sectionFilterLevels = computed(() =>
+    this.uniqueSorted(this.secciones().map((s) => s.nivel ?? 'Sin nivel')),
+  );
+
+  protected readonly sectionFilterGrades = computed(() => {
+    const nivel = this.sectionFilterNivel();
+    const sections = nivel ? this.secciones().filter((s) => (s.nivel ?? 'Sin nivel') === nivel) : this.secciones();
+    return this.uniqueSorted(sections.map((s) => s.grado ?? 'Sin grado'));
+  });
+
+  protected readonly filteredSecciones = computed(() => {
+    const nivel = this.sectionFilterNivel();
+    const grado = this.sectionFilterGrado();
+    const query = this.normalize(this.sectionFilterBusqueda());
+
+    return this.secciones().filter((section) => {
+      const sectionNivel = section.nivel ?? 'Sin nivel';
+      const sectionGrado = section.grado ?? 'Sin grado';
+      const matchesNivel = !nivel || sectionNivel === nivel;
+      const matchesGrado = !grado || sectionGrado === grado;
+      const searchable = `${sectionNivel} ${sectionGrado} ${section.nombre} ${section.aula ?? ''} ${section.capacidad ?? ''}`;
+      const matchesQuery = !query || this.normalize(searchable).includes(query);
+      return matchesNivel && matchesGrado && matchesQuery;
+    });
   });
 
   protected readonly cards: SettingsCard[] = [
@@ -328,6 +357,17 @@ export class Settings implements OnInit {
     }
   }
 
+  protected onSectionFilterNivel(nivel: string): void {
+    this.sectionFilterNivel.set(nivel);
+    this.sectionFilterGrado.set('');
+  }
+
+  protected clearSectionFilters(): void {
+    this.sectionFilterNivel.set('');
+    this.sectionFilterGrado.set('');
+    this.sectionFilterBusqueda.set('');
+  }
+
   protected crearSeccion(): void {
     if (!this.anioActivoId() || !this.nuevaSeccionGrado() || !this.nuevaSeccionNombre().trim()) {
       this.errorMessage.set('Seleccione grado y nombre de sección.');
@@ -375,5 +415,18 @@ export class Settings implements OnInit {
         },
         error: (err) => this.errorMessage.set(err?.error?.detail ?? 'No se pudo actualizar la sección.'),
       });
+  }
+
+  private uniqueSorted(values: string[]): string[] {
+    return Array.from(new Set(values.filter((value) => value.trim()))).sort((a, b) =>
+      a.localeCompare(b, 'es', { sensitivity: 'base' }),
+    );
+  }
+
+  private normalize(value: string): string {
+    return value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
   }
 }

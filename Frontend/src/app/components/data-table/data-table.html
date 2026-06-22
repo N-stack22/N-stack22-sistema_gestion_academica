@@ -34,6 +34,43 @@
     </div>
   }
 
+  @if (showColumnFilters() && filterGroups().length > 0) {
+    <div class="data-table__filters">
+      <div class="data-table__filters-header">
+        <span class="data-table__filters-title">
+          <i class="bi bi-funnel" aria-hidden="true"></i>
+          Filtros
+        </span>
+        @if (activeFilterCount() > 0) {
+          <span class="data-table__filters-count">{{ activeFilterCount() }} activo{{ activeFilterCount() === 1 ? '' : 's' }}</span>
+        }
+      </div>
+      <div class="data-table__filter-grid">
+        @for (filter of filterGroups(); track filter.key) {
+          <label class="data-table__filter-field">
+            <span>{{ filter.label }}</span>
+            <select
+              class="form-select form-select-sm"
+              [value]="filterValue(filter.key)"
+              (change)="onColumnFilterInput(filter.key, $any($event.target).value)"
+            >
+              <option value="">Todos</option>
+              @for (option of filter.options; track option) {
+                <option [value]="option">{{ option }}</option>
+              }
+            </select>
+          </label>
+        }
+        @if (hasActiveFilters()) {
+          <button type="button" class="btn btn-sm btn-outline-secondary data-table__clear-filters" (click)="clearFilters()">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+            Limpiar
+          </button>
+        }
+      </div>
+    </div>
+  }
+
   <div class="data-table__body">
     @if (filteredRows().length === 0) {
       <app-empty-state
