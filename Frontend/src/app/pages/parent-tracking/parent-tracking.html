@@ -14,7 +14,7 @@
     <div class="form-panel admin-card mb-4">
       <div class="form-panel__header">
         <h2 class="form-panel__title">
-          {{ selectedCase() ? 'Registrar actualizacion de seguimiento' : 'Registrar seguimiento' }}
+          {{ selectedBase() ? 'Registrar actualizacion de seguimiento' : 'Registrar seguimiento' }}
         </h2>
         <p class="form-panel__hint mb-0">
           Seleccione un estudiante o use una fila del historial como base para una nueva comunicacion.
@@ -99,9 +99,9 @@
   }
 
   @if (selectedCase(); as caso) {
-    <div class="admin-card p-4 mb-4">
+    <div class="admin-card p-4 mb-4" data-table-action-target>
       <h2 class="h6 fw-bold mb-3">
-        {{ isParentView() ? 'Detalle de seguimiento' : 'Ultimo registro seleccionado' }}
+        Detalle de seguimiento
       </h2>
       <div class="row g-3">
         @if (!isParentView()) {
@@ -124,7 +124,9 @@
     [columns]="columns()"
     [rows]="rows()"
     [showActions]="true"
-    [detailLabel]="isParentView() ? 'Ver detalle' : 'Usar como base'"
+    detailLabel="Ver detalle"
+    [secondaryDetailLabel]="canRegisterFollowUp() ? 'Usar como base' : ''"
     (detailClick)="onDetail($event)"
+    (secondaryDetailClick)="onUseAsBase($event)"
   />
 </div>

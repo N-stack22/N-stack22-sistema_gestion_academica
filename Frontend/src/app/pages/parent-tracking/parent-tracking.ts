@@ -32,6 +32,7 @@ export class ParentTracking implements OnInit {
   protected readonly rawItems = signal<SeguimientoRow[]>([]);
   protected readonly students = signal<Student[]>([]);
   protected readonly selectedCase = signal<SeguimientoRow | null>(null);
+  protected readonly selectedBase = signal<SeguimientoRow | null>(null);
   protected readonly selectedStudentId = signal('');
 
   protected readonly observacion = signal('');
@@ -153,7 +154,18 @@ export class ParentTracking implements OnInit {
     if (!item) return;
 
     this.selectedCase.set(item);
+    this.successMessage.set('');
+    this.errorMessage.set('');
+  }
+
+  protected onUseAsBase(row: DataTableRow): void {
+    const item = this.rawItems().find((record) => record['id'] === row['_id']);
+    if (!item) return;
+
+    this.selectedCase.set(item);
+    this.selectedBase.set(item);
     this.selectedStudentId.set(item['studentId'] ?? '');
+    this.estadoCodigo.set(item['statusCode'] || this.estadoCodigo());
     this.observacion.set(item['notes'] ?? '');
     this.ultimaComunicacion.set(item['lastContact'] || new Date().toISOString().slice(0, 10));
     this.successMessage.set('');
@@ -163,6 +175,7 @@ export class ParentTracking implements OnInit {
   protected onStudentSelection(studentId: string): void {
     this.selectedStudentId.set(studentId);
     this.selectedCase.set(null);
+    this.selectedBase.set(null);
     this.observacion.set('');
     this.ultimaComunicacion.set(new Date().toISOString().slice(0, 10));
     this.successMessage.set('');
@@ -171,8 +184,8 @@ export class ParentTracking implements OnInit {
 
   protected registrarComunicacion(): void {
     const user = this.auth.currentUser();
-    const selectedCase = this.selectedCase();
-    const studentId = selectedCase?.['studentId'] || this.selectedStudentId();
+    const selectedBase = this.selectedBase();
+    const studentId = selectedBase?.['studentId'] || this.selectedStudentId();
 
     if (!studentId || !user) {
       this.errorMessage.set('Seleccione un estudiante para registrar el seguimiento.');
@@ -183,7 +196,7 @@ export class ParentTracking implements OnInit {
     this.seguimientoService
       .crear({
         estudiante_id: studentId,
-        apoderado_id: selectedCase?.['parentId'] || undefined,
+        apoderado_id: selectedBase?.['parentId'] || undefined,
         estado_codigo: this.estadoCodigo(),
         observacion: this.observacion().trim() || undefined,
         ultima_comunicacion: this.ultimaComunicacion() || new Date().toISOString().slice(0, 10),
@@ -194,6 +207,7 @@ export class ParentTracking implements OnInit {
         next: (created) => {
           const createdCase = created as SeguimientoRow;
           this.selectedCase.set(createdCase?.['id'] ? createdCase : null);
+          this.selectedBase.set(createdCase?.['id'] ? createdCase : null);
           this.selectedStudentId.set(createdCase?.['studentId'] || studentId);
           this.successMessage.set('Seguimiento academico registrado.');
           this.errorMessage.set('');
