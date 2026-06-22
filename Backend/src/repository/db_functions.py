@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import time
 from typing import Any
 
@@ -15,6 +16,7 @@ class DbFunctionError(Exception):
 
 
 _CACHE: dict[str, tuple[float, Any]] = {}
+_SAFE_FUNCTION_NAME = re.compile(r"^fn_[a-z0-9_]+$")
 
 
 def _cache_ttl_seconds() -> int:
@@ -52,6 +54,9 @@ def call_object_function(name: str, params: dict[str, Any] | None = None) -> dic
 def _call_function(name: str, params: dict[str, Any]) -> Any:
     if not has_database_url():
         raise DbFunctionError("DATABASE_URL no configurada")
+
+    if not _SAFE_FUNCTION_NAME.fullmatch(name):
+        raise DbFunctionError("Nombre de funcion SQL no permitido")
 
     clean = {k: (None if v in ("", None) else v) for k, v in params.items()}
     ttl = _cache_ttl_seconds()

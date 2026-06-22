@@ -25,6 +25,22 @@ Lista de verificacion para presentar el proyecto como portal academico real inte
 - [ ] PARENT solo consulta hijos asociados.
 - [ ] 401 cierra sesion y vuelve a login.
 - [ ] 403 bloquea acceso no permitido.
+- [ ] XSS mitigado: Angular renderiza datos por interpolacion y no se usa `innerHTML` ni `bypassSecurityTrust`.
+- [ ] SQL Injection mitigado: consultas Supabase usan query builder y SQL directo solo ejecuta funciones `fn_*` con parametros separados.
+- [ ] Endpoints privados protegidos por middleware backend que exige `Authorization: Bearer`.
+- [ ] Cabeceras de seguridad activas: `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy` y CSP para API.
+- [ ] HTTPS aplicado en despliegue Railway/GitHub Pages y HSTS habilitable con `ENABLE_HSTS=true`.
+
+### Vulnerabilidades identificadas y contramedidas
+
+| Vulnerabilidad comun | Riesgo en el sistema | Contramedida aplicada |
+| --- | --- | --- |
+| XSS | Inyeccion de HTML o scripts desde campos visibles. | Angular interpola contenido, no se usa HTML dinamico inseguro y el API responde con CSP para rutas JSON. |
+| SQL Injection | Manipulacion de consultas por parametros de usuario. | Supabase query builder parametriza filtros; funciones PostgreSQL aceptan parametros separados y nombres `fn_*` validados. |
+| Acceso no autorizado | Llamadas directas al backend sin pasar por guards del frontend. | Middleware global valida token Bearer en rutas privadas y mantiene 401/403 para control de sesion. |
+| Exposicion de sesion | Cache o reutilizacion accidental de respuestas de autenticacion. | Respuestas de `/api/auth/*` usan `Cache-Control: no-store`. |
+| Clickjacking y sniffing | Embebido del API en iframes o interpretacion incorrecta de contenido. | Cabeceras `X-Frame-Options: DENY` y `X-Content-Type-Options: nosniff`. |
+| Transporte inseguro | Credenciales o tokens enviados por HTTP en produccion. | Railway y GitHub Pages usan HTTPS; HSTS puede forzarse con `ENABLE_HSTS=true`. |
 
 ## Base de datos
 

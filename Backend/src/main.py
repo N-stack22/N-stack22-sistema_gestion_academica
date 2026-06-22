@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 load_dotenv(Path(__file__).resolve().parents[1] / ".env", override=True)
 
@@ -84,6 +85,86 @@ app.add_middleware(
 )
 
 
+PUBLIC_API_PATHS = {
+    "/api/auth/login",
+    "/api/health",
+}
+PUBLIC_API_PREFIXES = (
+    "/api/noticias",
+    "/api/comunicados",
+    "/api/niveles-educativos",
+)
+DOCUMENTATION_PATHS = {
+    "/",
+    "/docs",
+    "/redoc",
+    "/openapi.json",
+}
+
+
+def _is_public_api_path(path: str) -> bool:
+    return path in PUBLIC_API_PATHS or any(
+        path == prefix or path.startswith(f"{prefix}/")
+        for prefix in PUBLIC_API_PREFIXES
+    )
+
+
+def _apply_security_headers(request, response) -> None:
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("X-Frame-Options", "DENY")
+    response.headers.setdefault("Referrer-Policy", "no-referrer")
+    response.headers.setdefault(
+        "Permissions-Policy",
+        "camera=(), microphone=(), geolocation=()",
+    )
+
+    if request.url.path.startswith("/api/auth"):
+        response.headers["Cache-Control"] = "no-store"
+
+    if request.url.path not in DOCUMENTATION_PATHS:
+        response.headers.setdefault(
+            "Content-Security-Policy",
+            "default-src 'none'; frame-ancestors 'none'; base-uri 'none'",
+        )
+
+    enable_hsts = os.getenv("ENABLE_HSTS", "").strip().lower() in {"1", "true", "yes", "on"}
+    if request.url.scheme == "https" or enable_hsts:
+        response.headers.setdefault(
+            "Strict-Transport-Security",
+            "max-age=31536000; includeSubDomains",
+        )
+
+
+@app.middleware("http")
+async def require_private_api_token(request, call_next):
+    path = request.url.path
+    if request.method == "OPTIONS" or not path.startswith("/api/") or _is_public_api_path(path):
+        return await call_next(request)
+
+    authorization = request.headers.get("authorization")
+    if not authorization or not authorization.startswith("Bearer "):
+        response = JSONResponse({"detail": "Token no enviado"}, status_code=401)
+        _apply_security_headers(request, response)
+        return response
+
+    token = authorization.removeprefix("Bearer ").strip()
+    if not token:
+        response = JSONResponse({"detail": "Token vacio"}, status_code=401)
+        _apply_security_headers(request, response)
+        return response
+
+    try:
+        from src.repository.auth_repository import AuthRepository
+
+        AuthRepository().context(token)
+    except ValueError as exc:
+        response = JSONResponse({"detail": str(exc)}, status_code=401)
+        _apply_security_headers(request, response)
+        return response
+
+    return await call_next(request)
+
+
 @app.middleware("http")
 async def clear_query_cache_after_mutation(request, call_next):
     response = await call_next(request)
@@ -91,6 +172,7 @@ async def clear_query_cache_after_mutation(request, call_next):
         from src.repository.db_functions import clear_function_cache
 
         clear_function_cache()
+    _apply_security_headers(request, response)
     return response
 
 app.include_router(auth_router)
