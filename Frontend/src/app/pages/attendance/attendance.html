@@ -30,6 +30,115 @@
     </div>
   </header>
 
+  @if (roleContext.isInstitutional()) {
+    <div class="form-panel admin-card mb-4" data-table-action-target>
+      <div class="form-panel__header">
+        <h2 class="form-panel__title">
+          {{ editMode() ? 'Editar asistencia' : 'Registrar asistencia' }}
+        </h2>
+        <p class="form-panel__subtitle mb-0">
+          @if (editMode()) {
+            Actualice el estado y la observacion del registro seleccionado.
+          } @else {
+            Seleccione curso, fecha y estudiante para registrar asistencia individual.
+          }
+        </p>
+      </div>
+      <div class="form-panel__body">
+        @if (successMessage().length > 0) {
+          <div class="form-success-card mb-3">{{ successMessage() }}</div>
+        }
+        @if (errorMessage().length > 0) {
+          <div class="alert alert-danger mb-3">{{ errorMessage() }}</div>
+        }
+        <div class="row g-3 align-items-end">
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Curso</label>
+            <select
+              class="form-select"
+              [value]="cursoId()"
+              (change)="onCursoChange($any($event.target).value)"
+              [disabled]="saving() || editMode()"
+            >
+              <option value="">Seleccionar</option>
+              @for (c of cursos(); track c.id) {
+                <option [value]="c.id">{{ c.name }}{{ c.section ? ' - ' + c.section : '' }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-lg-2 col-md-6">
+            <label class="form-label">Fecha</label>
+            <input
+              type="date"
+              class="form-control"
+              [value]="fecha()"
+              (input)="onFechaChange($any($event.target).value)"
+              [readonly]="saving() || editMode()"
+            />
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label">Estudiante</label>
+            <select
+              class="form-select"
+              [value]="estudianteId()"
+              (change)="estudianteId.set($any($event.target).value)"
+              [disabled]="saving() || editMode()"
+            >
+              <option value="">Seleccionar</option>
+              @for (e of cursoEstudiantes(); track e.id) {
+                <option [value]="e.id">{{ e.fullName }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label">Estado</label>
+            <select
+              class="form-select"
+              [value]="estadoCodigo()"
+              (change)="estadoCodigo.set($any($event.target).value)"
+              [disabled]="saving()"
+            >
+              @for (estado of estados; track estado.codigo) {
+                <option [value]="estado.codigo">{{ estado.nombre }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-lg-8">
+            <label class="form-label">Observacion</label>
+            <input
+              class="form-control"
+              [value]="observacion()"
+              (input)="observacion.set($any($event.target).value)"
+              placeholder="Opcional"
+              [disabled]="saving()"
+            />
+          </div>
+          <div class="col-lg-4">
+            <div class="d-flex flex-wrap gap-2">
+              <button
+                type="button"
+                class="btn btn-horizonte-primary flex-fill"
+                (click)="guardarAsistencia()"
+                [disabled]="saving() || !cursoId() || !estudianteId()"
+              >
+                @if (saving()) {
+                  Guardando...
+                } @else {
+                  {{ editMode() ? 'Guardar cambios' : 'Guardar asistencia' }}
+                }
+              </button>
+              @if (editMode()) {
+                <button type="button" class="btn btn-outline-secondary" (click)="cancelarEdicion()" [disabled]="saving()">
+                  Cancelar
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
   @if (roleContext.isTeacher()) {
     <div class="form-panel admin-card mb-4">
       <div class="form-panel__header">
