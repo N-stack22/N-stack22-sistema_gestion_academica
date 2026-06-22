@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Horizonte Digital">
+  <title>Horizonte Digital</title>
+  <defs>
+    <linearGradient id="bg" x1="8" y1="6" x2="58" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#123765" />
+      <stop offset="0.58" stop-color="#0b1f3a" />
+      <stop offset="1" stop-color="#071527" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)" />
+  <path d="M10 50h44v4H10z" fill="#f4c430" opacity="0.95" />
+  <path d="M15 19 32 10l17 9-17 9-17-9Z" fill="#f4c430" />
+  <path d="M46 22v9.5" fill="none" stroke="#f4c430" stroke-width="3" stroke-linecap="round" />
+  <circle cx="46" cy="34" r="3.4" fill="#f4c430" />
+  <path d="M19 27h8v19h-8V27Zm18 0h8v19h-8V27Zm-12 7h14v6H25v-6Z" fill="#fff" />
+  <path d="M20 47c4-2 8-2 12 0 4-2 8-2 12 0v4c-4-2-8-2-12 0-4-2-8-2-12 0v-4Z" fill="#ffffff" opacity="0.9" />
+</svg>
