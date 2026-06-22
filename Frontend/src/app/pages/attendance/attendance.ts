@@ -28,44 +28,44 @@ export class Attendance implements OnInit {
   private readonly attendanceService = inject(AttendanceService);
   private readonly courseService = inject(CourseService);
   private readonly catalogService = inject(CatalogService);
-  protected readonly roleContext = inject(RoleContextService);
+  public readonly roleContext = inject(RoleContextService);
   private readonly studentContext = inject(StudentContextService);
   private readonly parentContext = inject(ParentContextService);
   private readonly studentService = inject(StudentService);
 
-  protected readonly editId = signal('');
-  protected readonly cursoId = signal('');
-  protected readonly fecha = signal(new Date().toISOString().slice(0, 10));
-  protected readonly estudianteId = signal('');
-  protected readonly estadoCodigo = signal('PRESENTE');
-  protected readonly observacion = signal('');
-  protected readonly saving = signal(false);
-  protected readonly successMessage = signal('');
-  protected readonly errorMessage = signal('');
+  public readonly editId = signal('');
+  public readonly cursoId = signal('');
+  public readonly fecha = signal(new Date().toISOString().slice(0, 10));
+  public readonly estudianteId = signal('');
+  public readonly estadoCodigo = signal('PRESENTE');
+  public readonly observacion = signal('');
+  public readonly saving = signal(false);
+  public readonly successMessage = signal('');
+  public readonly errorMessage = signal('');
 
-  protected readonly draftFiltroCurso = signal('');
-  protected readonly draftFiltroFecha = signal('');
-  protected readonly draftFiltroEstudiante = signal('');
-  protected readonly draftFiltroEstado = signal('');
+  public readonly draftFiltroCurso = signal('');
+  public readonly draftFiltroFecha = signal('');
+  public readonly draftFiltroEstudiante = signal('');
+  public readonly draftFiltroEstado = signal('');
 
-  protected readonly filtroCurso = signal('');
-  protected readonly filtroFecha = signal('');
-  protected readonly filtroEstudiante = signal('');
-  protected readonly filtroEstado = signal('');
+  public readonly filtroCurso = signal('');
+  public readonly filtroFecha = signal('');
+  public readonly filtroEstudiante = signal('');
+  public readonly filtroEstado = signal('');
 
-  protected readonly cursos = signal<{ id: string; name: string; section: string }[]>([]);
-  protected readonly estudiantes = signal<{ id: string; fullName: string; section: string }[]>([]);
-  protected readonly attendanceDrafts = signal<AttendanceDraft[]>([]);
-  protected readonly estados = [
+  public readonly cursos = signal<{ id: string; name: string; section: string }[]>([]);
+  public readonly estudiantes = signal<{ id: string; fullName: string; section: string }[]>([]);
+  public readonly attendanceDrafts = signal<AttendanceDraft[]>([]);
+  public readonly estados = [
     { codigo: 'PRESENTE', nombre: 'Presente' },
     { codigo: 'TARDE', nombre: 'Tarde' },
     { codigo: 'FALTA', nombre: 'Falta' },
     { codigo: 'JUSTIFICADO', nombre: 'Justificado' },
   ];
 
-  protected readonly editMode = computed(() => !!this.editId());
+  public readonly editMode = computed(() => !!this.editId());
 
-  protected readonly adminColumns: DataTableColumn[] = [
+  public readonly adminColumns: DataTableColumn[] = [
     { key: 'fecha', label: 'Fecha' },
     { key: 'estudiante', label: 'Estudiante' },
     { key: 'curso', label: 'Curso' },
@@ -73,20 +73,20 @@ export class Attendance implements OnInit {
     { key: 'observacion', label: 'Observación' },
   ];
 
-  protected readonly personalColumns: DataTableColumn[] = [
+  public readonly personalColumns: DataTableColumn[] = [
     { key: 'fecha', label: 'Fecha' },
     { key: 'curso', label: 'Curso' },
     { key: 'estado', label: 'Estado' },
   ];
 
-  protected readonly columns = computed(() =>
+  public readonly columns = computed(() =>
     this.roleContext.isStudent() || this.roleContext.isParent() ? this.personalColumns : this.adminColumns,
   );
 
-  protected readonly allRows = signal<DataTableRow[]>([]);
-  protected readonly selectedAttendance = signal<DataTableRow | null>(null);
+  public readonly allRows = signal<DataTableRow[]>([]);
+  public readonly selectedAttendance = signal<DataTableRow | null>(null);
 
-  protected readonly rows = computed(() => {
+  public readonly rows = computed(() => {
     let data = this.allRows();
     if (this.filtroEstado()) {
       const estado = this.estados.find((e) => e.codigo === this.filtroEstado())?.nombre ?? this.filtroEstado();
@@ -95,7 +95,7 @@ export class Attendance implements OnInit {
     return data;
   });
 
-  protected readonly attendanceStats = computed(() => {
+  public readonly attendanceStats = computed(() => {
     const rows = this.allRows();
     let presentes = 0;
     let tardes = 0;
@@ -113,15 +113,15 @@ export class Attendance implements OnInit {
     return { presentes, tardes, faltas, justificados, total, asistencia };
   });
 
-  protected readonly cursoEstudiantes = computed(() => {
+  public readonly cursoEstudiantes = computed(() => {
     const curso = this.cursos().find((c) => c.id === this.cursoId());
     if (!curso) return this.estudiantes();
     return this.estudiantes().filter((e) => e.section === curso.section);
   });
 
-  protected readonly selectedCourse = computed(() => this.cursos().find((c) => c.id === this.cursoId()) ?? null);
+  public readonly selectedCourse = computed(() => this.cursos().find((c) => c.id === this.cursoId()) ?? null);
 
-  protected readonly canEdit = computed(
+  public readonly canEdit = computed(
     () => this.roleContext.isTeacher() || this.roleContext.isInstitutional(),
   );
 
@@ -178,7 +178,7 @@ export class Attendance implements OnInit {
     });
   }
 
-  protected buscar(): void {
+  public buscar(): void {
     this.filtroCurso.set(this.draftFiltroCurso());
     this.filtroFecha.set(this.draftFiltroFecha());
     this.filtroEstudiante.set(this.draftFiltroEstudiante());
@@ -186,7 +186,7 @@ export class Attendance implements OnInit {
     this.loadAsistencia();
   }
 
-  protected loadAsistencia(): void {
+  public loadAsistencia(): void {
     if (this.roleContext.requiresStudentScope() && !this.roleContext.getStudentId()) {
       this.allRows.set([]);
       return;
@@ -228,7 +228,7 @@ export class Attendance implements OnInit {
     });
   }
 
-  protected guardarAsistencia(): void {
+  public guardarAsistencia(): void {
     if (this.roleContext.isTeacher()) {
       this.guardarAsistenciaLote();
       return;
@@ -261,7 +261,7 @@ export class Attendance implements OnInit {
     });
   }
 
-  protected editarAsistencia(row: DataTableRow): void {
+  public editarAsistencia(row: DataTableRow): void {
     const id = row['_id'];
     if (!id) return;
     if (this.roleContext.isTeacher()) {
@@ -287,11 +287,11 @@ export class Attendance implements OnInit {
     }
   }
 
-  protected verDetalleAsistencia(row: DataTableRow): void {
+  public verDetalleAsistencia(row: DataTableRow): void {
     this.selectedAttendance.set(row);
   }
 
-  protected onTableDetail(row: DataTableRow): void {
+  public onTableDetail(row: DataTableRow): void {
     if (this.canEdit()) {
       this.editarAsistencia(row);
       return;
@@ -300,14 +300,14 @@ export class Attendance implements OnInit {
     this.verDetalleAsistencia(row);
   }
 
-  protected cancelarEdicion(): void {
+  public cancelarEdicion(): void {
     this.editId.set('');
     this.estudianteId.set('');
     this.observacion.set('');
     this.estadoCodigo.set('PRESENTE');
   }
 
-  protected onCursoChange(cursoId: string): void {
+  public onCursoChange(cursoId: string): void {
     this.cursoId.set(cursoId);
     this.estudianteId.set('');
     this.editId.set('');
@@ -319,7 +319,7 @@ export class Attendance implements OnInit {
     }
   }
 
-  protected onFechaChange(value: string): void {
+  public onFechaChange(value: string): void {
     this.fecha.set(value);
     this.successMessage.set('');
     this.errorMessage.set('');
@@ -328,19 +328,19 @@ export class Attendance implements OnInit {
     }
   }
 
-  protected updateDraftStatus(studentId: string, statusCode: string): void {
+  public updateDraftStatus(studentId: string, statusCode: string): void {
     this.attendanceDrafts.update((items) =>
       items.map((item) => (item.studentId === studentId ? { ...item, statusCode } : item)),
     );
   }
 
-  protected updateDraftObservation(studentId: string, observation: string): void {
+  public updateDraftObservation(studentId: string, observation: string): void {
     this.attendanceDrafts.update((items) =>
       items.map((item) => (item.studentId === studentId ? { ...item, observation } : item)),
     );
   }
 
-  protected markAll(statusCode: string): void {
+  public markAll(statusCode: string): void {
     this.attendanceDrafts.update((items) => items.map((item) => ({ ...item, statusCode })));
   }
 
@@ -401,7 +401,7 @@ export class Attendance implements OnInit {
     });
   }
 
-  protected loadAttendanceDrafts(students = this.cursoEstudiantes()): void {
+  public loadAttendanceDrafts(students = this.cursoEstudiantes()): void {
     if (!this.cursoId() || !this.fecha()) {
       this.attendanceDrafts.set([]);
       return;

@@ -25,45 +25,45 @@ export class ParentTracking implements OnInit {
   private readonly studentService = inject(StudentService);
   private readonly auth = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
-  protected readonly roleContext = inject(RoleContextService);
-  protected readonly parentContext = inject(ParentContextService);
+  public readonly roleContext = inject(RoleContextService);
+  public readonly parentContext = inject(ParentContextService);
 
-  protected readonly allRows = signal<DataTableRow[]>([]);
-  protected readonly rawItems = signal<SeguimientoRow[]>([]);
-  protected readonly students = signal<Student[]>([]);
-  protected readonly selectedCase = signal<SeguimientoRow | null>(null);
-  protected readonly selectedBase = signal<SeguimientoRow | null>(null);
-  protected readonly selectedStudentId = signal('');
+  public readonly allRows = signal<DataTableRow[]>([]);
+  public readonly rawItems = signal<SeguimientoRow[]>([]);
+  public readonly students = signal<Student[]>([]);
+  public readonly selectedCase = signal<SeguimientoRow | null>(null);
+  public readonly selectedBase = signal<SeguimientoRow | null>(null);
+  public readonly selectedStudentId = signal('');
 
-  protected readonly observacion = signal('');
-  protected readonly estadoCodigo = signal('REGULAR');
-  protected readonly ultimaComunicacion = signal(new Date().toISOString().slice(0, 10));
-  protected readonly successMessage = signal('');
-  protected readonly errorMessage = signal('');
-  protected readonly saving = signal(false);
+  public readonly observacion = signal('');
+  public readonly estadoCodigo = signal('REGULAR');
+  public readonly ultimaComunicacion = signal(new Date().toISOString().slice(0, 10));
+  public readonly successMessage = signal('');
+  public readonly errorMessage = signal('');
+  public readonly saving = signal(false);
 
-  protected readonly estados = signal<{ codigo: string; nombre: string }[]>([]);
+  public readonly estados = signal<{ codigo: string; nombre: string }[]>([]);
 
-  protected readonly isParentView = computed(() => this.roleContext.isParent());
-  protected readonly canRegisterFollowUp = computed(() => !this.isParentView());
-  protected readonly rows = computed(() => this.allRows());
-  protected readonly selectedStudent = computed(
+  public readonly isParentView = computed(() => this.roleContext.isParent());
+  public readonly canRegisterFollowUp = computed(() => !this.isParentView());
+  public readonly rows = computed(() => this.allRows());
+  public readonly selectedStudent = computed(
     () => this.students().find((student) => student.id === this.selectedStudentId()) ?? null,
   );
 
-  protected readonly pageLabel = computed(() => {
+  public readonly pageLabel = computed(() => {
     if (this.roleContext.isParent()) return 'Portal padre de familia';
     if (this.roleContext.isTeacher()) return 'Gestion docente';
     return 'Gestion institucional';
   });
 
-  protected readonly pageTitle = computed(() => {
+  public readonly pageTitle = computed(() => {
     if (this.roleContext.isParent()) return 'Seguimiento academico del estudiante';
     if (this.roleContext.isTeacher()) return 'Seguimiento de estudiantes';
     return 'Seguimiento academico';
   });
 
-  protected readonly pageSubtitle = computed(() => {
+  public readonly pageSubtitle = computed(() => {
     if (this.roleContext.isParent()) {
       return 'Observaciones y estado academico del estudiante seleccionado.';
     }
@@ -73,7 +73,7 @@ export class ParentTracking implements OnInit {
     return 'Registre y consulte el seguimiento academico de todos los estudiantes.';
   });
 
-  protected readonly columns = computed<DataTableColumn[]>(() =>
+  public readonly columns = computed<DataTableColumn[]>(() =>
     this.isParentView()
       ? [
           { key: 'fecha', label: 'Fecha' },
@@ -122,7 +122,7 @@ export class ParentTracking implements OnInit {
     });
   }
 
-  protected load(): void {
+  public load(): void {
     const params: Record<string, string> = {};
 
     if (this.roleContext.isParent()) {
@@ -149,7 +149,7 @@ export class ParentTracking implements OnInit {
     });
   }
 
-  protected onDetail(row: DataTableRow): void {
+  public onDetail(row: DataTableRow): void {
     const item = this.rawItems().find((record) => record['id'] === row['_id']);
     if (!item) return;
 
@@ -158,7 +158,7 @@ export class ParentTracking implements OnInit {
     this.errorMessage.set('');
   }
 
-  protected onUseAsBase(row: DataTableRow): void {
+  public onUseAsBase(row: DataTableRow): void {
     const item = this.rawItems().find((record) => record['id'] === row['_id']);
     if (!item) return;
 
@@ -172,7 +172,7 @@ export class ParentTracking implements OnInit {
     this.errorMessage.set('');
   }
 
-  protected onStudentSelection(studentId: string): void {
+  public onStudentSelection(studentId: string): void {
     this.selectedStudentId.set(studentId);
     this.selectedCase.set(null);
     this.selectedBase.set(null);
@@ -182,7 +182,7 @@ export class ParentTracking implements OnInit {
     this.errorMessage.set('');
   }
 
-  protected registrarComunicacion(): void {
+  public registrarComunicacion(): void {
     const user = this.auth.currentUser();
     const selectedBase = this.selectedBase();
     const studentId = selectedBase?.['studentId'] || this.selectedStudentId();
