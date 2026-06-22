@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, computed, effect, input, output, signal } from '@angular/core';
+import { Component, ElementRef, computed, effect, inject, input, output, signal } from '@angular/core';
 import { EmptyState } from '../empty-state/empty-state';
 import { DataTableColumn, DataTableRow } from './data-table.model';
 
@@ -16,6 +16,8 @@ interface DataTableFilterGroup {
   styleUrl: './data-table.scss',
 })
 export class DataTable {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
   readonly title = input<string>('');
   readonly subtitle = input<string>('');
   readonly icon = input<string>('bi-table');
@@ -26,6 +28,8 @@ export class DataTable {
   readonly showColumnFilters = input<boolean>(true);
   readonly showPagination = input<boolean>(true);
   readonly pageSize = input<number>(10);
+  readonly autoScrollOnAction = input<boolean>(true);
+  readonly actionScrollTarget = input<string>('');
   readonly showViewButton = input<boolean>(false);
   readonly viewLabel = input<string>('Ver');
   readonly detailLabel = input<string>('Detalle');
@@ -178,14 +182,17 @@ export class DataTable {
 
   protected onDetail(row: DataTableRow): void {
     this.detailClick.emit(row);
+    this.scheduleActionScroll(this.detailLabel());
   }
 
   protected onView(row: DataTableRow): void {
     this.viewClick.emit(row);
+    this.scheduleActionScroll(this.viewLabel());
   }
 
   protected onSecondaryDetail(row: DataTableRow): void {
     this.secondaryDetailClick.emit(row);
+    this.scheduleActionScroll(this.secondaryDetailLabel());
   }
 
   protected cellValue(row: DataTableRow, key: string): string {
@@ -227,5 +234,138 @@ export class DataTable {
 
   private filterDisplayValue(row: DataTableRow, key: string): string {
     return row[key]?.trim() || 'Sin dato';
+  }
+
+  private scheduleActionScroll(label: string): void {
+    if (!this.autoScrollOnAction() || !this.shouldAutoScroll(label)) {
+      return;
+    }
+
+    window.setTimeout(() => this.scrollToActionTarget(label), 80);
+  }
+
+  private shouldAutoScroll(label: string): boolean {
+    const normalized = this.normalize(label);
+    return ['editar', 'detalle', 'seguimiento', 'usar como base', 'calificar', 'entregas'].some((term) =>
+      normalized.includes(term),
+    );
+  }
+
+  private scrollToActionTarget(label: string): void {
+    const hostElement = this.host.nativeElement;
+    const page = hostElement.closest('.admin-page') as HTMLElement | null;
+    const scope = page ?? document.body;
+    const explicitTarget = this.actionScrollTarget().trim();
+    const target =
+      (explicitTarget ? this.findVisibleElement(scope, explicitTarget) : null) ??
+      this.findMatchingActionPanel(scope, hostElement, label) ??
+      this.findMarkedActionPanel(scope, hostElement) ??
+      this.findDefaultActionPanel(scope, hostElement, label);
+
+    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  private findVisibleElement(scope: ParentNode, selector: string): HTMLElement | null {
+    return (
+      Array.from(scope.querySelectorAll<HTMLElement>(selector)).find((element) =>
+        this.isVisible(element),
+      ) ?? null
+    );
+  }
+
+  private findMatchingActionPanel(scope: ParentNode, hostElement: HTMLElement, label: string): HTMLElement | null {
+    const labelTerms = this.actionTerms(label);
+    if (labelTerms.length === 0) {
+      return null;
+    }
+
+    const panels = this.actionPanels(scope).filter((element) => !element.contains(hostElement));
+    return (
+      panels.find((element) => {
+        const title = this.normalize(element.querySelector('h1,h2,h3,h4,.form-panel__title')?.textContent ?? '');
+        return labelTerms.some((term) => title.includes(term));
+      }) ?? null
+    );
+  }
+
+  private findMarkedActionPanel(scope: ParentNode, hostElement: HTMLElement): HTMLElement | null {
+    const markedPanels = Array.from(scope.querySelectorAll<HTMLElement>('[data-table-action-target]')).filter(
+      (element) => this.isVisible(element) && !element.contains(hostElement),
+    );
+
+    return this.closestPanel(markedPanels, hostElement);
+  }
+
+  private findDefaultActionPanel(scope: ParentNode, hostElement: HTMLElement, label: string): HTMLElement | null {
+    const panels = this.actionPanels(scope).filter((element) => !this.isFilterPanel(element));
+    const formPanels = panels.filter((element) => element.classList.contains('form-panel'));
+    const beforeForms = formPanels.filter((element) => this.isBefore(element, hostElement));
+
+    if (this.prefersFormTarget(label) && beforeForms.length) {
+      return beforeForms[0];
+    }
+
+    const beforeTable = panels.filter(
+      (element) => this.isBefore(element, hostElement),
+    );
+    const afterTable = panels.filter((element) => this.isAfter(element, hostElement));
+
+    if (this.prefersDetailTarget(label)) {
+      return afterTable[0] ?? this.closestPanel(beforeTable, hostElement) ?? panels[0] ?? null;
+    }
+
+    return beforeForms[0] ?? this.closestPanel(beforeTable, hostElement) ?? afterTable[0] ?? panels[0] ?? null;
+  }
+
+  private actionPanels(scope: ParentNode): HTMLElement[] {
+    return Array.from(scope.querySelectorAll<HTMLElement>('.form-panel, .admin-card')).filter(
+      (element) =>
+        this.isVisible(element) &&
+        !element.classList.contains('data-table') &&
+        !!element.querySelector('h1,h2,h3,h4,.form-panel__title,form,button'),
+    );
+  }
+
+  private actionTerms(label: string): string[] {
+    const normalized = this.normalize(label);
+    const terms = ['editar', 'detalle', 'seguimiento', 'usar como base', 'calificar', 'entregas'];
+    return terms.filter((term) => normalized.includes(term));
+  }
+
+  private prefersFormTarget(label: string): boolean {
+    const normalized = this.normalize(label);
+    return normalized.includes('editar') || normalized.includes('usar como base') || normalized.includes('seguimiento');
+  }
+
+  private prefersDetailTarget(label: string): boolean {
+    const normalized = this.normalize(label);
+    return normalized.includes('detalle') || normalized.includes('entregas') || normalized.includes('calificar');
+  }
+
+  private isFilterPanel(element: HTMLElement): boolean {
+    return this.normalize(element.textContent ?? '').includes('filtros de busqueda');
+  }
+
+  private isBefore(element: HTMLElement, reference: HTMLElement): boolean {
+    return (element.compareDocumentPosition(reference) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+  }
+
+  private isAfter(element: HTMLElement, reference: HTMLElement): boolean {
+    return (element.compareDocumentPosition(reference) & Node.DOCUMENT_POSITION_PRECEDING) !== 0;
+  }
+
+  private closestPanel(elements: HTMLElement[], reference: HTMLElement): HTMLElement | null {
+    return (
+      elements
+        .map((element) => ({
+          element,
+          distance: Math.abs(element.getBoundingClientRect().top - reference.getBoundingClientRect().top),
+        }))
+        .sort((a, b) => a.distance - b.distance)[0]?.element ?? null
+    );
+  }
+
+  private isVisible(element: HTMLElement): boolean {
+    return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
   }
 }
