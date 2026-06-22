@@ -33,48 +33,92 @@
   @if (roleContext.isTeacher()) {
     <div class="form-panel admin-card mb-4">
       <div class="form-panel__header">
-        <h2 class="form-panel__title">{{ editMode() ? 'Editar asistencia' : 'Registrar asistencia' }}</h2>
+        <h2 class="form-panel__title">Registrar asistencia por salon</h2>
+        <p class="form-panel__subtitle mb-0">Seleccione curso y fecha para marcar la asistencia de todos los estudiantes del salon.</p>
       </div>
       <div class="form-panel__body">
         @if (successMessage()) { <div class="form-success-card mb-3">{{ successMessage() }}</div> }
         @if (errorMessage()) { <div class="alert alert-danger mb-3">{{ errorMessage() }}</div> }
         <div class="row g-3 align-items-end">
-          <div class="col-md-3">
+          <div class="col-md-5">
             <label class="form-label">Curso</label>
-            <select class="form-select" [value]="cursoId()" (change)="onCursoChange($any($event.target).value)" [disabled]="editMode()">
+            <select class="form-select" [value]="cursoId()" (change)="onCursoChange($any($event.target).value)" [disabled]="saving()">
               <option value="">Seleccionar</option>
               @for (c of cursos(); track c.id) { <option [value]="c.id">{{ c.name }}</option> }
             </select>
           </div>
-          <div class="col-md-2">
-            <label class="form-label">Fecha</label>
-            <input type="date" class="form-control" [value]="fecha()" (input)="fecha.set($any($event.target).value)" [readonly]="editMode()" />
-          </div>
           <div class="col-md-3">
-            <label class="form-label">Estudiante</label>
-            <select class="form-select" [value]="estudianteId()" (change)="estudianteId.set($any($event.target).value)" [disabled]="editMode()">
-              <option value="">Seleccionar</option>
-              @for (e of cursoEstudiantes(); track e.id) { <option [value]="e.id">{{ e.fullName }}</option> }
-            </select>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">Estado</label>
-            <select class="form-select" [value]="estadoCodigo()" (change)="estadoCodigo.set($any($event.target).value)">
-              @for (e of estados; track e.codigo) { <option [value]="e.codigo">{{ e.nombre }}</option> }
-            </select>
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-control" [value]="fecha()" (input)="onFechaChange($any($event.target).value)" [readonly]="saving()" />
           </div>
           <div class="col-md-4">
-            <label class="form-label">Observación</label>
-            <input class="form-control" [value]="observacion()" (input)="observacion.set($any($event.target).value)" placeholder="Opcional" />
+            <label class="form-label">Salon</label>
+            <input class="form-control" readonly [value]="selectedCourse()?.section || 'Seleccione un curso'" />
           </div>
-          <div class="col-md-8 d-flex gap-2">
-            <button type="button" class="btn btn-horizonte-primary" (click)="guardarAsistencia()">
-              {{ editMode() ? 'Actualizar' : 'Guardar' }}
-            </button>
-            @if (editMode()) {
-              <button type="button" class="btn btn-outline-secondary" (click)="cancelarEdicion()">Cancelar</button>
+        </div>
+
+        @if (cursoId()) {
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-4 mb-3">
+            <div>
+              <h3 class="h6 fw-bold mb-1">Lista de estudiantes</h3>
+              <p class="text-muted small mb-0">{{ attendanceDrafts().length }} estudiante{{ attendanceDrafts().length === 1 ? '' : 's' }} para registrar.</p>
+            </div>
+            @if (attendanceDrafts().length) {
+              <div class="d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-sm btn-outline-success" (click)="markAll('PRESENTE')" [disabled]="saving()">Todos presentes</button>
+                <button type="button" class="btn btn-sm btn-outline-warning" (click)="markAll('TARDE')" [disabled]="saving()">Todos tarde</button>
+                <button type="button" class="btn btn-sm btn-outline-danger" (click)="markAll('FALTA')" [disabled]="saving()">Todos falta</button>
+              </div>
             }
           </div>
+
+          @if (attendanceDrafts().length) {
+            <div class="table-responsive">
+              <table class="table erp-table mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">Estudiante</th>
+                    <th scope="col" style="width: 14rem">Estado</th>
+                    <th scope="col">Observacion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (item of attendanceDrafts(); track item.studentId) {
+                    <tr>
+                      <td class="fw-semibold">{{ item.fullName }}</td>
+                      <td>
+                        <select class="form-select form-select-sm" [value]="item.statusCode" (change)="updateDraftStatus(item.studentId, $any($event.target).value)" [disabled]="saving()">
+                          @for (estado of estados; track estado.codigo) {
+                            <option [value]="estado.codigo">{{ estado.nombre }}</option>
+                          }
+                        </select>
+                      </td>
+                      <td>
+                        <input class="form-control form-control-sm" [value]="item.observation" (input)="updateDraftObservation(item.studentId, $any($event.target).value)" placeholder="Opcional" [disabled]="saving()" />
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          } @else {
+            <div class="alert alert-warning mb-0">No se encontraron estudiantes para este curso.</div>
+          }
+        } @else {
+          <div class="alert alert-info mt-4 mb-0">Seleccione un curso para cargar la lista de estudiantes.</div>
+        }
+
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <button type="button" class="btn btn-horizonte-primary" (click)="guardarAsistencia()" [disabled]="saving() || !cursoId() || !attendanceDrafts().length">
+            @if (saving()) {
+              Guardando...
+            } @else {
+              Guardar asistencia del salon
+            }
+          </button>
+          @if (cursoId()) {
+            <button type="button" class="btn btn-outline-secondary" (click)="loadAttendanceDrafts()" [disabled]="saving()">Recargar lista</button>
+          }
         </div>
       </div>
     </div>

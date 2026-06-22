@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Query
 
-from src.schemas.requests import AsistenciaRegistroRequest
+from src.schemas.requests import AsistenciaLoteRequest, AsistenciaRegistroRequest
 from src.services.asistencia_service import AsistenciaService
 
 router = APIRouter(prefix="/api/asistencia", tags=["asistencia"])
@@ -25,6 +25,11 @@ def listar_asistencia(
 @router.post("", status_code=201)
 def registrar_asistencia(body: AsistenciaRegistroRequest):
     return service.registrar(body.model_dump())
+
+
+@router.post("/lote", status_code=201)
+def registrar_asistencia_lote(body: AsistenciaLoteRequest):
+    return service.registrar_lote([registro.model_dump() for registro in body.registros])
 
 
 @router.put("/{asistencia_id}")

@@ -166,6 +166,10 @@ class AsistenciaRegistroRequest(BaseModel):
     registrado_por_docente_id: str | None = None
 
 
+class AsistenciaLoteRequest(BaseModel):
+    registros: list[AsistenciaRegistroRequest] = Field(min_length=1)
+
+
 class EntregaCalificarRequest(BaseModel):
     nota: float | None = None
     retroalimentacion: str | None = None

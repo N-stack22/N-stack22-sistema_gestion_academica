@@ -16,6 +16,12 @@ class AsistenciaService:
         except ValueError as exc:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
+    def registrar_lote(self, registros: list[dict]):
+        try:
+            return [self._repository.registrar(data) for data in registros]
+        except ValueError as exc:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
     def actualizar(self, asistencia_id: str, data: dict):
         try:
             return self._repository.actualizar(asistencia_id, data)

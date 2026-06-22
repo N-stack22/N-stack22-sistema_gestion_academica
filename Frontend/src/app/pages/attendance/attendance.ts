@@ -1,4 +1,5 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { finalize } from 'rxjs';
 import { DataTable } from '../../components/data-table/data-table';
 import { DataTableColumn, DataTableRow } from '../../components/data-table/data-table.model';
 import { AttendanceService } from '../../services/attendance.service';
@@ -8,6 +9,14 @@ import { RoleContextService } from '../../services/role-context.service';
 import { StudentContextService } from '../../services/student-context.service';
 import { ParentContextService } from '../../services/parent-context.service';
 import { StudentService } from '../../services/student.service';
+
+interface AttendanceDraft {
+  studentId: string;
+  fullName: string;
+  statusCode: string;
+  observation: string;
+  existingId?: string;
+}
 
 @Component({
   selector: 'app-attendance',
@@ -30,6 +39,7 @@ export class Attendance implements OnInit {
   protected readonly estudianteId = signal('');
   protected readonly estadoCodigo = signal('PRESENTE');
   protected readonly observacion = signal('');
+  protected readonly saving = signal(false);
   protected readonly successMessage = signal('');
   protected readonly errorMessage = signal('');
 
@@ -45,6 +55,7 @@ export class Attendance implements OnInit {
 
   protected readonly cursos = signal<{ id: string; name: string; section: string }[]>([]);
   protected readonly estudiantes = signal<{ id: string; fullName: string; section: string }[]>([]);
+  protected readonly attendanceDrafts = signal<AttendanceDraft[]>([]);
   protected readonly estados = [
     { codigo: 'PRESENTE', nombre: 'Presente' },
     { codigo: 'TARDE', nombre: 'Tarde' },
@@ -107,6 +118,8 @@ export class Attendance implements OnInit {
     if (!curso) return this.estudiantes();
     return this.estudiantes().filter((e) => e.section === curso.section);
   });
+
+  protected readonly selectedCourse = computed(() => this.cursos().find((c) => c.id === this.cursoId()) ?? null);
 
   protected readonly canEdit = computed(
     () => this.roleContext.isTeacher() || this.roleContext.isInstitutional(),
@@ -216,8 +229,12 @@ export class Attendance implements OnInit {
   }
 
   protected guardarAsistencia(): void {
+    if (this.roleContext.isTeacher()) {
+      this.guardarAsistenciaLote();
+      return;
+    }
+
     if (!this.cursoId() || !this.estudianteId()) return;
-    if (this.roleContext.isTeacher() && !this.roleContext.getTeacherId()) return;
 
     this.errorMessage.set('');
     const payload = {
@@ -233,7 +250,8 @@ export class Attendance implements OnInit {
       ? this.attendanceService.actualizar(this.editId(), payload)
       : this.attendanceService.registrar(payload);
 
-    request.subscribe({
+    this.saving.set(true);
+    request.pipe(finalize(() => this.saving.set(false))).subscribe({
       next: () => {
         this.successMessage.set(this.editId() ? 'Asistencia actualizada.' : 'Asistencia registrada.');
         this.cancelarEdicion();
@@ -246,6 +264,16 @@ export class Attendance implements OnInit {
   protected editarAsistencia(row: DataTableRow): void {
     const id = row['_id'];
     if (!id) return;
+    if (this.roleContext.isTeacher()) {
+      const cursoId = String(row['_cursoId'] ?? '');
+      this.editId.set('');
+      this.cursoId.set(cursoId);
+      this.fecha.set(String(row['_fecha'] ?? row['fecha'] ?? this.fecha()));
+      this.successMessage.set('');
+      this.errorMessage.set('');
+      this.loadEstudiantesDocente(cursoId, true);
+      return;
+    }
     this.editId.set(String(id));
     this.cursoId.set(String(row['_cursoId'] ?? ''));
     this.fecha.set(String(row['_fecha'] ?? row['fecha'] ?? ''));
@@ -273,25 +301,136 @@ export class Attendance implements OnInit {
   protected onCursoChange(cursoId: string): void {
     this.cursoId.set(cursoId);
     this.estudianteId.set('');
+    this.editId.set('');
+    this.attendanceDrafts.set([]);
+    this.successMessage.set('');
+    this.errorMessage.set('');
     if (this.roleContext.isTeacher()) {
-      this.loadEstudiantesDocente(cursoId);
+      this.loadEstudiantesDocente(cursoId, true);
     }
   }
 
-  private loadEstudiantesDocente(cursoId?: string): void {
+  protected onFechaChange(value: string): void {
+    this.fecha.set(value);
+    this.successMessage.set('');
+    this.errorMessage.set('');
+    if (this.roleContext.isTeacher() && this.cursoId()) {
+      this.loadAttendanceDrafts();
+    }
+  }
+
+  protected updateDraftStatus(studentId: string, statusCode: string): void {
+    this.attendanceDrafts.update((items) =>
+      items.map((item) => (item.studentId === studentId ? { ...item, statusCode } : item)),
+    );
+  }
+
+  protected updateDraftObservation(studentId: string, observation: string): void {
+    this.attendanceDrafts.update((items) =>
+      items.map((item) => (item.studentId === studentId ? { ...item, observation } : item)),
+    );
+  }
+
+  protected markAll(statusCode: string): void {
+    this.attendanceDrafts.update((items) => items.map((item) => ({ ...item, statusCode })));
+  }
+
+  private guardarAsistenciaLote(): void {
+    const docenteId = this.roleContext.getTeacherId();
+    if (!docenteId) return;
+    if (!this.cursoId() || !this.fecha()) {
+      this.errorMessage.set('Seleccione curso y fecha para registrar asistencia.');
+      return;
+    }
+    if (!this.attendanceDrafts().length) {
+      this.errorMessage.set('No hay estudiantes disponibles para este curso.');
+      return;
+    }
+
+    const payload = this.attendanceDrafts().map((row) => ({
+      estudiante_id: row.studentId,
+      curso_asignado_id: this.cursoId(),
+      estado_codigo: row.statusCode,
+      fecha: this.fecha(),
+      observacion: row.observation.trim() || undefined,
+      registrado_por_docente_id: docenteId,
+    }));
+
+    this.errorMessage.set('');
+    this.successMessage.set('');
+    this.saving.set(true);
+    this.attendanceService
+      .registrarLote(payload)
+      .pipe(finalize(() => this.saving.set(false)))
+      .subscribe({
+        next: () => {
+          this.successMessage.set(`Asistencia registrada para ${payload.length} estudiante${payload.length === 1 ? '' : 's'}.`);
+          this.loadAttendanceDrafts();
+          this.loadAsistencia();
+        },
+        error: (err) => this.errorMessage.set(err?.error?.detail ?? 'No se pudo guardar la asistencia del salón.'),
+      });
+  }
+
+  private loadEstudiantesDocente(cursoId?: string, prepareRoster = false): void {
     const docenteId = this.roleContext.getTeacherId();
     if (!docenteId) return;
     const params: Record<string, string> = { docente_id: docenteId };
     if (cursoId) params['curso_id'] = cursoId;
     this.studentService.listar(params).subscribe({
-      next: (students) =>
-        this.estudiantes.set(
-          students.map((e) => ({
-            id: e.id,
-            fullName: e.fullName,
-            section: e.section ?? '',
+      next: (students) => {
+        const mapped = students.map((e) => ({
+          id: e.id,
+          fullName: e.fullName,
+          section: e.section ?? '',
+        }));
+        this.estudiantes.set(mapped);
+        if (prepareRoster) {
+          this.loadAttendanceDrafts(mapped);
+        }
+      },
+    });
+  }
+
+  protected loadAttendanceDrafts(students = this.cursoEstudiantes()): void {
+    if (!this.cursoId() || !this.fecha()) {
+      this.attendanceDrafts.set([]);
+      return;
+    }
+
+    const params: Record<string, string> = {
+      curso_id: this.cursoId(),
+      fecha: this.fecha(),
+    };
+    const docenteId = this.roleContext.getTeacherId();
+    if (docenteId) params['docente_id'] = docenteId;
+
+    this.attendanceService.listar(params).subscribe({
+      next: (records) => {
+        const byStudent = new Map(records.map((record) => [record.studentId, record]));
+        this.attendanceDrafts.set(
+          students.map((student) => {
+            const existing = byStudent.get(student.id);
+            return {
+              studentId: student.id,
+              fullName: student.fullName,
+              statusCode: existing?.statusCode || 'PRESENTE',
+              observation: existing?.notes ?? '',
+              existingId: existing?.id,
+            };
+          }),
+        );
+      },
+      error: () => {
+        this.attendanceDrafts.set(
+          students.map((student) => ({
+            studentId: student.id,
+            fullName: student.fullName,
+            statusCode: 'PRESENTE',
+            observation: '',
           })),
-        ),
+        );
+      },
     });
   }
 }

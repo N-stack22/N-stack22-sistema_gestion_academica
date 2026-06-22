@@ -18,6 +18,10 @@ export class AttendanceService {
     return this.http.post<Attendance>(this.baseUrl, payload);
   }
 
+  registrarLote(payload: Record<string, unknown>[]): Observable<Attendance[]> {
+    return this.http.post<Attendance[]>(`${this.baseUrl}/lote`, { registros: payload });
+  }
+
   actualizar(id: string, payload: Record<string, unknown>): Observable<Attendance> {
     return this.http.put<Attendance>(`${this.baseUrl}/${id}`, payload);
   }
