@@ -28,8 +28,9 @@ class SeguimientoRepository:
             .select(
                 "id,observacion,ultima_comunicacion,estudiante_id,"
                 "estudiantes(id,codigo_estudiante,perfiles(nombres,apellidos),"
-                "matriculas(secciones(id,nombre,grados(id,nombre,niveles_educativos(id,nombre))))),"
-                "apoderados(perfiles(nombres,apellidos)),"
+                "matriculas(secciones(id,nombre,grados(id,nombre,niveles_educativos(id,nombre)))),"
+                "apoderado_estudiante(parentesco,es_principal,apoderados(id,perfiles(nombres,apellidos)))),"
+                "apoderados(id,perfiles(nombres,apellidos)),"
                 "estados_seguimiento(codigo,nombre)"
             )
         )
@@ -70,6 +71,7 @@ class SeguimientoRepository:
 
     def crear(self, data: dict) -> dict:
         client = get_supabase()
+        apoderado_id = data.get("apoderado_id") or self._buscar_apoderado_principal(data["estudiante_id"])
         estado_resp = (
             client.table("estados_seguimiento")
             .select("id")
@@ -84,7 +86,7 @@ class SeguimientoRepository:
             .insert(
                 {
                     "estudiante_id": data["estudiante_id"],
-                    "apoderado_id": data.get("apoderado_id"),
+                    "apoderado_id": apoderado_id,
                     "estado_id": estado_resp.data[0]["id"],
                     "observacion": data.get("observacion"),
                     "ultima_comunicacion": data.get("ultima_comunicacion"),
@@ -99,9 +101,23 @@ class SeguimientoRepository:
         created_rows = self.listar(estudiante_id=data["estudiante_id"])
         return next((row for row in created_rows if row["id"] == created_id), created_rows[0])
 
+    def _buscar_apoderado_principal(self, estudiante_id: str) -> str | None:
+        client = get_supabase()
+        response = (
+            client.table("apoderado_estudiante")
+            .select("apoderado_id")
+            .eq("estudiante_id", estudiante_id)
+            .order("es_principal", desc=True)
+            .limit(1)
+            .execute()
+        )
+        if not response.data:
+            return None
+        return response.data[0].get("apoderado_id")
+
     def _map_row(self, row: dict) -> dict:
         est = row.get("estudiantes") or {}
-        ap = row.get("apoderados") or {}
+        ap = row.get("apoderados") or self._apoderado_desde_estudiante(est)
         estado = row.get("estados_seguimiento") or {}
         matriculas = est.get("matriculas") or []
         mat = matriculas[-1] if matriculas else {}
@@ -123,3 +139,11 @@ class SeguimientoRepository:
             "lastContact": str(row.get("ultima_comunicacion", "")),
             "notes": row.get("observacion", ""),
         }
+
+    @staticmethod
+    def _apoderado_desde_estudiante(estudiante: dict) -> dict:
+        links = estudiante.get("apoderado_estudiante") or []
+        if not links:
+            return {}
+        principal = next((link for link in links if link.get("es_principal")), links[0])
+        return principal.get("apoderados") or {}

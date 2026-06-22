@@ -109,9 +109,11 @@
                     {{ secondaryDetailLabel() }}
                   </button>
                 }
-                <button type="button" class="btn btn-sm erp-action-btn erp-action-btn--ghost" (click)="onDetail(row)">
-                  {{ detailLabel() }}
-                </button>
+                @if (detailLabel()) {
+                  <button type="button" class="btn btn-sm erp-action-btn erp-action-btn--ghost" (click)="onDetail(row)">
+                    {{ detailLabel() }}
+                  </button>
+                }
               </div>
             }
           </article>
@@ -161,13 +163,15 @@
                         {{ secondaryDetailLabel() }}
                       </button>
                     }
-                    <button
-                      type="button"
-                      class="btn btn-sm erp-action-btn erp-action-btn--ghost"
-                      (click)="onDetail(row)"
-                    >
-                      {{ detailLabel() }}
-                    </button>
+                    @if (detailLabel()) {
+                      <button
+                        type="button"
+                        class="btn btn-sm erp-action-btn erp-action-btn--ghost"
+                        (click)="onDetail(row)"
+                      >
+                        {{ detailLabel() }}
+                      </button>
+                    }
                   </td>
                 }
               </tr>
