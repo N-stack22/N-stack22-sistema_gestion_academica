@@ -98,6 +98,7 @@ export class Sidebar {
         { label: 'Recursos', icon: 'bi-folder2-open', route: '/admin/recursos' },
         { label: 'Asistencia', icon: 'bi-calendar-check', route: '/admin/asistencia' },
         { label: 'Estudiantes', icon: 'bi-person-badge', route: '/admin/estudiantes' },
+        { label: 'Seguimiento', icon: 'bi-people', route: '/admin/seguimiento-padres' },
       ],
     },
     {

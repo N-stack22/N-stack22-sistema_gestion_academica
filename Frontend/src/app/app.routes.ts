@@ -67,7 +67,7 @@ export const routes: Routes = [
         path: 'seguimiento-padres',
         component: ParentTracking,
         canActivate: [roleGuard],
-        data: { roles: ['ADMIN', 'DIRECTOR', 'PARENT'] },
+        data: { roles: ['ADMIN', 'DIRECTOR', 'TEACHER', 'PARENT'] },
       },
       { path: 'estudiantes', component: Students, canActivate: [roleGuard], data: { roles: ['ADMIN', 'DIRECTOR', 'TEACHER'] } },
       {

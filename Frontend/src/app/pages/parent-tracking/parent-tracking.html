@@ -1,84 +1,97 @@
 <div class="admin-page erp-module-shell">
   <header class="admin-page-header mb-4">
     <div>
-      <span class="badge admin-page__badge-module admin-badge mb-2">
-        {{ isParentView() ? 'Portal padre de familia' : 'Gestión institucional' }}
-      </span>
+      <span class="badge admin-page__badge-module admin-badge mb-2">{{ pageLabel() }}</span>
       <h1 class="admin-page-title h4 text-horizonte-blue fw-bold">
         <i class="bi bi-people horizonte-icon-inline" aria-hidden="true"></i>
-        {{ isParentView() ? 'Seguimiento académico del estudiante' : 'Seguimiento padres' }}
+        {{ pageTitle() }}
       </h1>
-      <p class="admin-page-subtitle text-muted mb-0">
-        @if (isParentView()) {
-          Observaciones y estado académico del estudiante seleccionado (solo consulta).
-        } @else {
-          Indicadores de rendimiento y comunicación con familias.
-        }
-      </p>
+      <p class="admin-page-subtitle text-muted mb-0">{{ pageSubtitle() }}</p>
     </div>
   </header>
 
-  @if (!isParentView()) {
+  @if (canRegisterFollowUp()) {
     <div class="form-panel admin-card mb-4">
-      <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
-      <div class="form-panel__body">
-        <div class="row g-3 align-items-end">
-          <div class="col-md-3">
-            <label class="form-label">Buscar</label>
-            <input class="form-control" placeholder="Estudiante o apoderado" [value]="draftBusqueda()" (input)="draftBusqueda.set($any($event.target).value)" />
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">Nivel</label>
-            <select class="form-select" [value]="draftNivelId()" (change)="onDraftNivelChange($any($event.target).value)">
-              <option value="">Todos</option>
-              @for (n of niveles(); track n.id) { <option [value]="n.id">{{ n.nombre }}</option> }
-            </select>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">Grado</label>
-            <select class="form-select" [value]="draftGradoId()" (change)="onDraftGradoChange($any($event.target).value)">
-              <option value="">Todos</option>
-              @for (g of grados(); track g.id) { <option [value]="g.id">{{ g.nombre }}</option> }
-            </select>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">Sección</label>
-            <select class="form-select" [value]="draftSeccionId()" (change)="draftSeccionId.set($any($event.target).value)">
-              <option value="">Todas</option>
-              @for (s of secciones(); track s.id) { <option [value]="s.id">{{ s.nombre }}</option> }
-            </select>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">Estado académico</label>
-            <select class="form-select" [value]="draftEstadoFiltro()" (change)="draftEstadoFiltro.set($any($event.target).value)">
-              <option value="">Todos</option>
-              @for (e of estados(); track e.codigo) { <option [value]="e.codigo">{{ e.nombre }}</option> }
-            </select>
-          </div>
-          <div class="col-md-1">
-            <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscar()">Buscar</button>
-          </div>
-        </div>
+      <div class="form-panel__header">
+        <h2 class="form-panel__title">
+          {{ selectedCase() ? 'Registrar actualizacion de seguimiento' : 'Registrar seguimiento' }}
+        </h2>
+        <p class="form-panel__hint mb-0">
+          Seleccione un estudiante o use una fila del historial como base para una nueva comunicacion.
+        </p>
       </div>
-    </div>
-  } @else {
-    <div class="form-panel admin-card mb-4">
-      <div class="form-panel__header"><h2 class="form-panel__title">Filtros de búsqueda</h2><p class="form-panel__hint mb-0"><i class="bi bi-funnel horizonte-icon-inline" aria-hidden="true"></i>Seleccione los criterios y pulse <strong>Buscar</strong> para actualizar la tabla.</p></div>
       <div class="form-panel__body">
+        @if (successMessage()) {
+          <div class="form-success-card mb-3" role="status">{{ successMessage() }}</div>
+        }
+        @if (errorMessage()) {
+          <div class="alert alert-danger mb-3" role="alert">{{ errorMessage() }}</div>
+        }
+
         <div class="row g-3 align-items-end">
           <div class="col-md-4">
-            <label class="form-label">Buscar</label>
-            <input class="form-control" placeholder="Observación o estado" [value]="draftBusqueda()" (input)="draftBusqueda.set($any($event.target).value)" />
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">Estado académico</label>
-            <select class="form-select" [value]="draftEstadoFiltro()" (change)="draftEstadoFiltro.set($any($event.target).value)">
-              <option value="">Todos</option>
-              @for (e of estados(); track e.codigo) { <option [value]="e.codigo">{{ e.nombre }}</option> }
+            <label class="form-label" for="tracking-student">Estudiante</label>
+            <select
+              id="tracking-student"
+              class="form-select"
+              [value]="selectedStudentId()"
+              (change)="onStudentSelection($any($event.target).value)"
+            >
+              <option value="">Seleccionar estudiante</option>
+              @for (student of students(); track student.id) {
+                <option [value]="student.id">
+                  {{ student.fullName }} - {{ student.code }} - {{ student.grade }} {{ student.section }}
+                </option>
+              }
             </select>
           </div>
           <div class="col-md-2">
-            <button type="button" class="btn btn-horizonte-primary w-100" (click)="buscar()">Buscar</button>
+            <label class="form-label" for="tracking-status">Estado</label>
+            <select
+              id="tracking-status"
+              class="form-select"
+              [value]="estadoCodigo()"
+              (change)="estadoCodigo.set($any($event.target).value)"
+            >
+              @for (estado of estados(); track estado.codigo) {
+                <option [value]="estado.codigo">{{ estado.nombre }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label" for="tracking-date">Comunicacion</label>
+            <input
+              id="tracking-date"
+              type="date"
+              class="form-control"
+              [value]="ultimaComunicacion()"
+              (input)="ultimaComunicacion.set($any($event.target).value)"
+            />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="tracking-note">Observacion / proxima accion</label>
+            <textarea
+              id="tracking-note"
+              class="form-control"
+              rows="2"
+              [value]="observacion()"
+              (input)="observacion.set($any($event.target).value)"
+            ></textarea>
+          </div>
+          <div class="col-12 d-flex flex-wrap gap-2 align-items-center">
+            <button
+              type="button"
+              class="btn btn-horizonte-primary"
+              [disabled]="saving()"
+              (click)="registrarComunicacion()"
+            >
+              {{ saving() ? 'Guardando...' : 'Registrar seguimiento' }}
+            </button>
+            @if (selectedStudent(); as student) {
+              <span class="text-muted small">
+                Alumno seleccionado: {{ student.fullName }} - {{ student.level }} {{ student.grade }} {{ student.section }}
+              </span>
+            }
           </div>
         </div>
       </div>
@@ -88,51 +101,30 @@
   @if (selectedCase(); as caso) {
     <div class="admin-card p-4 mb-4">
       <h2 class="h6 fw-bold mb-3">
-        {{ isParentView() ? 'Detalle de seguimiento' : 'Detalle del caso — ' + caso['studentName'] }}
+        {{ isParentView() ? 'Detalle de seguimiento' : 'Ultimo registro seleccionado' }}
       </h2>
-      <div class="row g-3 mb-3">
+      <div class="row g-3">
         @if (!isParentView()) {
+          <div class="col-md-3"><strong>Estudiante:</strong> {{ caso['studentName'] }}</div>
           <div class="col-md-3"><strong>Apoderado:</strong> {{ caso['parentName'] }}</div>
           <div class="col-md-3"><strong>Nivel:</strong> {{ caso['level'] }}</div>
-          <div class="col-md-3"><strong>Grado/Sección:</strong> {{ caso['grade'] }} {{ caso['section'] }}</div>
+          <div class="col-md-3"><strong>Grado/Seccion:</strong> {{ caso['grade'] }} {{ caso['section'] }}</div>
         }
         <div class="col-md-3"><strong>Estado:</strong> {{ caso['academicStatus'] }}</div>
-        <div class="col-md-12"><strong>Observación:</strong> {{ caso['notes'] || '—' }}</div>
-        <div class="col-md-12"><strong>Última comunicación:</strong> {{ caso['lastContact'] || '—' }}</div>
+        <div class="col-md-3"><strong>Ultima comunicacion:</strong> {{ caso['lastContact'] || '-' }}</div>
+        <div class="col-md-12"><strong>Observacion:</strong> {{ caso['notes'] || '-' }}</div>
       </div>
-      @if (!isParentView()) {
-        @if (successMessage()) { <div class="form-success-card mb-3">{{ successMessage() }}</div> }
-        <div class="row g-3">
-          <div class="col-md-3">
-            <label class="form-label">Estado seguimiento</label>
-            <select class="form-select" [value]="estadoCodigo()" (change)="estadoCodigo.set($any($event.target).value)">
-              @for (e of estados(); track e.codigo) { <option [value]="e.codigo">{{ e.nombre }}</option> }
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">Última comunicación</label>
-            <input type="date" class="form-control" [value]="ultimaComunicacion()" (input)="ultimaComunicacion.set($any($event.target).value)" />
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">Observación / próxima acción</label>
-            <textarea class="form-control" rows="2" [value]="observacion()" (input)="observacion.set($any($event.target).value)"></textarea>
-          </div>
-          <div class="col-12">
-            <button type="button" class="btn btn-horizonte-primary" (click)="registrarComunicacion()">Registrar comunicación</button>
-          </div>
-        </div>
-      }
     </div>
   }
 
   <app-data-table
-    [title]="isParentView() ? 'Historial de observaciones' : 'Seguimiento académico'"
-    [subtitle]="isParentView() ? 'Registros del estudiante seleccionado.' : 'Filtrado por estudiante, nivel, grado, sección y estado.'"
+    [title]="isParentView() ? 'Historial de observaciones' : 'Historial de seguimiento'"
+    [subtitle]="isParentView() ? 'Registros del estudiante seleccionado.' : 'Use los filtros de la tabla para ubicar estudiante, nivel, grado, seccion o estado.'"
     icon="bi-people"
     [columns]="columns()"
     [rows]="rows()"
     [showActions]="true"
-    [detailLabel]="isParentView() ? 'Ver detalle' : 'Detalle'"
+    [detailLabel]="isParentView() ? 'Ver detalle' : 'Usar como base'"
     (detailClick)="onDetail($event)"
   />
 </div>

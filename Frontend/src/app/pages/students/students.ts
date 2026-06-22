@@ -6,7 +6,6 @@ import { DataTableColumn, DataTableRow } from '../../components/data-table/data-
 import { Student } from '../../interfaces/student';
 import { RoleContextService } from '../../services/role-context.service';
 import { StudentService } from '../../services/student.service';
-import { CourseService } from '../../services/course.service';
 import { ParentService } from '../../services/parent.service';
 import { CatalogService } from '../../services/catalog.service';
 import {
@@ -27,7 +26,6 @@ import {
 export class Students implements OnInit {
   private readonly studentService = inject(StudentService);
   private readonly parentService = inject(ParentService);
-  private readonly courseService = inject(CourseService);
   private readonly catalogService = inject(CatalogService);
   private readonly router = inject(Router);
   protected readonly roleContext = inject(RoleContextService);
@@ -44,12 +42,6 @@ export class Students implements OnInit {
   protected readonly successMessage = signal('');
   protected readonly errorMessage = signal('');
   protected readonly loading = signal(false);
-  protected readonly draftSearchFilter = signal('');
-  protected readonly draftCourseId = signal('');
-  protected readonly searchFilter = signal('');
-  protected readonly selectedCourseId = signal('');
-
-  protected readonly teacherCursos = signal<{ id: string; name: string }[]>([]);
 
   protected readonly selectedStudent = signal<Student | null>(null);
   protected readonly editMode = signal(false);
@@ -74,15 +66,7 @@ export class Students implements OnInit {
 
   protected readonly allRows = signal<DataTableRow[]>([]);
 
-  protected readonly rows = computed(() => {
-    const q = this.searchFilter().trim().toLowerCase();
-    if (!q) return this.allRows();
-    return this.allRows().filter((r) => {
-      const nombre = String(r['nombre'] ?? '').toLowerCase();
-      const codigo = String(r['codigo'] ?? '').toLowerCase();
-      return nombre.includes(q) || codigo.includes(q);
-    });
-  });
+  protected readonly rows = computed(() => this.allRows());
 
   protected readonly isFormValid = computed(
     () =>
@@ -119,13 +103,7 @@ export class Students implements OnInit {
   });
 
   ngOnInit(): void {
-    if (this.roleContext.isTeacher() && this.roleContext.getTeacherId()) {
-      this.courseService.listar({ docente_id: this.roleContext.getTeacherId()! }).subscribe({
-        next: (c) =>
-          this.teacherCursos.set(c.map((x) => ({ id: x.id, name: x.label ?? x.name }))),
-      });
-    }
-    this.loadStudents();
+    this.roleContext.whenReady(() => this.loadStudents());
     if (!this.roleContext.isTeacher()) {
     this.parentService.listar().subscribe({
       next: (parents) => {
@@ -137,12 +115,6 @@ export class Students implements OnInit {
       },
     });
     }
-  }
-
-  protected buscar(): void {
-    this.searchFilter.set(this.draftSearchFilter().trim());
-    this.selectedCourseId.set(this.draftCourseId());
-    this.loadStudents();
   }
 
   protected onDniInput(event: Event): void {
@@ -160,7 +132,6 @@ export class Students implements OnInit {
     const params: Record<string, string> = {};
     if (this.roleContext.isTeacher() && this.roleContext.getTeacherId()) {
       params['docente_id'] = this.roleContext.getTeacherId()!;
-      if (this.selectedCourseId()) params['curso_id'] = this.selectedCourseId()!;
     }
     this.studentService
       .listar(Object.keys(params).length ? params : undefined)
@@ -249,6 +220,12 @@ export class Students implements OnInit {
   protected onDetail(row: DataTableRow): void {
     const id = row['_id'];
     if (!id) return;
+    if (this.roleContext.isTeacher()) {
+      void this.router.navigate(['/admin/seguimiento-padres'], {
+        queryParams: { estudianteId: id },
+      });
+      return;
+    }
     this.studentService.obtener(id).subscribe({
       next: (student) => {
         this.selectedStudent.set(student);

@@ -1,4 +1,4 @@
-from src.repository.helpers import nombre_completo, normalizar_grado_nombre
+from src.repository.helpers import nombre_completo, normalizar_grado_nombre, obtener_estudiantes_ids_por_docente
 from src.services.database import get_supabase
 
 
@@ -12,8 +12,17 @@ class SeguimientoRepository:
         busqueda: str | None = None,
         comunicacion: str | None = None,
         estudiante_id: str | None = None,
+        docente_id: str | None = None,
     ) -> list[dict]:
         client = get_supabase()
+        allowed_student_ids: set[str] | None = None
+        if docente_id:
+            allowed_student_ids = obtener_estudiantes_ids_por_docente(docente_id)
+            if estudiante_id:
+                allowed_student_ids = {sid for sid in allowed_student_ids if sid == estudiante_id}
+            if not allowed_student_ids:
+                return []
+
         query = (
             client.table("seguimiento_academico")
             .select(
@@ -26,6 +35,8 @@ class SeguimientoRepository:
         )
         if estudiante_id:
             query = query.eq("estudiante_id", estudiante_id)
+        elif allowed_student_ids is not None:
+            query = query.in_("estudiante_id", list(allowed_student_ids))
         response = query.execute()
         rows = []
         for r in response.data or []:
@@ -84,7 +95,9 @@ class SeguimientoRepository:
         )
         if not resp.data:
             raise ValueError("No se pudo registrar seguimiento")
-        return self.listar()[0]
+        created_id = resp.data[0]["id"]
+        created_rows = self.listar(estudiante_id=data["estudiante_id"])
+        return next((row for row in created_rows if row["id"] == created_id), created_rows[0])
 
     def _map_row(self, row: dict) -> dict:
         est = row.get("estudiantes") or {}
@@ -105,6 +118,7 @@ class SeguimientoRepository:
             "grade": normalizar_grado_nombre(grado.get("nombre", "")),
             "section": sec.get("nombre", ""),
             "academicStatus": estado.get("nombre", ""),
+            "statusCode": estado.get("codigo", ""),
             "communicationStatus": "Al día" if row.get("ultima_comunicacion") else "Pendiente",
             "lastContact": str(row.get("ultima_comunicacion", "")),
             "notes": row.get("observacion", ""),

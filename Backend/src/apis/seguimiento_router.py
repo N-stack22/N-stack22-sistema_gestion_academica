@@ -16,6 +16,7 @@ def listar_seguimiento(
     busqueda: str | None = Query(default=None),
     comunicacion: str | None = Query(default=None),
     estudiante_id: str | None = Query(default=None),
+    docente_id: str | None = Query(default=None),
 ):
     return service.listar(
         nivel_id=nivel_id,
@@ -25,6 +26,7 @@ def listar_seguimiento(
         busqueda=busqueda,
         comunicacion=comunicacion,
         estudiante_id=estudiante_id,
+        docente_id=docente_id,
     )
 
 
