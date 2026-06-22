@@ -8,13 +8,6 @@
         <i class="bi bi-credit-card horizonte-icon-inline" aria-hidden="true"></i>
         {{ isParentView() ? 'Pagos del estudiante' : 'Gestion de pagos' }}
       </h1>
-      <p class="erp-hero__subtitle mb-0">
-        @if (isParentView()) {
-          Consulta los pagos registrados del estudiante seleccionado.
-        } @else {
-          Seleccione un estudiante, revise sus deudas pendientes y marque como pagadas las pensiones canceladas.
-        }
-      </p>
     </div>
   </header>
 
@@ -22,9 +15,6 @@
     <div class="form-panel admin-card mb-4">
       <div class="form-panel__header">
         <h2 class="form-panel__title">Registrar pago de pension</h2>
-        <p class="form-panel__hint mb-0">
-          La tabla de deudas muestra solo pensiones pendientes o vencidas del estudiante seleccionado.
-        </p>
       </div>
       <div class="form-panel__body">
         @if (successMessage()) {
@@ -59,20 +49,32 @@
             </div>
           </div>
         </div>
+        @if (selectedStudent()) {
+          <div class="d-flex flex-wrap gap-3 mt-3 text-muted small">
+            <span>Estudiante: <strong>{{ selectedStudent()?.fullName }}</strong></span>
+            <span>Total pendiente: <strong>S/ {{ pendingDebtTotal().toFixed(2) }}</strong></span>
+          </div>
+        }
       </div>
     </div>
 
     @if (estudianteId()) {
-      @if (pendingDebtRows().length > 0) {
+      @if (loadingDebts()) {
+        <div class="admin-card p-4 mb-4">
+          <h2 class="h6 fw-bold mb-1">Cargando deudas</h2>
+          <p class="text-muted mb-0">Consultando pensiones pendientes del estudiante seleccionado.</p>
+        </div>
+      } @else if (pendingDebtRows().length > 0) {
         <app-data-table
           class="d-block mb-4"
           title="Deudas pendientes del estudiante"
-          subtitle="Seleccione la pension cancelada para registrarla como pagada."
+          subtitle=""
           icon="bi-receipt"
           [columns]="debtColumns"
           [rows]="pendingDebtRows()"
           [showActions]="true"
-          detailLabel="Marcar pagada"
+          [showColumnFilters]="false"
+          detailLabel="Registrar pago"
           (detailClick)="marcarPensionPagada($event)"
         />
       } @else {

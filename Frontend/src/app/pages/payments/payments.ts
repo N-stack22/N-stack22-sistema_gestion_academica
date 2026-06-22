@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
-import { forkJoin } from 'rxjs';
+import { finalize, forkJoin } from 'rxjs';
 import { DataTable } from '../../components/data-table/data-table';
 import { DataTableColumn, DataTableRow } from '../../components/data-table/data-table.model';
 import { StatCard } from '../../components/stat-card/stat-card';
@@ -47,11 +47,17 @@ export class Payments implements OnInit {
   public readonly successMessage = signal('');
   public readonly errorMessage = signal('');
   public readonly loading = signal(false);
+  public readonly loadingDebts = signal(false);
+  public readonly savingPayment = signal(false);
 
   public readonly isParentView = computed(() => this.roleContext.isParent());
 
-  public readonly pensionSeleccionada = computed(
-    () => this.pensiones().find((p) => p.id === this.pensionId()) ?? null,
+  public readonly selectedStudent = computed(
+    () => this.estudiantes().find((student) => student.id === this.estudianteId()) ?? null,
+  );
+
+  public readonly pendingDebtTotal = computed(
+    () => this.pensiones().reduce((total, pension) => total + pension.amount, 0),
   );
 
   public readonly validosRows = computed(() =>
@@ -187,25 +193,30 @@ export class Payments implements OnInit {
   public cargarPensionesPendientes(estudianteId: string): void {
     if (!estudianteId) {
       this.pensiones.set([]);
+      this.loadingDebts.set(false);
       return;
     }
 
+    this.pensiones.set([]);
+    this.loadingDebts.set(true);
     forkJoin([
       this.pensionService.listar({ estudiante_id: estudianteId, estado: 'PENDIENTE' }),
       this.pensionService.listar({ estudiante_id: estudianteId, estado: 'VENCIDA' }),
-    ]).subscribe({
-      next: ([pending, overdue]) => {
-        const byId = new Map<string, Pension>();
-        for (const pension of [...pending, ...overdue]) {
-          byId.set(pension.id, pension);
-        }
-        this.pensiones.set(Array.from(byId.values()).map((p) => this.mapPendingPension(p)));
-      },
-      error: () => {
-        this.errorMessage.set('No se pudieron cargar las deudas pendientes del estudiante.');
-        this.pensiones.set([]);
-      },
-    });
+    ])
+      .pipe(finalize(() => this.loadingDebts.set(false)))
+      .subscribe({
+        next: ([pending, overdue]) => {
+          const byId = new Map<string, Pension>();
+          for (const pension of [...pending, ...overdue]) {
+            byId.set(pension.id, pension);
+          }
+          this.pensiones.set(Array.from(byId.values()).map((p) => this.mapPendingPension(p)));
+        },
+        error: () => {
+          this.errorMessage.set('No se pudieron cargar las deudas pendientes del estudiante.');
+          this.pensiones.set([]);
+        },
+      });
   }
 
   public onPensionChange(id: string): void {
@@ -215,6 +226,8 @@ export class Payments implements OnInit {
   }
 
   public registrarPago(pensionId = this.pensionId()): void {
+    if (this.savingPayment()) return;
+
     this.successMessage.set('');
     this.errorMessage.set('');
 
@@ -226,6 +239,7 @@ export class Payments implements OnInit {
       return;
     }
 
+    this.savingPayment.set(true);
     this.paymentService
       .registrar({
         pension_id: pensionId,
@@ -233,6 +247,7 @@ export class Payments implements OnInit {
         metodo_pago_codigo: this.metodoPago(),
         monto: amount,
       })
+      .pipe(finalize(() => this.savingPayment.set(false)))
       .subscribe({
         next: () => {
           this.successMessage.set('Pago registrado y pension marcada como pagada.');
@@ -248,6 +263,8 @@ export class Payments implements OnInit {
   }
 
   public marcarPensionPagada(row: DataTableRow): void {
+    if (this.savingPayment()) return;
+
     const pensionId = String(row['_id'] ?? '');
     if (!pensionId) return;
     this.onPensionChange(pensionId);
