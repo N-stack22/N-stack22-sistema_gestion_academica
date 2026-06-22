@@ -86,6 +86,10 @@ class UsuarioUpdateRequest(BaseModel):
     estado: bool | None = None
 
 
+class UsuarioPasswordResetRequest(BaseModel):
+    new_password: str = Field(min_length=6, max_length=128)
+
+
 class MatriculaCreateRequest(BaseModel):
     estudiante_id: str
     anio_academico_id: str

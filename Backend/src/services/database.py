@@ -17,9 +17,7 @@ def _first_env(*names: str) -> str:
     return ""
 
 
-def get_supabase() -> Client:
-    global _client
-
+def _supabase_credentials() -> tuple[str, str]:
     url = _first_env("SUPABASE_URL")
     key = _first_env("SUPABASE_KEY", "SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_KEY")
 
@@ -33,11 +31,21 @@ def get_supabase() -> Client:
             "con la service_role key de Supabase -> Settings -> API. "
             "Tambien se acepta SUPABASE_SERVICE_ROLE_KEY."
         )
+    return url, key
+
+
+def create_supabase_client() -> Client:
+    url, key = _supabase_credentials()
+    return create_client(url, key)
+
+
+def get_supabase() -> Client:
+    global _client
 
     if _client is not None:
         return _client
 
-    _client = create_client(url, key)
+    _client = create_supabase_client()
     return _client
 
 

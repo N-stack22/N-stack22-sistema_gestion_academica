@@ -52,6 +52,13 @@ export class AuthService {
     return this.accessToken;
   }
 
+  changePassword(currentPassword: string, newPassword: string): Observable<{ message: string }> {
+    return this.http.patch<{ message: string }>(`${API_BASE_URL}/api/auth/password`, {
+      current_password: currentPassword,
+      new_password: newPassword,
+    });
+  }
+
   private toSession(response: LoginResponse): AuthSession {
     return {
       user: {

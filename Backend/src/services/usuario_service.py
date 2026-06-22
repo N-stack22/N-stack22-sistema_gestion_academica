@@ -1,6 +1,7 @@
 from fastapi import HTTPException, status
 
 from src.repository.usuario_repository import UsuarioRepository
+from src.services.security import require_admin_or_director
 
 
 class UsuarioService:
@@ -27,3 +28,11 @@ class UsuarioService:
             return self._repository.actualizar(usuario_id, data)
         except ValueError as exc:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
+    def restablecer_password(self, usuario_id: str, new_password: str, context: dict) -> dict:
+        require_admin_or_director(context)
+        try:
+            self._repository.restablecer_password(usuario_id, new_password)
+        except ValueError as exc:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+        return {"message": "Contrasena restablecida correctamente"}

@@ -88,6 +88,59 @@
       <button type="button" class="btn btn-sm btn-horizonte-primary" (click)="toggleStatus()">
         {{ user.active ? 'Desactivar cuenta' : 'Activar cuenta' }}
       </button>
+
+      <hr class="my-4" />
+      <div class="row g-3 align-items-end">
+        <div class="col-12">
+          <h3 class="h6 fw-bold mb-1">Restablecer contrasena</h3>
+          <p class="text-muted small mb-0">Asigne una nueva contrasena temporal al usuario seleccionado.</p>
+        </div>
+        @if (resetPasswordMessage()) {
+          <div class="col-12">
+            <div class="form-success-card">{{ resetPasswordMessage() }}</div>
+          </div>
+        }
+        @if (resetPasswordError()) {
+          <div class="col-12">
+            <div class="alert alert-danger py-2 mb-0">{{ resetPasswordError() }}</div>
+          </div>
+        }
+        <div class="col-md-4">
+          <label class="form-label">Nueva contrasena</label>
+          <input
+            type="password"
+            class="form-control"
+            autocomplete="new-password"
+            [value]="resetPassword()"
+            (input)="resetPassword.set($any($event.target).value)"
+          />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Confirmar contrasena</label>
+          <input
+            type="password"
+            class="form-control"
+            autocomplete="new-password"
+            [value]="resetPasswordConfirm()"
+            (input)="resetPasswordConfirm.set($any($event.target).value)"
+          />
+        </div>
+        <div class="col-md-4">
+          <button
+            type="button"
+            class="btn btn-outline-primary w-100"
+            [disabled]="resettingPassword()"
+            (click)="restablecerPassword()"
+          >
+            @if (resettingPassword()) {
+              <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              Guardando...
+            } @else {
+              Restablecer contrasena
+            }
+          </button>
+        </div>
+      </div>
     </div>
   }
 

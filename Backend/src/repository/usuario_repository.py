@@ -147,6 +147,16 @@ class UsuarioRepository:
             raise ValueError("Usuario no encontrado")
         return result
 
+    def restablecer_password(self, perfil_id: str, new_password: str) -> None:
+        if not self.find_by_id(perfil_id):
+            raise ValueError("Usuario no encontrado")
+
+        client = get_supabase()
+        try:
+            client.auth.admin.update_user_by_id(perfil_id, {"password": new_password})
+        except Exception as exc:
+            raise ValueError("No se pudo actualizar la contrasena") from exc
+
     def _map_row(self, row: dict) -> dict:
         roles = row.get("usuarios_roles") or []
         active_role = next((r for r in roles if r.get("activo")), roles[0] if roles else None)

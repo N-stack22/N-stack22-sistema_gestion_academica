@@ -28,6 +28,8 @@ Lista de verificacion para presentar el proyecto como portal academico real inte
 - [ ] XSS mitigado: Angular renderiza datos por interpolacion y no se usa `innerHTML` ni `bypassSecurityTrust`.
 - [ ] SQL Injection mitigado: consultas Supabase usan query builder y SQL directo solo ejecuta funciones `fn_*` con parametros separados.
 - [ ] Endpoints privados protegidos por middleware backend que exige `Authorization: Bearer`.
+- [ ] ADMIN/DIRECTOR pueden restablecer contrasenas desde Gestion de usuarios sin ver la contrasena anterior.
+- [ ] Cada usuario puede cambiar su propia contrasena validando la contrasena actual.
 - [ ] Cabeceras de seguridad activas: `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy` y CSP para API.
 - [ ] HTTPS aplicado en despliegue Railway/GitHub Pages y HSTS habilitable con `ENABLE_HSTS=true`.
 

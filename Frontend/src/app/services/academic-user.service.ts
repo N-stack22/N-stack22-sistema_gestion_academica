@@ -42,4 +42,10 @@ export class AcademicUserService {
   actualizar(id: string, payload: Record<string, unknown>): Observable<AcademicUser> {
     return this.http.put<AcademicUser>(`${this.baseUrl}/${id}`, payload);
   }
+
+  restablecerPassword(id: string, newPassword: string): Observable<{ message: string }> {
+    return this.http.patch<{ message: string }>(`${this.baseUrl}/${id}/password`, {
+      new_password: newPassword,
+    });
+  }
 }

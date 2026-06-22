@@ -25,6 +25,69 @@
       </div>
     </div>
 
+    <div class="admin-card profile-card mb-4">
+      <div class="card-body p-4">
+        <h2 class="profile-card__title">
+          <i class="bi bi-shield-lock horizonte-icon-inline" aria-hidden="true"></i>
+          Seguridad de la cuenta
+        </h2>
+        <p class="text-muted small mb-3">Actualiza tu contrasena usando tu contrasena actual.</p>
+        @if (passwordMessage()) {
+          <div class="form-success-card mb-3">{{ passwordMessage() }}</div>
+        }
+        @if (passwordError()) {
+          <div class="alert alert-danger py-2 mb-3">{{ passwordError() }}</div>
+        }
+        <div class="row g-3 align-items-end">
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label">Contrasena actual</label>
+            <input
+              type="password"
+              class="form-control"
+              autocomplete="current-password"
+              [value]="currentPassword()"
+              (input)="currentPassword.set($any($event.target).value)"
+            />
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label">Nueva contrasena</label>
+            <input
+              type="password"
+              class="form-control"
+              autocomplete="new-password"
+              [value]="newPassword()"
+              (input)="newPassword.set($any($event.target).value)"
+            />
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <label class="form-label">Confirmar contrasena</label>
+            <input
+              type="password"
+              class="form-control"
+              autocomplete="new-password"
+              [value]="confirmPassword()"
+              (input)="confirmPassword.set($any($event.target).value)"
+            />
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <button
+              type="button"
+              class="btn btn-horizonte-primary w-100"
+              [disabled]="savingPassword()"
+              (click)="cambiarPassword()"
+            >
+              @if (savingPassword()) {
+                <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                Guardando...
+              } @else {
+                Cambiar contrasena
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     @if (loading()) {
       <div class="admin-card p-4 text-center text-muted">
         <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>

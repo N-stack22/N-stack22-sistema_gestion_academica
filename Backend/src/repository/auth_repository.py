@@ -1,5 +1,5 @@
 from src.repository.helpers import normalizar_grado_nombre
-from src.services.database import get_supabase
+from src.services.database import create_supabase_client, get_supabase
 
 ROLE_MAP = {
     "ADMIN": "ADMIN",
@@ -16,10 +16,12 @@ ROLE_MAP = {
 
 class AuthRepository:
     def login(self, email: str, password: str) -> dict:
-        client = get_supabase()
-        auth_response = client.auth.sign_in_with_password(
+        auth_client = create_supabase_client()
+        auth_response = auth_client.auth.sign_in_with_password(
             {"email": email, "password": password}
         )
+
+        client = get_supabase()
 
         user = auth_response.user
         session = auth_response.session
@@ -212,3 +214,29 @@ class AuthRepository:
                 }
 
         return ctx
+
+    def change_password(
+        self,
+        user_id: str,
+        email: str,
+        current_password: str,
+        new_password: str,
+    ) -> None:
+        if current_password == new_password:
+            raise ValueError("La nueva contrasena debe ser distinta a la actual")
+
+        verify_client = create_supabase_client()
+        try:
+            auth_response = verify_client.auth.sign_in_with_password(
+                {"email": email, "password": current_password}
+            )
+            if not auth_response.user:
+                raise ValueError("Contrasena actual incorrecta")
+        except Exception as exc:
+            raise ValueError("Contrasena actual incorrecta") from exc
+
+        client = get_supabase()
+        try:
+            client.auth.admin.update_user_by_id(user_id, {"password": new_password})
+        except Exception as exc:
+            raise ValueError("No se pudo actualizar la contrasena") from exc

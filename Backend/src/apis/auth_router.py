@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Header
+from fastapi import APIRouter, Depends, Header
 
-from src.schemas.auth import AuthUserResponse, LoginRequest
+from src.schemas.auth import AuthUserResponse, LoginRequest, PasswordChangeRequest
 from src.services.auth_service import AuthService
+from src.services.security import get_current_context
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 service = AuthService()
@@ -38,3 +39,11 @@ def context(authorization: str | None = Header(default=None)):
 
     token = authorization.removeprefix("Bearer ").strip()
     return service.context(token)
+
+
+@router.patch("/password")
+def cambiar_password(
+    body: PasswordChangeRequest,
+    context_data: dict = Depends(get_current_context),
+):
+    return service.cambiar_password(body, context_data)

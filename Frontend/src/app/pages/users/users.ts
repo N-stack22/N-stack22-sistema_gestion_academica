@@ -3,7 +3,7 @@ import { DataTable } from '../../components/data-table/data-table';
 import { DataTableColumn, DataTableRow } from '../../components/data-table/data-table.model';
 import { AcademicUser, AcademicUserService } from '../../services/academic-user.service';
 import { CatalogService } from '../../services/catalog.service';
-import { isRequired, emailFormatError } from '../../utils/form-validation';
+import { isRequired, emailFormatError, minLength } from '../../utils/form-validation';
 
 @Component({
   selector: 'app-users',
@@ -38,6 +38,11 @@ export class Users implements OnInit {
   public readonly rolCodigo = signal('ADMIN');
   public readonly password = signal('Admin123');
   public readonly successMessage = signal('');
+  public readonly resetPassword = signal('');
+  public readonly resetPasswordConfirm = signal('');
+  public readonly resetPasswordMessage = signal('');
+  public readonly resetPasswordError = signal('');
+  public readonly resettingPassword = signal(false);
 
   public readonly columns: DataTableColumn[] = [
     { key: 'nombre', label: 'Nombre' },
@@ -80,7 +85,13 @@ export class Users implements OnInit {
     const id = row['_id'];
     if (!id) return;
     this.academicUserService.obtener(id).subscribe({
-      next: (user) => this.selectedUser.set(user),
+      next: (user) => {
+        this.selectedUser.set(user);
+        this.resetPassword.set('');
+        this.resetPasswordConfirm.set('');
+        this.resetPasswordMessage.set('');
+        this.resetPasswordError.set('');
+      },
     });
   }
 
@@ -125,5 +136,36 @@ export class Users implements OnInit {
           this.loadUsers();
         },
       });
+  }
+
+  public restablecerPassword(): void {
+    const user = this.selectedUser();
+    if (!user || this.resettingPassword()) return;
+
+    const password = this.resetPassword().trim();
+    const confirm = this.resetPasswordConfirm().trim();
+    const error =
+      isRequired(password, 'Ingrese una nueva contrasena.') ||
+      minLength(password, 6, 'La contrasena debe tener al menos 6 caracteres.') ||
+      (password !== confirm ? 'La confirmacion no coincide.' : '');
+
+    this.resetPasswordMessage.set('');
+    this.resetPasswordError.set(error);
+    if (error) return;
+
+    this.resettingPassword.set(true);
+    this.academicUserService.restablecerPassword(user.id, password).subscribe({
+      next: (response) => {
+        this.resetPasswordMessage.set(response.message || 'Contrasena restablecida correctamente.');
+        this.resetPasswordError.set('');
+        this.resetPassword.set('');
+        this.resetPasswordConfirm.set('');
+        this.resettingPassword.set(false);
+      },
+      error: (err) => {
+        this.resetPasswordError.set(err?.error?.detail || 'No se pudo restablecer la contrasena.');
+        this.resettingPassword.set(false);
+      },
+    });
   }
 }
